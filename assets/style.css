@@ -276,3 +276,15 @@ a.wp-cell .wp-n { color: var(--brand); }
   .card, .week, .hero, .table-wrap { box-shadow: none; break-inside: avoid; }
   main { max-width: none; }
 }
+
+/* Homepage link to the independent DATA LAB experience. */
+.site-head.has-data-lab .inner { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 14px; }
+.site-head .data-lab-link { display: inline-flex; align-items: center; gap: 8px; justify-content: center; white-space: nowrap; padding: 7px 12px; border: 1px solid #b9efcc; border-radius: 999px; background: #b9efcc; color: #193c33; text-decoration: none; font-size: 12px; font-weight: 800; letter-spacing: .05em; }
+.site-head .data-lab-link:hover { background: #d5f9e1; border-color: #76ac8a; }
+.site-head .data-lab-link:focus-visible { outline: 3px solid var(--brand); outline-offset: 3px; }
+@media (max-width: 850px) {
+  .site-head.has-data-lab .inner { grid-template-columns: 1fr auto; gap: 10px; }
+  .site-head.has-data-lab .brand { font-size: 16px; }
+  .site-head.has-data-lab nav { grid-row: 2; grid-column: 1 / -1; margin-left: 0; }
+  .site-head .data-lab-link { grid-column: 2; grid-row: 1; padding: 6px 10px; font-size: 11px; }
+}
