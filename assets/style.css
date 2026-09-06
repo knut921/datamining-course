@@ -1,0 +1,278 @@
+/* ===== 資料探勘課程網站 共用樣式 ===== */
+:root {
+  --bg: #f6f5f2;
+  --surface: #ffffff;
+  --surface-2: #f0efec;
+  --ink: #1f2430;
+  --ink-soft: #4b5265;
+  --line: #e2e0da;
+  --brand: #3b4a8c;
+  --brand-soft: #eef0fa;
+  --accent: #b5622a;
+  --accent-soft: #f8ede3;
+  --good: #2f7d5d;
+  --warn: #b3892b;
+  --radius: 14px;
+  --shadow: 0 1px 2px rgba(20,24,40,.05), 0 8px 24px rgba(20,24,40,.06);
+  --maxw: 980px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14161c;
+    --surface: #1c1f27;
+    --surface-2: #232733;
+    --ink: #e7e8ec;
+    --ink-soft: #a7adbd;
+    --line: #313643;
+    --brand: #97a6ef;
+    --brand-soft: #232a45;
+    --accent: #e0965f;
+    --accent-soft: #35291f;
+    --good: #6fc79e;
+    --warn: #e0be74;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.35);
+  }
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+    system-ui, -apple-system, "Helvetica Neue", sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+  line-height: 1.75;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--brand); text-underline-offset: 3px; }
+
+/* ---- 頁首導覽 ---- */
+.site-head {
+  position: sticky; top: 0; z-index: 20;
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.site-head .inner {
+  max-width: var(--maxw); margin: 0 auto; padding: 12px 20px;
+  display: flex; align-items: baseline; gap: 18px; flex-wrap: wrap;
+}
+.site-head .brand { font-weight: 700; color: var(--ink); text-decoration: none; letter-spacing: .02em; }
+.site-head nav { display: flex; gap: 6px; margin-left: auto; flex-wrap: wrap; }
+.site-head nav a {
+  text-decoration: none; color: var(--ink-soft);
+  padding: 5px 12px; border-radius: 999px; font-size: 14.5px;
+}
+.site-head nav a:hover { background: var(--surface-2); color: var(--ink); }
+.site-head nav a.active { background: var(--brand); color: #fff; }
+
+/* ---- 版心 ---- */
+main { max-width: var(--maxw); margin: 0 auto; padding: 32px 20px 80px; }
+
+/* ---- Hero ---- */
+.hero {
+  background: linear-gradient(135deg, var(--brand-soft), var(--surface));
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 34px 32px;
+  box-shadow: var(--shadow);
+}
+.hero .kicker {
+  font-size: 13px; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--accent); font-weight: 700; margin: 0 0 10px;
+}
+.hero h1 { margin: 0 0 8px; font-size: clamp(1.7rem, 4vw, 2.5rem); line-height: 1.3; }
+.hero p.lead { margin: 6px 0 0; color: var(--ink-soft); max-width: 62ch; }
+.meta-grid {
+  margin-top: 24px; display: grid; gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+.meta-grid div { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; }
+.meta-grid dt { font-size: 12px; color: var(--ink-soft); letter-spacing: .05em; }
+.meta-grid dd { margin: 2px 0 0; font-weight: 600; }
+
+/* ---- 區塊 ---- */
+section { margin-top: 40px; }
+section > h2 {
+  font-size: 1.4rem; margin: 0 0 4px;
+  display: flex; align-items: center; gap: 10px;
+}
+section > h2::before {
+  content: ""; width: 8px; height: 22px; border-radius: 3px;
+  background: var(--accent); display: inline-block;
+}
+section > .sec-note { color: var(--ink-soft); margin: 0 0 18px; font-size: 15px; }
+
+.card {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 22px 24px; box-shadow: var(--shadow);
+}
+.card + .card { margin-top: 16px; }
+
+/* ---- 目標 / 清單卡 ---- */
+.list-cards { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.list-cards .item {
+  background: var(--surface); border: 1px solid var(--line);
+  border-left: 4px solid var(--brand); border-radius: 10px; padding: 16px 18px;
+}
+.list-cards .item h3 { margin: 0 0 6px; font-size: 1rem; }
+.list-cards .item p { margin: 0; color: var(--ink-soft); font-size: 14.5px; }
+
+/* ---- 六步驟 ---- */
+.steps { display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch; }
+.steps .step {
+  flex: 1 1 140px; background: var(--surface-2); border: 1px solid var(--line);
+  border-radius: 10px; padding: 12px 14px; position: relative; font-size: 14px;
+}
+.steps .step b { display: block; color: var(--accent); font-size: 12px; letter-spacing: .05em; margin-bottom: 2px; }
+.steps .step.here { background: var(--accent-soft); border-color: var(--accent); }
+
+/* ---- 週次表 ---- */
+.weeks { display: grid; gap: 12px; }
+.week {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+  padding: 16px 20px; display: grid; grid-template-columns: 54px 1fr; gap: 4px 18px;
+  box-shadow: var(--shadow);
+}
+.week .wk-num {
+  grid-column: 1; grid-row: 1 / span 4; font-weight: 800; font-size: 1.5rem; color: var(--brand);
+  display: flex; align-items: flex-start; justify-content: center;
+  background: var(--brand-soft); border-radius: 8px; padding: 6px 0; align-self: start;
+}
+.week h3 { grid-column: 2; margin: 0; font-size: 1.08rem; }
+.week .wk-concept { grid-column: 2; margin: 0; font-size: 13.5px; color: var(--accent); font-weight: 600; }
+.week .wk-body { grid-column: 2; margin: 6px 0 0; font-size: 14.5px; color: var(--ink-soft); }
+.week .wk-out {
+  grid-column: 2; width: fit-content; max-width: 100%; margin: 10px 0 0; font-size: 13px; display: inline-block;
+  background: var(--surface-2); border: 1px solid var(--line);
+  padding: 3px 10px; border-radius: 999px; color: var(--ink);
+}
+.week.is-exam { border-style: dashed; }
+.week.is-mid .wk-num { background: var(--accent-soft); color: var(--accent); }
+
+/* ---- 表格 ---- */
+.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; min-width: 520px; }
+th, td { text-align: left; padding: 9px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+thead th { background: var(--surface-2); font-size: 12.5px; letter-spacing: .04em; color: var(--ink-soft); position: sticky; top: 0; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: var(--surface-2); }
+td .tag { font-size: 12px; padding: 1px 8px; border-radius: 999px; border: 1px solid var(--line); white-space: nowrap; }
+.tag.cat { background: var(--brand-soft); color: var(--brand); border-color: transparent; }
+.tag.num { background: var(--accent-soft); color: var(--accent); border-color: transparent; }
+.tag.id  { background: var(--surface-2); color: var(--ink-soft); }
+
+/* ---- 評分 bar ---- */
+.bars { display: grid; gap: 10px; }
+.bar { display: grid; grid-template-columns: 1fr auto; gap: 4px 10px; align-items: center; }
+.bar .track { grid-column: 1 / -1; height: 10px; background: var(--surface-2); border-radius: 999px; overflow: hidden; }
+.bar .fill { height: 100%; background: linear-gradient(90deg, var(--brand), var(--accent)); border-radius: 999px; }
+.bar .lab { font-size: 14.5px; }
+.bar .pct { font-weight: 700; font-variant-numeric: tabular-nums; }
+
+/* ---- 好壞問題對照 ---- */
+.compare { display: grid; gap: 12px; grid-template-columns: 1fr 1fr; }
+.compare > div { border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+.compare .bad  { background: color-mix(in srgb, #c0392b 8%, var(--surface)); border-color: color-mix(in srgb, #c0392b 30%, var(--line)); }
+.compare .good { background: color-mix(in srgb, var(--good) 10%, var(--surface)); border-color: color-mix(in srgb, var(--good) 32%, var(--line)); }
+.compare h4 { margin: 0 0 8px; font-size: 13px; letter-spacing: .05em; }
+.compare .bad h4 { color: #c0392b; }
+.compare .good h4 { color: var(--good); }
+.compare ul { margin: 0; padding-left: 18px; }
+.compare li { margin: 4px 0; font-size: 14px; }
+
+/* ---- 提示語框 ---- */
+.prompt {
+  background: var(--surface-2); border: 1px solid var(--line); border-left: 4px solid var(--brand);
+  border-radius: 8px; padding: 14px 16px; margin: 10px 0;
+  font-family: "SFMono-Regular", ui-monospace, Menlo, Consolas, monospace;
+  font-size: 13.5px; line-height: 1.7; white-space: pre-wrap; color: var(--ink);
+}
+.prompt .p-label { display: block; font-family: inherit; font-size: 11px; letter-spacing: .1em; color: var(--accent); margin-bottom: 6px; text-transform: uppercase; }
+
+/* ---- 檢核清單 ---- */
+.checklist { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.checklist li {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 8px;
+  padding: 10px 14px 10px 40px; position: relative; font-size: 14.5px;
+}
+.checklist li::before {
+  content: ""; position: absolute; left: 14px; top: 13px;
+  width: 15px; height: 15px; border: 2px solid var(--brand); border-radius: 4px;
+}
+
+/* ---- callout ---- */
+.callout {
+  border-radius: 10px; padding: 14px 16px; font-size: 14.5px;
+  border: 1px solid var(--line); background: var(--surface-2);
+}
+.callout.warn { border-color: color-mix(in srgb, var(--warn) 45%, var(--line)); background: color-mix(in srgb, var(--warn) 12%, var(--surface)); }
+.callout.info { border-color: color-mix(in srgb, var(--brand) 35%, var(--line)); background: var(--brand-soft); }
+.callout b { color: var(--ink); }
+
+/* ---- 課堂流程 ---- */
+.timeline { display: grid; gap: 6px; }
+.timeline .row { display: grid; grid-template-columns: 84px 1fr; gap: 14px; padding: 8px 0; border-bottom: 1px dashed var(--line); font-size: 14.5px; }
+.timeline .row:last-child { border-bottom: none; }
+.timeline .t { font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
+
+/* ---- 頁尾 ---- */
+footer { max-width: var(--maxw); margin: 0 auto; padding: 24px 20px 60px; color: var(--ink-soft); font-size: 13px; border-top: 1px solid var(--line); }
+
+/* ---- 回上一頁 ---- */
+.backlink { display: inline-flex; align-items: center; gap: 6px; text-decoration: none; color: var(--ink-soft); font-size: 14px; margin-bottom: 8px; }
+.backlink:hover { color: var(--brand); }
+
+/* ---- 每週教材快速選擇 ---- */
+.week-picker {
+  display: grid; gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+}
+.wp-cell {
+  display: flex; flex-direction: column; gap: 3px;
+  border: 1px solid var(--line); border-radius: 12px;
+  padding: 12px 14px; background: var(--surface);
+  text-decoration: none; color: var(--ink);
+  box-shadow: var(--shadow);
+  transition: transform .12s ease, border-color .12s ease;
+}
+.wp-cell .wp-n { font-size: 12px; font-weight: 700; letter-spacing: .08em; color: var(--ink-soft); }
+.wp-cell .wp-t { font-size: 14px; font-weight: 600; line-height: 1.45; }
+.wp-cell .wp-s { font-size: 11.5px; color: var(--ink-soft); }
+a.wp-cell:hover { transform: translateY(-2px); border-color: var(--brand); }
+a.wp-cell .wp-n { color: var(--brand); }
+.wp-cell.is-ready { border-left: 4px solid var(--brand); }
+.wp-cell.is-ready .wp-s { color: var(--good); font-weight: 600; }
+.wp-cell.is-soon { opacity: .62; cursor: default; }
+.wp-cell.is-exam { border-style: dashed; }
+.wp-cell.current { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+/* ---- 週教材上一週 / 下一週 ---- */
+.week-nav {
+  display: flex; gap: 10px; flex-wrap: wrap;
+  margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--line);
+}
+.week-nav a, .week-nav span {
+  flex: 1 1 200px; text-decoration: none;
+  border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px;
+  background: var(--surface); color: var(--ink); font-size: 14px;
+}
+.week-nav a:hover { border-color: var(--brand); }
+.week-nav .nn { display: block; font-size: 11px; letter-spacing: .1em; color: var(--ink-soft); text-transform: uppercase; }
+.week-nav .next { text-align: right; }
+.week-nav .disabled { opacity: .45; }
+
+@media (max-width: 620px) {
+  .compare { grid-template-columns: 1fr; }
+  .week { grid-template-columns: 44px 1fr; }
+  .week .wk-num { font-size: 1.2rem; }
+}
+
+@media print {
+  .site-head, footer, .backlink { display: none; }
+  body { background: #fff; font-size: 12px; }
+  .card, .week, .hero, .table-wrap { box-shadow: none; break-inside: avoid; }
+  main { max-width: none; }
+}

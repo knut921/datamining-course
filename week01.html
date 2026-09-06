@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 1 週教材：用資料回答問題｜資料探勘</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<header class="site-head">
+  <div class="inner">
+    <a class="brand" href="index.html">資料探勘 · Data Mining</a>
+    <nav>
+      <a href="index.html">課程大綱</a>
+      <a href="index.html#pick">每週教材</a>
+      <a href="#micro">概念微講授</a>
+      <a href="#dataset">本週資料</a>
+      <a href="#task">Antigravity 任務單</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <a class="backlink" href="index.html">← 回課程大綱</a>
+
+  <section class="hero">
+    <p class="kicker">Week 1 · 校園生活調查</p>
+    <h1>用資料回答問題</h1>
+    <p class="lead">
+      這一週不談公式。我們要學會「看懂一份資料長什麼樣子」：它有幾筆、有哪些欄位、每個欄位是什麼型態、
+      哪裡有缺漏，然後把心裡「有趣的疑問」磨成「這份資料真的能回答的問題」。
+    </p>
+    <dl class="meta-grid">
+      <div><dt>概念微講授</dt><dd>資料 · 變項 · 觀察值</dd></div>
+      <div><dt>核心動作</dt><dd>資料健檢 + 提問</dd></div>
+      <div><dt>本週資料</dt><dd>臺灣青年調查 212 筆</dd></div>
+      <div><dt>當週成果</dt><dd>健檢表 + 問題卡 + 限制</dd></div>
+    </dl>
+  </section>
+
+  <section id="goals">
+    <h2>本週學習目標</h2>
+    <div class="list-cards">
+      <div class="item"><h3>看懂資料結構</h3><p>能指出一份表格資料的「觀察值（列）」與「變項（欄）」，並說出各變項是類別還是數值。</p></div>
+      <div class="item"><h3>會做資料健檢</h3><p>能用自然語言請 Antigravity 盤點筆數、欄位、型態、缺失與異常值，並自己覆核數字。</p></div>
+      <div class="item"><h3>會提可回答的問題</h3><p>能判斷一個問題是否能「由現有資料」回答，並修正含糊或需額外資料的提問。</p></div>
+      <div class="item"><h3>知道資料有極限</h3><p>能寫出至少一項這份資料「不能說」的話（樣本範圍、變項定義、時間點造成的限制）。</p></div>
+    </div>
+  </section>
+
+  <section id="flow">
+    <h2>本週在六步驟中的位置</h2>
+    <p class="sec-note">每週都走同一套流程。第 1 週的重點落在「下達任務」與「結果驗證」。</p>
+    <div class="card">
+      <div class="steps">
+        <div class="step"><b>STEP 1</b>主題情境：校園生活調查</div>
+        <div class="step"><b>STEP 2</b>概念微講授：資料／變項／觀察值</div>
+        <div class="step here"><b>STEP 3</b>自然語言下達：盤點 + 提問</div>
+        <div class="step here"><b>STEP 4</b>Antigravity 執行健檢</div>
+        <div class="step here"><b>STEP 5</b>驗證：自己數一次筆數與缺失</div>
+        <div class="step"><b>STEP 6</b>成果：資料健檢表與問題卡</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="micro">
+    <h2>概念微講授：一份資料長什麼樣子</h2>
+
+    <div class="card">
+      <h3 style="margin-top:0">1 · 資料表的兩個方向</h3>
+      <p>大部分課堂資料都是一張表（試算表 / CSV）。看懂它只需要兩個詞：</p>
+      <div class="list-cards">
+        <div class="item"><h3>觀察值（列 / row）</h3><p>被記錄的「一個對象」。這份資料裡，一列 = 一位受訪者。212 列就是 212 位青年。也叫「樣本」「個案」「筆數」。</p></div>
+        <div class="item"><h3>變項（欄 / column）</h3><p>對每個對象記錄的「一個特徵」。例如「年齡」「性別」「每日使用網路分鐘」。24 欄就是 24 個變項。</p></div>
+      </div>
+      <p style="margin-bottom:0">一個「儲存格」= 某位受訪者在某個變項上的值。例如第 1 位受訪者的「年齡」= 23。</p>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0">2 · 變項的兩大型態</h3>
+      <p>拿到任何一欄，先問一句：<b>它是在「分類」，還是在「計量」？</b></p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>型態</th><th>意思</th><th>本週資料的例子</th><th>可以做什麼</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="tag cat">類別（質性）</span></td>
+              <td>把對象分到不同「組」，值本身不能加減。</td>
+              <td>性別、地區代碼、教育程度、各項滿意度（很滿意／普通／不滿意）</td>
+              <td>數次數、算百分比、找眾數、畫長條圖／圓餅圖</td>
+            </tr>
+            <tr>
+              <td><span class="tag num">數值（量化）</span></td>
+              <td>是可以比大小、可加減平均的「數量」。</td>
+              <td>年齡、每日使用網路分鐘、每日看電視分鐘、家庭月收入（若為金額）</td>
+              <td>算平均數／中位數、看分布、畫直方圖／箱型圖、算相關</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout warn" style="margin-top:14px">
+        <b>陷阱：看起來是數字，其實是類別。</b>「地區代碼」用 1、2、3 表示不同縣市，但把地區代碼「平均」出 2.4 沒有任何意義。
+        判斷關鍵是「這個數字相加或平均後，講得出人話嗎？」
+      </div>
+      <div class="callout info" style="margin-top:10px">
+        <b>順序型類別：</b>「很滿意 &gt; 普通 &gt; 不滿意」有高低順序但沒有固定間距，屬類別資料的一種（順序尺度）。
+        本課多數滿意度題都是這一類。
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0">3 · 為什麼一定要先分型態？</h3>
+      <p style="margin-bottom:0">
+        因為<b>型態決定方法</b>。用錯型態，AI 也會算出一個「數字」，但那個數字是錯的：
+        把類別拿去算平均、把數值硬塞進交叉表、對代碼算相關……都是本課評分「方法正確性」會扣分的地方。
+        第 1 週把型態看清楚，後面十七週才不會走錯路。
+      </p>
+    </div>
+  </section>
+
+  <section id="dataset">
+    <h2>認識本週資料：臺灣青年資料健檢.csv</h2>
+    <p class="sec-note">
+      來源為中央研究院「2015 臺灣社會變遷基本調查（第七期第一次）」，課堂 CSV 篩選 18–24 歲，共 212 筆、24 欄。
+      <a href="data/臺灣青年資料健檢.csv">↓ 開啟原始 CSV</a>
+    </p>
+
+    <div class="callout warn">
+      <b>使用限制（務必寫進成果）：</b>本資料僅限學術用途、禁止商業使用，任何成果須註明「資料來源：中央研究院社會學研究所，2015 臺灣社會變遷基本調查」。
+      課堂檔已保留抽樣權數與原始樣本編號，未經授權不得外流。
+    </div>
+
+    <div class="table-wrap" style="margin-top:16px">
+      <table>
+        <thead>
+          <tr><th>欄位</th><th>型態</th><th>說明</th><th>缺失／特殊值</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>樣本編號</td><td><span class="tag id">識別碼</span></td><td>受訪者唯一代碼，不參與統計</td><td>212 個皆相異，無重複</td></tr>
+          <tr><td>性別</td><td><span class="tag cat">類別</span></td><td>Male / Female</td><td>男 107、女 105，無缺失</td></tr>
+          <tr><td>年齡</td><td><span class="tag num">數值</span></td><td>足歲，範圍 19–24</td><td>無缺失</td></tr>
+          <tr><td>地區代碼</td><td><span class="tag cat">類別</span></td><td>居住縣市代碼（1–6），<b>不可當數值平均</b></td><td>無缺失</td></tr>
+          <tr><td>教育程度</td><td><span class="tag cat">類別</span></td><td>大學／科大／高職等在學或最高學歷</td><td>1 筆為 Not applicable</td></tr>
+          <tr><td>是否完成學業</td><td><span class="tag cat">類別</span></td><td>已畢業／肄業／仍在學</td><td>約 34 筆為 Not applicable（尚未進入該題）</td></tr>
+          <tr><td>每日閱讀報紙分鐘</td><td><span class="tag num">數值</span></td><td>自陳分鐘數</td><td>2 筆為 NA</td></tr>
+          <tr><td>每日看電視分鐘</td><td><span class="tag num">數值</span></td><td>自陳分鐘數</td><td>無缺失</td></tr>
+          <tr><td>每日使用網路分鐘</td><td><span class="tag num">數值</span></td><td>自陳分鐘數，範圍 0–900</td><td>無缺失；900 分鐘＝15 小時，屬需檢視的極端值</td></tr>
+          <tr><td>每週閱讀雜誌分鐘</td><td><span class="tag num">數值</span></td><td>自陳分鐘數</td><td>1 筆為 NA</td></tr>
+          <tr><td>臺灣經濟滿意度</td><td><span class="tag cat">類別</span></td><td>順序：很滿意 → 很不滿意</td><td>約 99 筆為 Not applicable</td></tr>
+          <tr><td>政府施政滿意度</td><td><span class="tag cat">類別</span></td><td>順序尺度</td><td>約 100 筆為 Not applicable</td></tr>
+          <tr><td>民主運作滿意度</td><td><span class="tag cat">類別</span></td><td>順序尺度</td><td>約 101 筆為 Not applicable</td></tr>
+          <tr><td>收入足夠日常開支</td><td><span class="tag cat">類別</span></td><td>遠超過 → 遠不足</td><td>3 筆為特殊值</td></tr>
+          <tr><td>整體 / 健康 / 朋友關係 / 工作滿意度</td><td><span class="tag cat">類別</span></td><td>順序尺度，4 個獨立變項</td><td>工作滿意度含「目前無業」選項</td></tr>
+          <tr><td>近期快樂程度</td><td><span class="tag cat">類別</span></td><td>順序尺度</td><td>無缺失</td></tr>
+          <tr><td>自評健康</td><td><span class="tag cat">類別</span></td><td>Very good → Poor</td><td>無缺失</td></tr>
+          <tr><td>覺得生活沒有希望</td><td><span class="tag cat">類別</span></td><td>頻率：完全沒有 → 比平常多很多</td><td>無缺失</td></tr>
+          <tr><td>家庭月收入</td><td><span class="tag cat">類別</span>／區間</td><td>以金額區間呈現（如 NT$60,000–69,999）</td><td>約 64 筆為「Don't know」，不可當 0</td></tr>
+          <tr><td>低生活滿意度</td><td><span class="tag cat">類別</span></td><td>0 / 1 的衍生指標（第 11 週會用）</td><td>無缺失</td></tr>
+          <tr><td>抽樣權數</td><td><span class="tag num">數值</span></td><td>加權用，範圍約 0.69–1.29，<b>不是受訪者特徵</b></td><td>無缺失</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="sec-note" style="margin-top:10px">
+      註：滿意度題大量出現 <code>Not applicable</code>，是因為原調查依受訪者身分跳題。做健檢時要如實記錄，
+      不要把 <code>NA</code>、<code>Don't know</code>、<code>Not applicable</code> 混為一談，也不要自行填 0。
+    </p>
+  </section>
+
+  <section id="demo">
+    <h2>示範：填好的「資料健檢表」</h2>
+    <p class="sec-note">這是本週成果之一的範例。你的版本應該用自己覆核過的數字，並補上發現與處理方式。</p>
+    <div class="card">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>健檢項目</th><th>檢查結果</th><th>發現 / 處理建議</th></tr></thead>
+          <tbody>
+            <tr><td>資料筆數（列）</td><td>212 筆</td><td>與資料說明一致（18–24 歲子集）。</td></tr>
+            <tr><td>欄位數（欄）</td><td>24 欄</td><td>1 欄識別碼、1 欄權數，實際可分析變項 22 個。</td></tr>
+            <tr><td>重複資料</td><td>樣本編號 212 個全相異</td><td>無重複列，不需去重。</td></tr>
+            <tr><td>變項型態</td><td>數值 6 欄、類別 16 欄、識別碼 1 欄、權數 1 欄</td><td>「地區代碼」「低生活滿意度」是以數字寫的類別，勿當數值。</td></tr>
+            <tr><td>缺失值（NA）</td><td>報紙分鐘 2、雜誌分鐘 1、教育程度 1</td><td>數量少，分析該欄時逐筆檢視或整列排除並註記。</td></tr>
+            <tr><td>跳題造成的空值</td><td>三項政經滿意度各約 100 筆 Not applicable</td><td>非隨機缺失，僅能分析「有回答的次母體」，須說明。</td></tr>
+            <tr><td>特殊值 / 不可當數字</td><td>家庭月收入約 64 筆「Don't know」</td><td>視為缺失，<b>不可</b>當 0；金額需先把區間轉為代表值才可計量。</td></tr>
+            <tr><td>極端值（初步）</td><td>每日使用網路最高 900 分鐘（15 小時）</td><td>保留但標記，第 3、4 週再用箱型圖正式檢視。</td></tr>
+            <tr><td>單位一致性</td><td>網路/電視/報紙為「每日分鐘」，雜誌為「每週分鐘」</td><td>跨欄比較前要換算成同一時間基準。</td></tr>
+            <tr><td>資料來源與時間</td><td>中研院 2015 台灣社會變遷調查</td><td>距今約 10 年，網路使用行為可能已改變，結論須加註年份。</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="questions">
+    <h2>從「有趣的問題」到「可回答的問題」</h2>
+    <p class="sec-note">課堂練習：把左邊的提問改寫成右邊的樣子。標準是「這份 212 筆、24 欄的資料，真的答得出來嗎？」</p>
+
+    <div class="compare">
+      <div class="bad">
+        <h4>✗ 還不能直接回答</h4>
+        <ul>
+          <li>「年輕人是不是都很不快樂？」<br><small>——「都」太滿；沒有比較基準；快樂是類別題。</small></li>
+          <li>「上網會讓人變得不滿意生活嗎？」<br><small>——問的是因果，觀察資料只能看關聯。</small></li>
+          <li>「台灣青年的政治態度如何？」<br><small>——政經滿意度約半數跳題，且無「政治態度」欄。</small></li>
+          <li>「哪一縣市的青年最幸福？」<br><small>——地區只有代碼、每區樣本可能個位數，不足以比較。</small></li>
+        </ul>
+      </div>
+      <div class="good">
+        <h4>✓ 可由這份資料回答</h4>
+        <ul>
+          <li>「這 212 位受訪者中，『近期快樂程度』各選項的人數與百分比分布為何？」</li>
+          <li>「每日使用網路分鐘數，與『整體生活滿意度』是否呈現關聯？關聯強弱如何？」</li>
+          <li>「在有回答政府施政滿意度的受訪者中，滿意與不滿意的比例各是多少？」</li>
+          <li>「男性與女性受訪者，在『每日使用網路分鐘』的中位數是否有明顯差距？」</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout info" style="margin-top:14px">
+      <b>好問題的四個條件：</b>①指名用到的欄位　②講清楚對象範圍（全體 212 筆，還是某個次母體）
+      ③用對型態的動作（類別→數次數、數值→比中位數）　④不預設因果。
+    </div>
+  </section>
+
+  <section id="task">
+    <h2>Antigravity 任務單（自然語言提示語）</h2>
+    <p class="sec-note">
+      依序貼給 Antigravity。每一步拿到回覆後，<b>先自己覆核再往下</b>。保留完整提示語，這是評量「AI 結果驗證與修正能力」的依據。
+    </p>
+
+    <div class="card">
+      <h3 style="margin-top:0">任務 A · 資料盤點（不要下結論）</h3>
+      <div class="prompt"><span class="p-label">貼給 Antigravity</span>請讀取我上傳的「臺灣青年資料健檢.csv」，只做盤點、先不要做任何分析或結論：
+1. 回報總列數（資料筆數）與總欄位數。
+2. 逐欄列出：欄位名稱、你判斷的資料型態（類別／數值／識別碼），以及判斷理由一句話。
+3. 逐欄回報缺失值數量，並分別統計 "NA"、"Don't know"、"Not applicable" 各出現幾次，不要合併。
+4. 指出哪些欄位「看起來是數字但實際是類別」，說明原因。
+5. 條列你目前觀察到、需要人工再確認的異常或極端值（例如過大的數值、單位不一致）。
+輸出成一個表格，最後附一段 100 字內的資料概況說明。</div>
+      <p style="margin-bottom:0;font-size:14px;color:var(--ink-soft)">
+        <b>你要覆核：</b>用試算表或 <code>=COUNTA()</code>／篩選功能，自己數一次筆數與至少兩欄的缺失數，和 AI 的數字對得起來嗎？
+      </p>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0">任務 B · 提出五個可回答的問題</h3>
+      <div class="prompt"><span class="p-label">貼給 Antigravity</span>根據上一步的欄位盤點結果，請提出 5 個「僅用這份資料就能回答」的分析問題。
+每個問題必須：
+- 明確指出會用到哪些欄位；
+- 說明分析對象是全體 212 筆，還是某個篩選後的次母體（並說明篩選條件）；
+- 標註打算用的動作屬於「類別描述（次數／百分比）」還是「數值描述（中位數／分布）」或「關聯」；
+- 不要使用「造成」「導致」「影響」等因果字眼。
+另外，請額外列出 2 個「常見但這份資料無法回答」的問題，並說明缺什麼欄位或什麼限制。</div>
+      <p style="margin-bottom:0;font-size:14px;color:var(--ink-soft)">
+        <b>你要覆核：</b>逐一檢查每個問題點名的欄位是否真的存在、型態是否對應動作；把其中一個最想做的問題選為你的「研究問題卡」。
+      </p>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0">任務 C · 整理資料限制</h3>
+      <div class="prompt"><span class="p-label">貼給 Antigravity</span>請根據這份資料的來源（中研院 2015 台灣社會變遷調查，18–24 歲子集，212 筆）與欄位特性，
+列出 3 項使用這份資料時必須說明的限制，方向包含：
+(1) 樣本涵蓋範圍與代表性；(2) 調查年份造成的時效問題；(3) 跳題造成的非隨機缺失；(4) 變項是自陳、可能有回憶或社會期許偏誤。
+每項限制寫成「因為……，所以本次分析不能宣稱……」的句型。</div>
+      <p style="margin-bottom:0;font-size:14px;color:var(--ink-soft)">
+        <b>你要覆核：</b>從中挑出並改寫成 1 句你最有把握的「資料限制」，作為本週成果。
+      </p>
+    </div>
+  </section>
+
+  <section id="verify">
+    <h2>結果檢核表（交件前逐項打勾）</h2>
+    <ul class="checklist">
+      <li>AI 回報的筆數是 212、欄位是 24，且我自己數過至少一次。</li>
+      <li>每一欄都標了型態，「地區代碼」「低生活滿意度」被歸為類別而非數值。</li>
+      <li><code>NA</code>、<code>Don't know</code>、<code>Not applicable</code> 分開統計，沒有被當成 0 或互相混用。</li>
+      <li>至少檢視一個極端值（如網路 900 分鐘），並決定「保留並標記」或「排除並說明」。</li>
+      <li>研究問題卡有點名欄位、講清楚對象範圍，且沒有因果字眼。</li>
+      <li>資料限制是「因為……所以不能宣稱……」的完整句，並註明資料來源與年份。</li>
+      <li>完整提示語（任務 A/B/C）已保存，另一位同學可以照著重現我的健檢結果。</li>
+    </ul>
+  </section>
+
+  <section id="deliver">
+    <h2>當週成果與繳交</h2>
+    <div class="list-cards">
+      <div class="item"><h3>① 資料健檢表</h3><p>依上方示範格式，填入自己覆核過的筆數、欄位型態、缺失、特殊值與極端值，每列附「發現／處理」。</p></div>
+      <div class="item"><h3>② 研究問題卡 ×1</h3><p>一張卡：問題敘述、用到的欄位、分析對象範圍、預計動作（類別描述／數值描述／關聯）。</p></div>
+      <div class="item"><h3>③ 資料限制 ×1</h3><p>一句「因為……，所以本次分析不能宣稱……」，並註明資料來源與調查年份。</p></div>
+    </div>
+    <div class="callout info" style="margin-top:14px">
+      <b>繳交形式：</b>一頁成果（可用文件或簡易網頁）＋ 完整 Antigravity 提示語紀錄。下週帶來做同儕互評。
+    </div>
+  </section>
+
+  <section id="teach-note">
+    <h2>課堂流程建議（教師參考 · 約 100 分鐘）</h2>
+    <div class="card">
+      <div class="timeline">
+        <div class="row"><span class="t">0–10′</span><span>主題情境：拋出「校園生活調查想知道什麼」，學生口頭發想 2–3 個疑問，先不評論好壞。</span></div>
+        <div class="row"><span class="t">10–30′</span><span>概念微講授：觀察值 vs 變項、類別 vs 數值、「數字型類別」陷阱。用本週 CSV 現場點欄位問型態。</span></div>
+        <div class="row"><span class="t">30–55′</span><span>示範任務 A：教師投影，貼提示語給 Antigravity，帶全班一起覆核筆數與缺失，示範抓 900 分鐘極端值。</span></div>
+        <div class="row"><span class="t">55–80′</span><span>學生實作任務 B：各自請 AI 產出 5 個可回答問題，教師巡場，挑 2–3 個含糊提問全班一起修。</span></div>
+        <div class="row"><span class="t">80–95′</span><span>完成研究問題卡與 1 項資料限制，兩兩交換用檢核表互評。</span></div>
+        <div class="row"><span class="t">95–100′</span><span>收束：強調「型態決定方法」，預告第 2 週用同一份資料畫樣本輪廓。</span></div>
+      </div>
+    </div>
+  </section>
+
+  <nav class="week-nav">
+    <span class="disabled"><span class="nn">上一週</span>— 這是第一週 —</span>
+    <a class="next" href="week02.html"><span class="nn">下一週 ›</span>第 2 週：誰是我們的受訪者？（人口特徵速寫）</a>
+  </nav>
+
+</main>
+
+<footer>
+  臺北市立大學 公共事務學系｜資料探勘（郭毓倫）｜第 1 週教材<br>
+  範例資料來源：中央研究院社會學研究所「2015 臺灣社會變遷基本調查（第七期第一次）」18–24 歲子集，僅限學術用途、禁止商業使用。
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 2 週教材：誰是我們的受訪者？｜資料探勘</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<header class="site-head">
+  <div class="inner">
+    <a class="brand" href="index.html">資料探勘 · Data Mining</a>
+    <nav>
+      <a href="index.html">課程大綱</a>
+      <a href="index.html#pick">每週教材</a>
+      <a href="#micro">概念微講授</a>
+      <a href="#dataset">本週資料</a>
+      <a href="#task">Antigravity 任務單</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <a class="backlink" href="index.html#pick">← 回每週教材選單</a>
+
+  <section class="hero">
+    <p class="kicker">Week 2 · 人口特徵速寫</p>
+    <h1>誰是我們的受訪者？</h1>
+    <p class="lead">
+      分析任何一份問卷之前，要先能一句話說清楚「回答的人長什麼樣子」。這一週學會用
+      <b>次數、百分比、眾數</b> 把類別資料整理成一張「樣本輪廓」，並認識「抽樣權數」為什麼會讓百分比改變。
+    </p>
+    <dl class="meta-grid">
+      <div><dt>概念微講授</dt><dd>次數 · 百分比 · 眾數</dd></div>
+      <div><dt>核心動作</dt><dd>次數分配表 + 長條圖</dd></div>
+      <div><dt>本週資料</dt><dd>青年人口輪廓 212 筆</dd></div>
+      <div><dt>當週成果</dt><dd>樣本輪廓圖卡</dd></div>
+    </dl>
+  </section>
+
+  <section id="goals">
+    <h2>本週學習目標</h2>
+    <div class="list-cards">
+      <div class="item"><h3>做出次數分配表</h3><p>能對一個類別變項列出各選項的次數（n）、百分比（%）與眾數，並確認百分比加總為 100%。</p></div>
+      <div class="item"><h3>讀懂加權百分比</h3><p>知道抽樣權數的用途，能說明為什麼「未加權 %」與「加權 %」會不一樣，該報告哪一個。</p></div>
+      <div class="item"><h3>選對圖表</h3><p>能判斷何時用長條圖、何時（很少）用圓餅圖，並指出圓餅圖常見的錯用。</p></div>
+      <div class="item"><h3>寫出樣本輪廓與限制</h3><p>能用 3–4 句話描述樣本組成，並指出這個樣本「不能代表誰」。</p></div>
+    </div>
+  </section>
+
+  <section id="flow">
+    <h2>本週在六步驟中的位置</h2>
+    <div class="card">
+      <div class="steps">
+        <div class="step"><b>STEP 1</b>主題情境：認識受訪者</div>
+        <div class="step"><b>STEP 2</b>概念微講授：次數／百分比／眾數</div>
+        <div class="step here"><b>STEP 3</b>自然語言下達：產生次數與加權百分比表</div>
+        <div class="step here"><b>STEP 4</b>Antigravity 產表與長條圖</div>
+        <div class="step here"><b>STEP 5</b>驗證：百分比總和、加權前後比較</div>
+        <div class="step"><b>STEP 6</b>成果：樣本輪廓圖卡</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="micro">
+    <h2>概念微講授：把類別資料變成一張輪廓</h2>
+
+    <div class="card">
+      <h3 style="margin-top:0">1 · 三個基本詞</h3>
+      <div class="list-cards">
+        <div class="item"><h3>次數 (n)</h3><p>某個選項出現幾次。例：性別為「男」的有 107 人，這個 107 就是次數。</p></div>
+        <div class="item"><h3>百分比 (%)</h3><p>次數 ÷ 總數 × 100。107 ÷ 212 × 100 ≈ 50.5%。也叫「相對次數」，方便跨資料比較。</p></div>
+        <div class="item"><h3>眾數</h3><p>次數最多的那個選項。年齡的眾數是 19 歲（45 人），不是「平均年齡」。眾數是類別資料唯一能用的「集中量數」。</p></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0">2 · 次數分配表怎麼排</h3>
+      <p>一張標準的次數分配表有四欄：<b>選項　｜　次數 n　｜　百分比 %　｜　累積 %</b>。
+      習慣把次數由大到小排（除非選項本身有自然順序，例如年齡、學歷）。</p>
+      <div class="callout info">
+        <b>檢查點：</b>所有選項的百分比加起來應該是 100%（四捨五入可能出現 99.9% 或 100.1%，屬正常）。
+        如果差很多，通常是「缺失值」被漏算或被當成一個選項。缺失值要另外列一行，不要偷偷併進去。
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0">3 · 抽樣權數與加權百分比</h3>
+      <p>
+        調查為了省成本，某些群體可能被抽得比母體比例多或少。<b>抽樣權數</b>就是用來「調回」母體結構的係數：
+        被抽太多的人權數 &lt; 1，被抽太少的人權數 &gt; 1。本週資料權數介於約 0.69–1.29，平均約 1.0。
+      </p>
+      <p style="margin-bottom:0">
+        <b>未加權 %</b> 把每個人算成 1；<b>加權 %</b> 把每個人算成他的權數再求比例。
+        兩者通常接近，但當某個群體權數普遍偏高或偏低時會明顯拉開——本週地區代碼就是最好的例子（見下方示範）。
+        <b>對外報告樣本輪廓時，慣例是報加權百分比，並同時附上未加權的實際人數。</b>
+      </p>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0">4 · 長條圖 vs 圓餅圖</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>用途</th><th>長條圖</th><th>圓餅圖</th></tr></thead>
+          <tbody>
+            <tr><td>適合的選項數</td><td>幾乎都可以，選項多也行（可排序、可橫放）</td><td>只有 2–4 類、且要強調「佔整體比例」時</td></tr>
+            <tr><td>比較高低</td><td>容易，眼睛沿同一基準線比長度</td><td>困難，人對扇形角度不敏感</td></tr>
+            <tr><td>本週哪些變項適合</td><td>年齡（6 類）、地區（6 類）、教育程度（11 類）</td><td>性別（2 類）勉強可用，其餘都不建議</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout warn" style="margin-top:14px">
+        <b>圓餅圖常見錯用：</b>①塞進 8、9 個以上的類別，擠成一團看不懂　②多個圓餅圖並排比較（改用堆疊長條圖）
+        ③3D、爆炸分離效果，扭曲面積　④百分比加起來不是 100%（漏了缺失值或選項可複選）。
+      </div>
+    </div>
+  </section>
+
+  <section id="dataset">
+    <h2>認識本週資料：臺灣青年人口輪廓.csv</h2>
+    <p class="sec-note">
+      與第 1 週同一批受訪者（中研院 2015 臺灣社會變遷基本調查 18–24 歲子集，212 筆），本週只保留人口背景 7 欄。
+      <a href="data/臺灣青年人口輪廓.csv">↓ 開啟原始 CSV</a>
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>欄位</th><th>型態</th><th>說明</th><th>備註</th></tr></thead>
+        <tbody>
+          <tr><td>樣本編號</td><td><span class="tag id">識別碼</span></td><td>受訪者唯一代碼</td><td>212 個皆相異</td></tr>
+          <tr><td>性別</td><td><span class="tag cat">類別</span></td><td>Male / Female</td><td>無缺失</td></tr>
+          <tr><td>年齡</td><td><span class="tag num">數值</span>／可當順序類別</td><td>19–24 足歲</td><td>本週依年齡分組數次數，當作有順序的類別看待</td></tr>
+          <tr><td>地區代碼</td><td><span class="tag cat">類別</span></td><td>居住縣市代碼 1–6，<b>不可平均</b></td><td>加權前後差異明顯</td></tr>
+          <tr><td>教育程度</td><td><span class="tag cat">類別</span></td><td>在學或最高學歷，共 11 種取值</td><td>1 筆為「Don't know」，末段數類僅 1–2 人</td></tr>
+          <tr><td>是否完成學業</td><td><span class="tag cat">類別</span></td><td>已畢業／仍在學／肄業</td><td>34 筆為「Not applicable」，算百分比時分母要講清楚</td></tr>
+          <tr><td>抽樣權數</td><td><span class="tag num">數值</span></td><td>加權用係數，約 0.69–1.29</td><td>不是受訪者特徵，不要拿去做輪廓</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout warn" style="margin-top:14px">
+      <b>使用限制（務必寫進成果）：</b>資料來源為「中央研究院社會學研究所，2015 臺灣社會變遷基本調查」，僅限學術用途、禁止商業使用，成果須註明來源。
+    </div>
+  </section>
+
+  <section id="demo">
+    <h2>示範：填好的「樣本輪廓」次數分配表</h2>
+    <p class="sec-note">以下數字已從 CSV 實際統計，可作為對照答案。你的成果要自己跑一次並確認。</p>
+
+    <div class="card">
+      <h3 style="margin-top:0">性別（眾數：男）</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>選項</th><th>次數 n</th><th>未加權 %</th><th>加權 %</th></tr></thead>
+        <tbody>
+          <tr><td>Male 男</td><td>107</td><td>50.5%</td><td>50.5%</td></tr>
+          <tr><td>Female 女</td><td>105</td><td>49.5%</td><td>49.5%</td></tr>
+          <tr><td>合計</td><td>212</td><td>100.0%</td><td>100.0%</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0">年齡（眾數：19 歲）</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>年齡</th><th>次數 n</th><th>未加權 %</th><th>加權 %</th></tr></thead>
+        <tbody>
+          <tr><td>19</td><td>45</td><td>21.2%</td><td>21.4%</td></tr>
+          <tr><td>20</td><td>22</td><td>10.4%</td><td>9.9%</td></tr>
+          <tr><td>21</td><td>31</td><td>14.6%</td><td>14.1%</td></tr>
+          <tr><td>22</td><td>39</td><td>18.4%</td><td>18.9%</td></tr>
+          <tr><td>23</td><td>35</td><td>16.5%</td><td>16.8%</td></tr>
+          <tr><td>24</td><td>40</td><td>18.9%</td><td>18.9%</td></tr>
+          <tr><td>合計</td><td>212</td><td>100.0%</td><td>100.0%</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0">地區代碼（眾數：地區 1）— 加權前後差最多的變項</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>地區代碼</th><th>次數 n</th><th>未加權 %</th><th>加權 %</th><th>差異</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>61</td><td>28.8%</td><td>22.9%</td><td>−5.9</td></tr>
+          <tr><td>2</td><td>46</td><td>21.7%</td><td>22.4%</td><td>+0.7</td></tr>
+          <tr><td>3</td><td>40</td><td>18.9%</td><td>20.8%</td><td>+1.9</td></tr>
+          <tr><td>4</td><td>26</td><td>12.3%</td><td>14.1%</td><td>+1.8</td></tr>
+          <tr><td>5</td><td>34</td><td>16.0%</td><td>17.5%</td><td>+1.5</td></tr>
+          <tr><td>6</td><td>5</td><td>2.4%</td><td>2.3%</td><td>−0.1</td></tr>
+          <tr><td>合計</td><td>212</td><td>100.0%</td><td>100.0%</td><td></td></tr>
+        </tbody>
+      </table></div>
+      <p style="margin-bottom:0;font-size:14px;color:var(--ink-soft)">
+        地區 1 在樣本中佔 28.8%，但加權後只佔 22.9%——代表這個地區的受訪者在抽樣時「被抽多了」，
+        權數把它調回接近母體的比例。報告時若說「近三成受訪者住在地區 1」會高估，應以加權值敘述。
+      </p>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0">教育程度（眾數：College）— 選項多，適合長條圖</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>選項</th><th>次數 n</th><th>未加權 %</th></tr></thead>
+        <tbody>
+          <tr><td>College 大學</td><td>75</td><td>35.4%</td></tr>
+          <tr><td>科大 / 技術學院</td><td>67</td><td>31.6%</td></tr>
+          <tr><td>Vocational senior high 高職</td><td>34</td><td>16.0%</td></tr>
+          <tr><td>Master's 碩士</td><td>11</td><td>5.2%</td></tr>
+          <tr><td>Junior high 國中</td><td>8</td><td>3.8%</td></tr>
+          <tr><td>Five-year junior college 五專</td><td>6</td><td>2.8%</td></tr>
+          <tr><td>Senior high 高中</td><td>5</td><td>2.4%</td></tr>
+          <tr><td>其他（綜合高中 2、二專 2、軍警校 1）</td><td>5</td><td>2.4%</td></tr>
+          <tr><td>Don't know</td><td>1</td><td>0.5%</td></tr>
+          <tr><td>合計</td><td>212</td><td>100.0%</td></tr>
+        </tbody>
+      </table></div>
+      <p style="margin-bottom:0;font-size:14px;color:var(--ink-soft)">
+        11 個原始選項中有多類只有 1–2 人。畫圖時可把末段小類合併為「其他」並註明內容；「Don't know」視為缺失、單獨一行。
+        這種情形<b>不要用圓餅圖</b>。
+      </p>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0">是否完成學業（眾數：已畢業）— 分母要講清楚</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>選項</th><th>次數 n</th><th>% (分母 212 · 全體)</th><th>% (分母 178 · 排除 N/A)</th></tr></thead>
+        <tbody>
+          <tr><td>Yes, I graduated 已畢業</td><td>99</td><td>46.7%</td><td>55.6%</td></tr>
+          <tr><td>No, I am still a student 仍在學</td><td>60</td><td>28.3%</td><td>33.7%</td></tr>
+          <tr><td>No, I didn't graduate 肄業</td><td>19</td><td>9.0%</td><td>10.7%</td></tr>
+          <tr><td>Not applicable（未進入此題）</td><td>34</td><td>16.0%</td><td>—</td></tr>
+          <tr><td>合計</td><td>212</td><td>100.0%</td><td>100.0%</td></tr>
+        </tbody>
+      </table></div>
+      <p style="margin-bottom:0;font-size:14px;color:var(--ink-soft)">
+        「已畢業」到底是 46.7% 還是 55.6%？兩個都對，差別在分母。<b>報告時必須寫清楚用哪一個分母</b>，否則同一份資料會給人不同印象。
+      </p>
+    </div>
+  </section>
+
+  <section id="practice">
+    <h2>課堂練習</h2>
+
+    <div class="card">
+      <h3 style="margin-top:0">練習 1 · 人數與百分比，哪個印象比較「大」？</h3>
+      <div class="compare">
+        <div class="bad">
+          <h4>✗ 容易誤導的說法</h4>
+          <ul>
+            <li>「有 <b>34 位</b>受訪者沒回答是否完成學業，樣本品質堪慮。」<br><small>——用絕對人數放大問題感。</small></li>
+            <li>「<b>超過一半</b>受訪者已經畢業。」<br><small>——用了排除 N/A 的分母卻沒說明。</small></li>
+            <li>「碩士只有 <b>11 人</b>，可以忽略不看。」</li>
+          </ul>
+        </div>
+        <div class="good">
+          <h4>✓ 平衡的說法</h4>
+          <ul>
+            <li>「是否完成學業有 34 筆（16.0%）為未填／不適用，後續分析以 178 筆為分母並註明。」</li>
+            <li>「以全體 212 人為分母，46.7% 已畢業；若僅計有作答者則為 55.6%。」</li>
+            <li>「碩士佔 5.2%（11 人），樣本數少，相關細分結果僅供參考。」</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0">練習 2 · 修正不恰當的圓餅圖</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>看到的圖</th><th>問題</th><th>建議改法</th></tr></thead>
+        <tbody>
+          <tr><td>教育程度 11 類的圓餅圖</td><td>類別太多、小扇形擠在一起、圖例對不上</td><td>改水平長條圖，由高到低排序，末段小類併「其他」</td></tr>
+          <tr><td>地區代碼 3D 立體圓餅圖</td><td>透視讓前方扇形看起來更大</td><td>改平面長條圖，直接標數值</td></tr>
+          <tr><td>三張圓餅圖並排比較男／女／全體</td><td>跨圓餅比角度非常困難</td><td>改「性別 × 教育程度」的堆疊或分組長條圖</td></tr>
+          <tr><td>圓餅圖百分比加起來 108%</td><td>缺失值被當成一類又重複計入</td><td>缺失值單列一項，重算分母</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </section>
+
+  <section id="task">
+    <h2>Antigravity 任務單（自然語言提示語）</h2>
+    <p class="sec-note">依序貼給 Antigravity，每步拿到結果先自己覆核。保留完整提示語作為評量依據。</p>
+
+    <div class="card">
+      <h3 style="margin-top:0">任務 A · 產生五個變項的次數與加權百分比表</h3>
+      <div class="prompt"><span class="p-label">貼給 Antigravity</span>請讀取「臺灣青年人口輪廓.csv」，對以下五個變項分別做次數分配表：性別、年齡、地區代碼、教育程度、是否完成學業。
+每張表要有欄位：選項、次數 n、未加權百分比、加權百分比（加權欄請用「抽樣權數」計算）。
+規則：
+- 缺失值、"Don't know"、"Not applicable" 各自單獨列一行，不要併入其他選項，也不要當成 0。
+- 每張表最後一行為合計，並回報未加權與加權百分比的總和。
+- 標出每個變項的眾數。
+- 「地區代碼」「年齡」請當成類別處理，不要計算平均。
+先輸出五張表，不要下任何解讀結論。</div>
+      <p style="margin-bottom:0;font-size:14px;color:var(--ink-soft)">
+        <b>你要覆核：</b>對照本頁「示範」數字；自己在試算表用篩選 / 樞紐分析重算「性別」與「地區代碼」兩張表。
+      </p>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0">任務 B · 繪製長條圖並檢查百分比總和</h3>
+      <div class="prompt"><span class="p-label">貼給 Antigravity</span>根據上一步的五張表，繪製對應的長條圖：
+- 每張圖都要有標題、座標軸標籤、百分比單位，並在圖下註明「資料來源：中研院 2015 臺灣社會變遷基本調查，n=212」。
+- 教育程度請用水平長條圖、由高到低排序，僅 1–2 人的選項合併為「其他」並在說明中列出內容。
+- 性別可另做一張圓餅圖示範；其餘變項不要用圓餅圖，並簡短說明原因。
+- 逐張回報：該圖百分比加總是否等於 100%（容許四捨五入 ±0.2）。若不等於，指出原因。</div>
+      <p style="margin-bottom:0;font-size:14px;color:var(--ink-soft)">
+        <b>你要覆核：</b>圖上的長度排序和表格數字一致嗎？標題、單位、來源齊全嗎？百分比總和有沒有落在 99.8–100.2%？
+      </p>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0">任務 C · 撰寫樣本輪廓圖卡文字</h3>
+      <div class="prompt"><span class="p-label">貼給 Antigravity</span>請根據上述次數表，寫一段 3–4 句的「樣本輪廓」描述，只陳述資料事實（性別比例、年齡集中區間、居住地區前三名、教育程度分布、畢業比例），
+數字以加權百分比為主、並在括號附實際人數。不要加入因果或評價。
+接著另外寫 2 項「抽樣限制」，句型為「因為……，所以本樣本不能代表……」，方向包含：
+(1) 僅涵蓋 18–24 歲、且為 2015 年調查；(2) 各地區與部分學歷組樣本數偏少；(3) 是否完成學業有 16% 未作答。</div>
+      <p style="margin-bottom:0;font-size:14px;color:var(--ink-soft)">
+        <b>你要覆核：</b>描述裡每個數字都能在你的表格找到嗎？有沒有偷偷寫成因果？限制是否為完整句並點出「不能代表誰」？
+      </p>
+    </div>
+  </section>
+
+  <section id="verify">
+    <h2>結果檢核表（交件前逐項打勾）</h2>
+    <ul class="checklist">
+      <li>五張次數分配表都有：選項、n、未加權 %、加權 %、合計、眾數。</li>
+      <li>缺失值 / Don't know / Not applicable 各自單列，沒有被當成 0 或併入其他選項。</li>
+      <li>每張表的百分比總和落在 99.8%–100.2%（四捨五入誤差內）。</li>
+      <li>已比較「地區代碼」加權前後的差異，並用加權值敘述地區分布。</li>
+      <li>教育程度用長條圖呈現，小類已合併「其他」並註明內容；沒有用圓餅圖硬塞多類別。</li>
+      <li>每張圖都有標題、座標軸、單位與資料來源（含 n=212）。</li>
+      <li>樣本輪廓文字只有事實、沒有因果；附了 2 項「因為…所以不能代表…」的限制。</li>
+      <li>完整提示語（任務 A/B/C）已保存，另一位同學可依此重現同一張輪廓圖卡。</li>
+    </ul>
+  </section>
+
+  <section id="deliver">
+    <h2>當週成果與繳交</h2>
+    <div class="list-cards">
+      <div class="item"><h3>① 樣本輪廓圖卡</h3><p>一頁：五個人口變項的次數／加權百分比表 + 至少 3 張長條圖（含性別、地區、教育程度），標題單位來源齊全。</p></div>
+      <div class="item"><h3>② 資料事實敘述</h3><p>3–4 句樣本輪廓描述，數字以加權百分比為主、括號附人數，純陳述事實。</p></div>
+      <div class="item"><h3>③ 抽樣限制 ×2</h3><p>兩句「因為……，所以本樣本不能代表……」，點出年份、年齡範圍、樣本數或未作答造成的限制。</p></div>
+    </div>
+    <div class="callout info" style="margin-top:14px">
+      <b>繳交形式：</b>一頁成果（文件或簡易網頁）＋ 完整 Antigravity 提示語紀錄。下週帶來做同儕互評。
+    </div>
+  </section>
+
+  <section id="teach-note">
+    <h2>課堂流程建議（教師參考 · 約 100 分鐘）</h2>
+    <div class="card">
+      <div class="timeline">
+        <div class="row"><span class="t">0–8′</span><span>回顧第 1 週健檢結果，點名本週要用的 7 欄，複習「類別 vs 數值」。</span></div>
+        <div class="row"><span class="t">8–30′</span><span>概念微講授：次數／百分比／眾數、次數分配表四欄、百分比總和檢查；用性別欄現場算一次。</span></div>
+        <div class="row"><span class="t">30–45′</span><span>加權概念：投影地區代碼加權前後對照表，討論「近三成 vs 22.9%」的差別，帶出何時報加權值。</span></div>
+        <div class="row"><span class="t">45–70′</span><span>學生實作任務 A、B：請 AI 產五張表與長條圖，教師巡場，全班一起檢查一張百分比總和。</span></div>
+        <div class="row"><span class="t">70–88′</span><span>練習 2：投影幾張不恰當圓餅圖，分組說出問題並提改法；完成樣本輪廓文字（任務 C）。</span></div>
+        <div class="row"><span class="t">88–100′</span><span>兩兩互評用檢核表；收束強調「分母要講清楚、圖表要能被重現」，預告第 3 週談集中與分散。</span></div>
+      </div>
+    </div>
+  </section>
+
+  <nav class="week-nav">
+    <a href="week01.html"><span class="nn">‹ 上一週</span>第 1 週：用資料回答問題（校園生活調查）</a>
+    <span class="next disabled"><span class="nn">下一週</span>第 3 週：集中與分散趨勢（教材準備中）</span>
+  </nav>
+
+</main>
+
+<footer>
+  臺北市立大學 公共事務學系｜資料探勘（郭毓倫）｜第 2 週教材<br>
+  範例資料來源：中央研究院社會學研究所「2015 臺灣社會變遷基本調查（第七期第一次）」18–24 歲子集，僅限學術用途、禁止商業使用。
+</footer>
+
+</body>
+</html>
