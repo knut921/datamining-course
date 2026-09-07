@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/week01-rpg.css">
 </head>
 <body>
 
@@ -310,6 +311,26 @@
   臺北市立大學 公共事務學系｜資料探勘（郭毓倫）｜第 1 週教材<br>
   範例資料來源：中央研究院社會學研究所「2015 臺灣社會變遷基本調查（第七期第一次）」18–24 歲子集，僅限學術用途、禁止商業使用。
 </footer>
+
+
+<section id="data-rpg" aria-label="第一週像素 RPG 彩蛋">
+  <details>
+    <summary><span class="rpg-cube" aria-hidden="true"></span><span><strong>隱藏彩蛋：DATA CRAFT</strong><small>像素資料村 · 第一週 RPG · 收集五顆知識寶石</small></span><span class="rpg-open-label">點我開啟 ▸</span></summary>
+    <div class="rpg-body">
+      <p class="rpg-intro">你是剛抵達資料村的探索者。村民的調查資料被迷思封印了！用第一週學到的知識，修復資料傳送門。</p>
+      <div class="rpg-hud"><strong class="rpg-count">0 / 5 知識寶石</strong><span class="rpg-xp">0 XP</span><button type="button" class="rpg-reset">↻ 重新冒險</button></div>
+      <canvas width="768" height="432" tabindex="0" role="img" aria-label="像素資料村地圖。點擊村民接任務；聚焦地圖後使用方向鍵或 WASD 移動、E 或 Enter 對話。也可用下方寶石按鈕直接選任務。">使用下方五顆寶石按鈕，完成相同的全部任務。</canvas>
+      <div class="rpg-controls"><p>電腦：點地圖後，用方向鍵 / WASD 移動，E 對話。<br>手機：點村民直接接任務，也可用方向按鈕探索。</p><div class="rpg-pad" aria-label="移動控制"><button type="button" data-move="0,-1" aria-label="向上">↑</button><button type="button" data-move="-1,0" aria-label="向左">←</button><button type="button" data-move="0,1" aria-label="向下">↓</button><button type="button" data-move="1,0" aria-label="向右">→</button></div><button type="button" class="rpg-interact">E · 與村民對話</button></div>
+      <p class="rpg-location rpg-footnote" role="status"></p>
+      <div class="rpg-panel"><p class="rpg-speaker">任務日誌</p><p class="rpg-question">歡迎來到資料村！</p><div class="rpg-options"></div><p class="rpg-feedback" aria-live="polite"></p><button type="button" class="rpg-next" hidden>下一個任務 →</button></div>
+      <div class="rpg-journal" aria-label="任務捷徑"><button type="button" data-quest="0">◇ 結構之石</button><button type="button" data-quest="1">◇ 型態之石</button><button type="button" data-quest="2">◇ 驗證之石</button><button type="button" data-quest="3">◇ 問題之石</button><button type="button" data-quest="4">◇ 限制之石</button></div>
+      <p class="rpg-win" role="status" hidden>✦ 五石集齊！資料傳送門已啟動，你獲得「資料探索者」稱號。</p>
+      <p class="rpg-footnote">原創方塊像素風教學小遊戲，非 Minecraft 官方作品。題目依本週教材編寫，無須登入；進度只保留在本次頁面，重新整理後重置。</p>
+      <noscript><p>請啟用 JavaScript 以進行互動遊戲；上方完整教材仍可閱讀。</p></noscript>
+    </div>
+  </details>
+</section>
+<script src="assets/week01-rpg.js" defer></script>
 
 </body>
 </html>
