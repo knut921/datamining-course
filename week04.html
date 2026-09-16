@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="第 4 週資料探勘教材：分布與極端值，附真實資料、互動實驗與 AI 任務單。"><title>第 4 週教材：房租與生活費是否差很多？｜資料探勘</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="assets/style.css"><link rel="stylesheet" href="assets/lesson.css"><script src="assets/lesson-data.js" defer></script><script src="assets/lesson.js" defer></script></head>
+<body class="lesson-page" data-week="04"><a href="#main" class="skip">跳到教材內容</a><header class="site-head"><div class="inner"><a class="brand" href="index.html">資料探勘 · Data Mining</a><nav aria-label="課程導覽"><a href="index.html">課程大綱</a><a href="index.html#pick">每週教材</a><a href="#concepts">概念微講授</a><a href="#dataset">本週資料</a><a href="#tasks">Antigravity 任務單</a></nav></div></header>
+<main id="main"><a class="backlink" href="index.html#pick">← 回每週教材選單</a><section class="hero"><p class="kicker">Week 4 · 分布與極端值</p><h1>房租與生活費是否差很多？</h1><p class="lead">從雙北租賃資料看見長尾、偏態與候選極端值。練習先查原因，再決定保留、修正或排除；本週聚焦租金，生活費留作延伸討論。</p>
+<dl class="meta-grid"><div><dt>概念微講授</dt><dd>分布 · 偏態 · 極端值</dd></div><div><dt>核心動作</dt><dd>直方圖 + 箱型圖</dd></div><div><dt>本週資料</dt><dd>雙北租賃 11,250 筆</dd></div><div><dt>當週成果</dt><dd>分布與異常值報告</dd></div></dl>
+<div class="actions"><a href="#lab" class="button">開始互動實驗 ↗</a><a class="button secondary" href="assets/data/雙北住宅租金分布.csv" download>下載本週 CSV ↓</a></div></section>
+<nav class="lesson-toc" aria-label="本頁重點"><a href="#goals">學習目標</a><a href="#worked">實算示範</a><a href="#lab">互動實驗</a><a href="#tasks">AI 任務單</a><a href="#deliver">成果與檢核</a></nav><noscript><p class="no-js">概念、實算表與下載仍可使用；互動圖表與複製功能需啟用 JavaScript。</p></noscript>
+<section id="goals" class="lesson-section">
+<p class="section-kicker">01 / Learning objectives</p><h2 class="section-title">租金很高，資料就有錯嗎？</h2>
+<p class="section-intro">同樣是每月房租，一間雅房與一整層樓的數字可能差很多。這週先看分布，再找出值得追查的個案。</p>
+<div class="grid-3"><article class="mini"><span class="num">01</span><h3>讀懂分布</h3><p>從直方圖辨認集中位置、長尾與組距造成的視覺差異。</p></article><article class="mini"><span class="num">02</span><h3>標示候選值</h3><p>讀懂箱型圖，用 1.5 IQR 規則標示需要查核的案件。</p></article><article class="mini"><span class="num">03</span><h3>說明處理理由</h3><p>比較保留、修正與排除的影響，留下可重現的決策紀錄。</p></article></div>
+<div class="flow" aria-label="本週六步驟"><span><b>STEP 01</b>租屋價格情境</span><span><b>STEP 02</b>分布與箱型圖</span><span><b>STEP 03</b>下達繪圖任務</span><span><b>STEP 04</b>AI 標示候選</span><span><b>STEP 05</b>逐案核查</span><span><b>STEP 06</b>異常值報告</span></div>
+</section>
+
+<section id="concepts" class="lesson-section">
+<p class="section-kicker">02 / Concept cards</p><h2 class="section-title">從一個平均，走向整個分布</h2>
+<div class="grid-2"><article class="mini concept"><span class="en">DISTRIBUTION</span><h3>分布｜數值如何散開</h3><p>看中心在哪裡、分散多大、有幾個高峰，以及兩側尾巴。這些資訊能補上平均數沒有告訴你的事。</p></article><article class="mini concept"><span class="en">HISTOGRAM</span><h3>直方圖｜每個數值區間有幾筆</h3><p>橫軸是連續數值的區間，縱軸是筆數。本頁採等寬組距；改變分組數會改變外觀，原始資料並沒有改變。</p></article><article class="mini concept"><span class="en">BOX PLOT</span><h3>箱型圖｜把位置壓成一張圖</h3><p>箱子從 Q1 延伸至 Q3，中線是中位數。本頁鬚線延伸至 1.5 IQR 界線內最遠的實際觀察值，界線外另畫成點。</p></article><article class="mini concept"><span class="en">SKEWNESS</span><h3>偏態｜尾巴往哪裡延伸</h3><p>右偏代表右側有較長的尾巴，常見平均數大於中位數。不能只看兩個數字就宣稱分布形狀，必須搭配圖表。</p></article></div>
+<div class="card" style="margin-top:16px"><h3>1.5 IQR 規則：圈出需要回查的數值</h3><p>IQR＝Q3−Q1<br>下界＝Q1−1.5×IQR<br>上界＝Q3＋1.5×IQR</p><p>小於下界或大於上界的值，標為<strong>候選極端值</strong>。這是探索資料的規則，不是自動刪除的命令；在長尾分布中，正常案件也可能超過界線。</p></div>
+<div class="note"><strong>不要把界線當鬚線。</strong>例如月租金上界為 45,000 元時，上鬚是「不超過 45,000 元的最大實際租金」，不一定剛好等於 45,000 元。本頁四分位數使用線性內插。</div>
+<p class="source">延伸閱讀：<a href="https://www.itl.nist.gov/div898/handbook/eda/section3/boxplot.htm" target="_blank" rel="noopener">NIST 統計手冊：Box Plot ↗</a>。</p>
+</section>
+
+<section id="dataset" class="lesson-section">
+<p class="section-kicker">03 / Meet the data</p><h2 class="section-title">11,250 筆雙北租賃案件</h2>
+<p class="section-intro">內政部實價登錄 114 年第 4 季下載版之課堂子集。臺北市 3,710 筆、新北市 7,540 筆；20 個欄位。</p>
+<div class="card"><h3>一列是一件租賃登錄案件</h3><p>本檔租賃日期為民國 114/08/11–114/11/10（2025/08/11–2025/11/10）。「第 4 季下載版」不是說所有案件都發生於第 4 季。本週分析<strong>月租金與每坪月租金</strong>；CSV 沒有生活費，也沒有租客是否為學生的欄位。</p><a class="button secondary" href="assets/data/雙北住宅租金分布.csv" download>下載本週 CSV ↓</a></div>
+<div class="table-wrap" tabindex="0" role="region" aria-label="可左右捲動的資料表"><table><caption>本週會用到的欄位</caption><thead><tr><th>欄位</th><th>單位／角色</th><th>核查重點</th></tr></thead><tbody><tr><td>月租金元</td><td>元／月</td><td>11,250 筆均為正數，無缺失；總租金不能直接跨坪數比較。</td></tr><tr><td>每坪月租金元</td><td>元／坪／月</td><td>月租金 ÷ 未四捨五入面積坪；本欄已取至整元。</td></tr><tr><td>建物面積平方公尺、建物面積坪</td><td>m²、坪</td><td>1 坪約 3.305785 m²；CSV 的坪數取 2 位小數，回算可能有小差異。</td></tr><tr><td>縣市、行政區</td><td>地理分組</td><td>比較分布時要說明採全體界線或各群組界線。</td></tr><tr><td>主要用途、建物型態、出租型態</td><td>查核背景</td><td>留意住商混用、店面、整戶與分租等差異。</td></tr><tr><td>租賃年月日、案件編號</td><td>時間、識別碼</td><td>日期為民國格式；案件編號用來追查，不拿來做統計。</td></tr></tbody></table></div>
+<div class="note warn"><strong>住宅子集仍需要檢查。</strong>原產製程式以「主要用途含『住』」篩選，尚含 185 筆「住商用」，建物型態有 140 筆店面與 32 筆辦公商業大樓。用途與型態是不同欄位，這些數目可能重疊；不能直接相加當作應排除筆數。</div>
+<p class="source">來源：<a href="https://plvr.land.moi.gov.tw/DownloadOpenData" target="_blank" rel="noopener">內政部不動產成交案件實際資訊資料供應系統 ↗</a>。本檔已移除完整門牌。資料只描述通過篩選的登錄案件，不代表所有租屋、所有大學生，或目前的市場行情。</p>
+</section>
+
+<section id="worked" class="lesson-section">
+<p class="section-kicker">04 / Worked example</p><h2 class="section-title">先建立一份不刪值的基準</h2>
+<p class="section-intro">全體 11,250 筆，依各變項的原始四分位數計算界線。下列為 CSV 的實際摘要，未修正或排除案件。</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="可左右捲動的資料表"><table class="numeric"><caption>基準摘要｜全部保留，n=11,250</caption><thead><tr><th scope="col">統計量</th><th scope="col">月租金（元／月）</th><th scope="col">每坪月租金（元／坪／月）</th></tr></thead><tbody><tr><td>有效筆數</td><td>11,250</td><td>11,250</td></tr><tr><td>平均數</td><td>24,430.29</td><td>1,226.03</td></tr><tr><td>中位數</td><td>20,000.00</td><td>967.00</td></tr><tr><td>最小值</td><td>3,300.00</td><td>110.00</td></tr><tr><td>Q1</td><td>15,000.00</td><td>694.00</td></tr><tr><td>Q3</td><td>27,000.00</td><td>1,478.75</td></tr><tr><td>最大值</td><td>402,854.00</td><td>7,052.00</td></tr><tr><td>樣本標準差</td><td>20,711.82</td><td>812.04</td></tr><tr><td>IQR 下界</td><td>-3,000.00</td><td>-483.12</td></tr><tr><td>IQR 上界</td><td>45,000.00</td><td>2,655.88</td></tr><tr><td>界線外候選值筆數</td><td>714</td><td>797</td></tr></tbody></table></div>
+<div class="note"><strong>怎麼解讀？</strong>月租金中位數為 20,000 元，平均數為 24,430.29 元；高租金案件拉長右尾。這是整份登錄樣本的描述。把月租金改成每坪租金後，衡量的是單位面積價格，極端案件不一定相同。</div>
+</section>
+
+<section id="lab" class="lesson-section">
+<p class="section-kicker">05 / Interactive lab</p><h2 class="section-title">自己切換，讀出分布的形狀</h2>
+<p class="section-intro">先保留全部案件；再切換縣市、指標與分組數。想比較候選值的影響時，才勾選暫排情境。</p>
+<div class="lab" id="rent-lab"><div class="lab-heading"><h3>雙北租金探索器</h3><span class="live-tag">11,250 RECORDS</span></div>
+<div class="controls"><div class="control"><label for="rent-city">分析範圍</label><select id="rent-city"><option value="all">雙北合併</option><option value="臺北市">臺北市</option><option value="新北市">新北市</option></select></div><div class="control"><label for="rent-variable">租金指標</label><select id="rent-variable"><option value="1">月租金（元／月）</option><option value="2">每坪月租金（元／坪／月）</option></select></div><div class="control"><label for="rent-bins">直方圖分組數</label><select id="rent-bins"><option value="12">12 組 · 看大致形狀</option><option value="24" selected>24 組 · 標準視圖</option><option value="40">40 組 · 看更多細節</option></select></div></div>
+<label class="toggle"><input id="hide-flags" type="checkbox">暫排 IQR 候選值，觀察敏感度（不修改 CSV）</label>
+<div class="stats" id="rent-stats" aria-live="polite"></div>
+<h4>直方圖｜目前情境的租金分布</h4><p class="fine">橫軸始終包含所選群組的完整原始範圍；長尾使主要資料集中在左側，這也是分布的一部分。</p>
+<p class="mobile-note">圖表可左右滑動查看。</p><div class="chart-scroll" tabindex="0" role="region" aria-label="可左右捲動的統計圖"><svg id="rent-histogram" class="chart" viewBox="0 0 640 285" role="img" aria-label="所選租金指標的直方圖"></svg></div>
+<details><summary>查看直方圖各區間的精確筆數</summary><div class="details-body"><p class="fine">左閉右開，最後一組含右界；區間顯示至小數 1 位，分組使用完整精度。</p><div class="table-wrap small" tabindex="0" role="region" aria-label="可左右捲動的資料表"><table class="numeric"><thead><tr><th>數值區間</th><th>筆數</th></tr></thead><tbody id="histogram-rows"></tbody></table></div></div></details>
+<h4>箱型圖｜始終保留原始群組與候選值</h4><div class="legend"><span>Q1 至 Q3；深線為中位數</span><span class="orange">IQR 界線外的候選值</span></div><div class="chart-scroll" tabindex="0" role="region" aria-label="可左右捲動的統計圖"><svg id="rent-boxplot" class="chart" viewBox="0 0 640 145" role="img" aria-label="原始群組的箱型圖與候選極端值"></svg></div><p id="box-summary" class="fine"></p>
+<p class="lab-description" id="rent-description" aria-live="polite"></p>
+<h4>敏感度比較｜界線固定於原始群組</h4><div class="table-wrap" tabindex="0" role="region" aria-label="可左右捲動的資料表"><table class="numeric"><thead><tr><th>情境</th><th>n</th><th>平均數</th><th>中位數</th><th>標準差</th></tr></thead><tbody id="rent-summary"></tbody></table></div><p id="summary-unit" class="fine"></p>
+<div class="toolbar"><button id="reset-rent" type="button">重設探索器</button></div></div>
+<div class="note warn"><strong>暫排只是比較情境，不是清理結論。</strong>切換縣市時，會用該縣市的原始資料重新計算 IQR 界線；勾選暫排後不反覆重算界線，以免一輪接一輪刪掉更多資料。</div>
+</section>
+
+<section id="cases" class="lesson-section">
+<p class="section-kicker">06 / Investigate first</p><h2 class="section-title">回到個案，做有理由的決定</h2>
+<div class="grid-2"><article class="mini"><span class="num">CASE A · 真實資料</span><h3>402,854 元／月，先查用途</h3><p>臺北市松山區，222.63 坪；主要用途「住商用」，建物型態「辦公商業大樓」。它是本檔最高月租金，卻不一定是典型住宅。</p><p class="fine">案件：RPWNMLNJJIKGFDA97CC</p><p><strong>討論：</strong>若研究對象限定純住宅，應先訂出一致的用途與型態規則，逐案套用；不能只因價格最高就刪除。</p></article><article class="mini"><span class="num">CASE B · 真實資料</span><h3>7,052 元／坪，先查面積</h3><p>新北市永和區，月租 12,800 元；登錄面積 6 m²（約 1.82 坪），出租型態「分租雅房」。小分母讓每坪租金很高。</p><p class="fine">案件：RPPNMLRKIIKGFHF58CC</p><p><strong>討論：</strong>核對面積是否為實際出租部分、格局欄位是否對應整戶。在沒有佐證前，不自行把 6 改成 60。</p></article></div>
+<div class="card" style="margin-top:16px"><h3>保留、修正、排除：理由不同，做法不同</h3><div class="table-wrap" tabindex="0" role="region" aria-label="可左右捲動的資料表"><table><thead><tr><th>處理</th><th>何時合理</th><th>要留下什麼</th></tr></thead><tbody><tr><td>保留</td><td>值雖特殊，仍屬研究範圍且沒有證據顯示錯誤。</td><td>原值、核查結果、必要的敏感度比較。</td></tr><tr><td>修正</td><td>有原始契約、原始登錄或單位核對等可查證的佐證。</td><td>舊值、新值、佐證、修正方式。</td></tr><tr><td>排除</td><td>確認不屬預先定義的研究範圍，或有無法修復的錯誤。</td><td>案件編號、規則、理由、排除前後 n。</td></tr></tbody></table></div></div>
+<details open><summary>課堂練習｜用一個已知誤植的假設例子，比較三種做法</summary><div class="details-body"><p><strong>以下是教學假設資料，不是實價登錄案件：</strong>租金為 [10,000、12,000、14,000、16,000、18,000、20,000、22,000、24,000、26,000、200,000]。假設原始契約已證實最後一筆應為 20,000。</p><div class="table-wrap" tabindex="0" role="region" aria-label="可左右捲動的資料表"><table class="numeric"><caption>教學假設情境｜單位：元／月</caption><thead><tr><th scope="col">情境</th><th scope="col">n</th><th scope="col">平均數</th><th scope="col">中位數</th><th scope="col">樣本標準差</th></tr></thead><tbody><tr><td>保留 200,000</td><td>10</td><td>36,200.00</td><td>19,000.00</td><td>57,784.66</td></tr><tr><td>依契約修正為 20,000</td><td>10</td><td>18,200.00</td><td>19,000.00</td><td>5,202.56</td></tr><tr><td>排除最後一筆</td><td>9</td><td>18,000.00</td><td>18,000.00</td><td>5,477.23</td></tr></tbody></table></div><p>在這個「已有佐證」的條件下，修正可以保留有效案件；若真實案件沒有佐證，不能套用這個假設去改值。真實資料的修正版可寫「目前無可佐證修正」，並保留原值。</p></div></details>
+<div class="card" data-quiz><p class="quiz-question">快速檢查｜一筆月租金超過 1.5 IQR 上界，下一步應該是？</p><div class="quiz-choices"><button type="button" aria-pressed="false" data-feedback="候選極端值不等於資料錯誤。自動刪除可能改變研究對象與分布。">A. 直接刪除，讓平均數更正常</button><button type="button" aria-pressed="false" data-feedback="對。先查單位、面積、用途、出租型態與登錄品質，再記錄決策理由。">B. 回查個案，再決定保留、修正或排除</button><button type="button" aria-pressed="false" data-feedback="把值換成中位數會人為改變資料；沒有佐證，不能這樣修正。">C. 一律改成中位數</button></div><p class="quiz-feedback" aria-live="polite">選一個答案，查看理由。</p></div>
+</section>
+
+<section id="tasks" class="lesson-section">
+<p class="section-kicker">07 / AI task sheet</p><h2 class="section-title">讓 AI 畫圖，也讓結果可追查</h2><p class="section-intro">依序執行，保留圖表、候選案件清單及處理紀錄。沒有核查證據，就不要要求 AI 猜測修正值。</p>
+<article class="prompt-card"><div class="prompt-head"><h3>A · 繪圖與基準摘要</h3><button type="button" class="copy-button" data-copy="prompt-0" aria-label="複製任務 A 提示語">複製提示語</button></div><pre class="prompt-text" id="prompt-0">請讀取我上傳的「雙北住宅租金分布.csv」，保留原始資料，不自動刪除極端值。
+1. 核對總筆數、縣市筆數、日期範圍，以及月租金元／每坪月租金元的缺失與非正數。
+2. 兩個變項各畫一張等寬直方圖和一張箱型圖，共 4 圖。直方圖採 24 組、完整數值範圍，回報組界與各組筆數；另試 12 與 40 組比較外觀。
+3. 圖上標明指標、單位、n、來源與資料版本。下載版為民國 114 年第 4 季，不表示所有租賃日期都在該季。
+4. 列出 n、平均數、中位數、Q1、Q3、樣本標準差、最小值、最大值。
+5. 四分位數採 (n−1)×p 線性內插，標準差使用 n−1。以 Q1−1.5IQR、Q3+1.5IQR 標示候選值；鬚線畫至界線內最遠的實際值。
+6. 分縣市時以各縣市原始資料計算界線，說明這與全體界線不同。</pre><div class="prompt-check"><strong>自己覆核：</strong>全體 n=11,250；月租金中位數 20,000、上界 45,000，界線外候選值 714 筆。</div></article><article class="prompt-card"><div class="prompt-head"><h3>B · 個案核查，不猜測修正值</h3><button type="button" class="copy-button" data-copy="prompt-1" aria-label="複製任務 B 提示語">複製提示語</button></div><pre class="prompt-text" id="prompt-1">列出月租金與每坪月租金的候選極端值，保留案件編號、縣市、行政區、原值、IQR 界線、面積、主要用途、建物型態、出租型態與租賃日期。
+至少檢查這兩筆：RPWNMLNJJIKGFDA97CC、RPPNMLRKIIKGFHF58CC。
+先描述觀察到的疑點，分開列出「已知事實」與「仍需外部佐證的假設」。
+核對月租／每坪月租、平方公尺／坪、出租範圍、住宅與住商用途；回算每坪租金時使用未四捨五入面積（平方公尺 ÷ 3.305785）。
+不得因 IQR 超界就自動刪除，不得無證據將數值除以 10 或改成中位數。
+產生決策表：案件編號、原值、疑點、核查證據、保留／修正／排除、理由、新值（若有）。沒有證據就寫待查或保留。</pre><div class="prompt-check"><strong>自己覆核：</strong>最高月租案件的用途是住商用；每坪最高的案件面積是 6 m²。疑點不等於誤植。</div></article><article class="prompt-card"><div class="prompt-head"><h3>C · 比較處理情境與寫報告</h3><button type="button" class="copy-button" data-copy="prompt-2" aria-label="複製任務 C 提示語">複製提示語</button></div><pre class="prompt-text" id="prompt-2">比較三種情境：原始全部保留、僅做有佐證的修正、依預先說明的研究範圍或品質規則排除。
+每種情境列出 n、平均數、中位數、Q1、Q3、樣本標準差與異動筆數。沒有佐證修正時，該欄寫「無可佐證修正，沿用原值」，不得虛構修正版。
+可另加「暫排 IQR 候選」作為敏感度分析，固定原始界線、不反覆刪值，且不要當作最終清理建議。
+另以教學假設資料 [10000,12000,14000,16000,18000,20000,22000,24000,26000,200000] 練習三種情境。假設契約已證實最後一筆應為 20000，分別比較保留、修正與排除最後一筆。
+將真實資料與教學假設分開呈現。最後用 80–120 字描述分布，附上處理決策與至少兩項限制；不把登錄案件解讀成今日所有學生租屋市場。</pre><div class="prompt-check"><strong>自己覆核：</strong>說明每個變動的證據與理由；敏感度比較必須列出被暫排的筆數。</div></article>
+</section>
+
+<section id="deliver" class="lesson-section">
+<p class="section-kicker">08 / Deliver &amp; reflect</p><h2 class="section-title">本週交件：分布與異常值報告</h2>
+<div class="card"><h3>一頁報告，附上可追查的附件</h3><ol><li>月租金與每坪月租金的直方圖、箱型圖，共 4 圖。標示單位、樣本數、來源及界線。</li><li>至少兩筆候選案件的核查卡：疑點、核查證據、處理決定與理由。</li><li>保留、可佐證修正、依規則排除的摘要比較。無修正證據時標示「無可佐證修正」，不虛構修正版。</li><li>用 80–120 字描述分布，並指出登錄樣本與學生租屋市場的差別。</li></ol><p>附件保留完整 AI 提示語、候選值清單與決策紀錄。若做 IQR 暫排比較，明確標為敏感度分析。</p><a href="assets/data/week04-成果模板.md" download>下載成果填寫模板（Markdown）↓</a></div>
+<div class="card"><h3>交件前逐項確認</h3><ul class="checklist"><li><label class="check-row"><input type="checkbox"><span>月租金與每坪月租金各有直方圖、箱型圖，共 4 圖。</span></label></li><li><label class="check-row"><input type="checkbox"><span>各圖標示單位、n、完整範圍、來源與資料版本。</span></label></li><li><label class="check-row"><input type="checkbox"><span>四分位數、IQR 界線、候選值數量與基準表對得上。</span></label></li><li><label class="check-row"><input type="checkbox"><span>至少兩筆案件有單位、面積、用途或登錄品質的核查紀錄。</span></label></li><li><label class="check-row"><input type="checkbox"><span>沒有只因 IQR 超界就刪除，也沒有猜測修正值。</span></label></li><li><label class="check-row"><input type="checkbox"><span>保留／修正／排除情境都有 n、摘要及理由；無修正證據時如實標示。</span></label></li><li><label class="check-row"><input type="checkbox"><span>暫排候選值的比較標為敏感度分析，未反覆刪值。</span></label></li><li><label class="check-row"><input type="checkbox"><span>真實案件與教學假設分開，且沒有推論成所有學生租屋市場。</span></label></li><li><label class="check-row"><input type="checkbox"><span>原始資料、候選清單、決策表與完整提示語已保存。</span></label></li></ul><p id="check-progress" class="check-progress" aria-live="polite"></p></div>
+<details><summary>教師參考｜100 分鐘課堂流程</summary><div class="details-body"><div class="timeline"><b>0–10′</b><span>承接第 3 週：平均數與中位數為什麼不同？</span><b>10–30′</b><span>直方圖、組距、箱型圖與 1.5 IQR 規則。</span><b>30–50′</b><span>執行任務 A，繪出 4 張圖，核對基準摘要。</span><b>50–70′</b><span>用探索器切換變項與縣市；核查兩筆真實候選案件。</span><b>70–85′</b><span>做三情境假設練習，區分有證據修正與無證據猜測。</span><b>85–100′</b><span>整理處理紀錄，完成報告並互評限制是否寫清楚。</span></div></div></details>
+</section>
+
+<div class="toolbar"><button type="button" data-print>列印教材／另存 PDF</button><a class="fine" href="assets/data/資料來源與計算說明.md" download>下載資料來源與計算說明</a></div><nav class="week-nav" aria-label="上下週教材"><a href="week03.html"><span class="nn">‹ 上一週</span>第 3 週：集中與分散趨勢</a><a href="index.html#pick" class="next"><span class="nn">課程總覽 ›</span>回到每週教材選單</a></nav></main>
+<footer>臺北市立大學 公共事務學系｜資料探勘（郭毓倫）｜第 4 週教材<br>範例資料來源：內政部實價登錄租賃資料 114 年第 4 季下載版之雙北課堂子集。</footer></body></html>

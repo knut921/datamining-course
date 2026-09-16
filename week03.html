@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="第 3 週資料探勘教材：集中與分散趨勢，附真實資料、互動實驗與 AI 任務單。"><title>第 3 週教材：學生一週花多少時間？｜資料探勘</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="assets/style.css"><link rel="stylesheet" href="assets/lesson.css"><script src="assets/lesson-data.js" defer></script><script src="assets/lesson.js" defer></script></head>
+<body class="lesson-page" data-week="03"><a href="#main" class="skip">跳到教材內容</a><header class="site-head"><div class="inner"><a class="brand" href="index.html">資料探勘 · Data Mining</a><nav aria-label="課程導覽"><a href="index.html">課程大綱</a><a href="index.html#pick">每週教材</a><a href="#concepts">概念微講授</a><a href="#dataset">本週資料</a><a href="#tasks">Antigravity 任務單</a></nav></div></header>
+<main id="main"><a class="backlink" href="index.html#pick">← 回每週教材選單</a><section class="hero"><p class="kicker">Week 3 · 集中與分散趨勢</p><h1>學生一週花多少時間？</h1><p class="lead">用真實青年時間資料，學會一起看平均數、中位數與分散程度。從「平均是多少」，走到「什麼數字更能描述典型情況」。</p>
+<dl class="meta-grid"><div><dt>概念微講授</dt><dd>平均數 · 中位數 · 標準差</dd></div><div><dt>核心動作</dt><dd>敘述統計 + 極端值實驗</dd></div><div><dt>本週資料</dt><dd>青年時間使用 212 筆</dd></div><div><dt>當週成果</dt><dd>敘述統計摘要</dd></div></dl>
+<div class="actions"><a href="#lab" class="button">開始互動實驗 ↗</a><a class="button secondary" href="assets/data/臺灣青年時間使用.csv" download>下載本週 CSV ↓</a></div></section>
+<nav class="lesson-toc" aria-label="本頁重點"><a href="#goals">學習目標</a><a href="#worked">實算示範</a><a href="#lab">互動實驗</a><a href="#tasks">AI 任務單</a><a href="#deliver">成果與檢核</a></nav><noscript><p class="no-js">概念、實算表與下載仍可使用；互動圖表與複製功能需啟用 JavaScript。</p></noscript>
+<section id="goals" class="lesson-section">
+<p class="section-kicker">01 / Learning objectives</p><h2 class="section-title">用一個數字，描述一群人？</h2>
+<p class="section-intro">「大家平均每天上網多久？」只是起點。接著要問：這個平均值，離多數人的生活有多遠？</p>
+<div class="grid-3">
+<article class="mini"><span class="num">01</span><h3>找到中心</h3><p>分辨平均數與中位數，依問題選擇有意義的代表值。</p></article>
+<article class="mini"><span class="num">02</span><h3>看見差異</h3><p>用最小值、最大值、四分位數與標準差描述分散程度。</p></article>
+<article class="mini"><span class="num">03</span><h3>驗證 AI 結果</h3><p>核對單位、有效筆數與計算方法，說明極端值如何影響摘要。</p></article>
+</div>
+<div class="flow" aria-label="本週六步驟"><span><b>STEP 01</b>時間使用情境</span><span><b>STEP 02</b>集中與分散</span><span><b>STEP 03</b>下達統計任務</span><span><b>STEP 04</b>AI 產表</span><span><b>STEP 05</b>加入極端值</span><span><b>STEP 06</b>寫摘要與限制</span></div>
+</section>
+
+<section id="concepts" class="lesson-section">
+<p class="section-kicker">02 / Concept cards</p><h2 class="section-title">中心與分散，要一起看</h2>
+<p class="section-intro">兩組資料可以有相同的平均數，卻有完全不同的分散程度。只報一個平均數，故事還不完整。</p>
+<div class="grid-2">
+<article class="mini concept"><span class="en">MEAN</span><h3>平均數｜把總量平均分配</h3><p>所有有效數值加總，再除以有效筆數。每一筆都會參與計算，因此特別大的數值能把平均數拉高。</p></article>
+<article class="mini concept"><span class="en">MEDIAN</span><h3>中位數｜排序後的中間位置</h3><p>奇數筆取正中間；偶數筆取中間兩個值的平均。相較於平均數，較不受少數極端值影響，但不保證完全不變。</p></article>
+<article class="mini concept"><span class="en">MINIMUM / MAXIMUM</span><h3>最小值與最大值｜兩端在哪裡</h3><p>全距＝最大值−最小值。容易理解，但只看兩端，無法知道大多數人集中在哪裡。</p></article>
+<article class="mini concept"><span class="en">QUARTILES / IQR</span><h3>四分位數｜把位置切成四份</h3><p>Q1、Q2、Q3 對應第 25、50、75 百分位位置，Q2 就是中位數。IQR＝Q3−Q1，描述中間約一半資料的跨度。</p></article>
+<article class="mini concept"><span class="en">STANDARD DEVIATION</span><h3>標準差｜離平均數有多分散</h3><p>以平方差衡量資料散開的程度，再開根號，單位與原始資料相同。本頁使用樣本標準差，分母為 n−1。</p></article>
+<article class="mini concept"><span class="en">READ TOGETHER</span><h3>搭配解讀｜典型值與差異</h3><p>分布大致對稱時，可報平均數與標準差；若有長尾或極端值，可優先用中位數與 IQR 描述典型位置，同時保留其他摘要。</p></article>
+</div>
+<div class="note"><strong>30 秒小例子：</strong>A 組 [50, 60, 70] 與 B 組 [0, 60, 120] 的平均數都等於 60；樣本標準差分別是 10 與 60。平均相同，不代表每個人的情況相近。</div>
+<details><summary>計算方法：讓試算表、Python 與網頁對得起來</summary><div class="details-body">平均數＝Σx / n；樣本標準差＝√[Σ(x−平均數)² / (n−1)]。四分位數採排序後索引 (n−1)×p 的線性內插，與試算表 PERCENTILE.INC 的方法相同。各軟體可採不同四分位數算法，核對時先確認方法，再比較數字。本週所有示範為<strong>未加權的樣本描述</strong>。</div></details>
+</section>
+
+<section id="dataset" class="lesson-section">
+<p class="section-kicker">03 / Meet the data</p><h2 class="section-title">本週資料：青年媒體時間</h2>
+<p class="section-intro">2015 臺灣社會變遷基本調查的青年子集，212 筆、8 欄。篩選條件為 18–24 歲；這份 CSV 實際年齡為 19–24 歲。</p>
+<div class="card"><h3>先認識資料，再交給 AI</h3><p>一列代表一位受訪者。資料記錄網路、電視、報紙與雜誌的使用時間，<strong>沒有讀書、打工或通勤時間，也無法用本檔判定誰仍是在校學生</strong>。課程以學生生活提問，結論則應寫成「本份青年樣本」。</p><a class="button secondary" href="assets/data/臺灣青年時間使用.csv" download>下載本週 CSV ↓</a></div>
+<div class="table-wrap" tabindex="0" role="region" aria-label="可左右捲動的資料表"><table><caption>欄位字典與資料檢查</caption><thead><tr><th>欄位</th><th>角色／單位</th><th>分析前要知道</th></tr></thead><tbody>
+<tr><td>樣本編號</td><td>識別碼</td><td>只用來定位個案，不計算平均。</td></tr>
+<tr><td>性別、年齡</td><td>背景欄位</td><td>本週不做群體推論。</td></tr>
+<tr><td>每日閱讀報紙分鐘</td><td>分鐘／日</td><td>210 筆有效，2 筆 NA。</td></tr>
+<tr><td>每日看電視分鐘</td><td>分鐘／日</td><td>212 筆有效，無缺失。</td></tr>
+<tr><td>每日使用網路分鐘</td><td>分鐘／日</td><td>212 筆有效，無缺失。</td></tr>
+<tr><td>每週閱讀雜誌分鐘</td><td>分鐘／週</td><td>211 筆有效，1 筆 NA；跨變項比較時另除以 7。</td></tr>
+<tr><td>抽樣權數</td><td>調查權重</td><td>保留但不套用於本週基礎示範；不能據此宣稱母體平均。</td></tr>
+</tbody></table></div>
+<div class="note warn"><strong>0 和 NA 是兩件事。</strong>0 分鐘是有效作答；NA 是缺失，應逐欄排除並報告有效 n。不要把 NA 補成 0，也不要為了某欄缺失而刪掉整位受訪者的其他有效作答。</div>
+<p class="source">來源：中央研究院社會學研究所「2015 臺灣社會變遷基本調查（第七期第一次）」。<a href="https://www2.ios.sinica.edu.tw/sc/en/scDownload.php" target="_blank" rel="noopener">資料下載與使用說明 ↗</a>。限學術用途、禁止商用，成果須註明來源。</p>
+</section>
+
+<section id="worked" class="lesson-section">
+<p class="section-kicker">04 / Worked example</p><h2 class="section-title">先核對數字，再解釋差異</h2>
+<p class="section-intro">以下結果直接由課堂 CSV 計算，取到小數點後 2 位；計算過程保留完整精度。</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="可左右捲動的資料表"><table class="numeric"><caption>未加權敘述統計｜原始時間單位</caption><thead><tr><th scope="col">變項／單位</th><th scope="col">有效 n</th><th scope="col">缺失</th><th scope="col">平均數</th><th scope="col">中位數</th><th scope="col">最小</th><th scope="col">Q1</th><th scope="col">Q3</th><th scope="col">最大</th><th scope="col">標準差</th></tr></thead><tbody><tr><td>每日閱讀報紙（分／日）</td><td>210</td><td>2</td><td>6.73</td><td>0.00</td><td>0.00</td><td>0.00</td><td>5.00</td><td>90.00</td><td>14.82</td></tr><tr><td>每日看電視（分／日）</td><td>212</td><td>0</td><td>102.83</td><td>75.00</td><td>0.00</td><td>30.00</td><td>150.00</td><td>600.00</td><td>95.25</td></tr><tr><td>每日使用網路（分／日）</td><td>212</td><td>0</td><td>254.86</td><td>240.00</td><td>0.00</td><td>150.00</td><td>330.00</td><td>900.00</td><td>154.68</td></tr><tr><td>每週閱讀雜誌（分／週）</td><td>211</td><td>1</td><td>41.82</td><td>0.00</td><td>0.00</td><td>0.00</td><td>30.00</td><td>1,440.00</td><td>131.76</td></tr></tbody></table></div>
+<p class="fine">上表各列沿用原始時間單位，不能直接比較跨列的時間長短或平均數與中位數的差距。</p>
+<div class="card"><h3>哪個變項的平均數與中位數差最多？</h3><p>先把雜誌閱讀時間除以 7，改成「平均每日分鐘」，再比較絕對差 |平均數−中位數|。這是每週總時間的日均換算，不是逐日觀測紀錄。</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="可左右捲動的資料表"><table class="numeric"><caption>統一單位：分鐘／日</caption><thead><tr><th scope="col">活動</th><th scope="col">平均數</th><th scope="col">中位數</th><th scope="col">絕對差</th></tr></thead><tbody><tr><td>看電視</td><td>102.83</td><td>75.00</td><td>27.83</td></tr><tr><td>使用網路</td><td>254.86</td><td>240.00</td><td>14.86</td></tr><tr><td>閱讀報紙</td><td>6.73</td><td>0.00</td><td>6.73</td></tr><tr><td>閱讀雜誌</td><td>5.97</td><td>0.00</td><td>5.97</td></tr></tbody></table></div>
+<p>統一成每日單位後，<strong>看電視時間的差距最大（27.83 分鐘／日）</strong>。若直接比較原始欄位，雜誌的 41.82 是「分鐘／週」，會混淆答案。差距大小也不等於完整的偏態判定，仍要搭配分布圖。</p></div>
+<div class="note"><strong>一段合格的摘要：</strong>本份 2015 青年樣本中，每日上網時間的未加權平均數為 254.86 分鐘，中位數為 240 分鐘，樣本標準差為 154.68 分鐘（n=212）。中間約一半的數值位於 150–330 分鐘。描述典型位置時可用中位數並附 IQR=180 分鐘；這不等同於今日所有大學生的上網時間。</div>
+</section>
+
+<section id="lab" class="lesson-section">
+<p class="section-kicker">05 / Interactive lab</p><h2 class="section-title">加入一筆極端值，會發生什麼事？</h2>
+<p class="section-intro">先預測哪個指標變化最大，再拖曳滑桿驗證。切換成小樣本，觀察同一筆新資料的影響是否更明顯。</p>
+<div class="lab" id="time-lab">
+<div class="lab-heading"><h3>時間使用實驗室</h3><span class="live-tag">LIVE CALCULATION</span></div>
+<div class="controls"><div class="control"><label for="time-sample">選擇比較樣本</label><select id="time-sample"><option value="real">實際青年網路時間（212 筆）</option><option value="small">教學假設小樣本（5 筆）</option></select></div></div>
+<label class="toggle"><input id="include-extreme" type="checkbox" checked>加入一筆假設觀察值</label>
+<div class="slider-row"><label for="extreme-value">新增的每日使用時間 <output id="extreme-label" for="extreme-value">1,440 分鐘</output></label><input id="extreme-value" type="range" min="0" max="1440" step="15" value="1440"><div class="range-labels"><span>0 min</span><span>720 min</span><span>1,440 min / 24 hr</span></div></div>
+<div class="stats" id="time-stats" aria-live="polite"></div>
+<div class="legend"><span>原始資料</span><span class="orange">目前情境</span></div>
+<p class="mobile-note">圖表可左右滑動查看。</p><div class="chart-scroll" tabindex="0" role="region" aria-label="可左右捲動的統計圖"><svg class="chart" id="time-chart" viewBox="0 0 640 280" role="img" aria-label="平均數、中位數與標準差比較圖"></svg></div>
+<p class="lab-description" id="time-description" aria-live="polite"></p>
+<div class="toolbar"><button id="reset-time" type="button">重設實驗</button></div>
+</div>
+<div class="note warn"><strong>極端不等於錯誤。</strong>1,440 分鐘是一天的總長度；出現這種作答，應回查題意與紀錄。此處只做假設實驗，沒有將它當成新的真實受訪者。</div>
+<div class="card" data-quiz><p class="quiz-question">快速檢查｜若要表達多數人所在的典型位置，並降低少數超長上網者的影響，你會先選？</p><div class="quiz-choices"><button type="button" aria-pressed="false" data-feedback="可以描述平均總量，但平均數會受每一筆數值影響；若重點是典型位置，請再比較中位數。">A. 只報平均數</button><button type="button" aria-pressed="false" data-feedback="對。中位數可描述典型位置，IQR 補充分散程度；仍應附上樣本、單位與限制。">B. 中位數，並附 IQR</button><button type="button" aria-pressed="false" data-feedback="最大值描述資料的一端，不能代替典型位置。">C. 最大值</button></div><p class="quiz-feedback" aria-live="polite">選一個答案，查看理由。</p></div>
+</section>
+
+<section id="tasks" class="lesson-section">
+<p class="section-kicker">06 / AI task sheet</p><h2 class="section-title">把統計任務說清楚</h2>
+<p class="section-intro">先下載 CSV，再把檔案與下列提示語交給 Antigravity／AI 助理。每一步都要自己覆核。</p>
+<article class="prompt-card"><div class="prompt-head"><h3>A · 資料健檢與敘述統計</h3><button type="button" class="copy-button" data-copy="prompt-0" aria-label="複製任務 A 提示語">複製提示語</button></div><pre class="prompt-text" id="prompt-0">請讀取我上傳的「臺灣青年時間使用.csv」，不要生成假受訪者。
+1. 回報總筆數、欄位、四個時間變項各自的有效 n 與缺失 n。
+2. NA、空白視為缺失，逐欄排除；0 是有效數值。不要整列刪除其他仍有效的作答。
+3. 對每日閱讀報紙分鐘、每日看電視分鐘、每日使用網路分鐘、每週閱讀雜誌分鐘，計算未加權平均數、中位數、最小值、最大值、Q1、Q3、樣本標準差。
+4. 樣本標準差使用 n−1；四分位數採 PERCENTILE.INC／(n−1)×p 線性內插。
+5. 表頭標明單位，保留每週雜誌的原始單位。顯示到小數 2 位，但計算時不先四捨五入。
+6. 保留抽樣權數但不套用；明確標示這是未加權樣本描述。先產表，不下母體推論。</pre><div class="prompt-check"><strong>自己覆核：</strong>確認總數 212；報紙有效 n=210，雜誌 n=211；網路與電視各 n=212。</div></article><article class="prompt-card"><div class="prompt-head"><h3>B · 統一單位，再比較差距</h3><button type="button" class="copy-button" data-copy="prompt-1" aria-label="複製任務 B 提示語">複製提示語</button></div><pre class="prompt-text" id="prompt-1">根據任務 A 的資料，另建「雜誌日均分鐘」＝每週閱讀雜誌分鐘 ÷ 7，不覆寫原欄位。
+將四個時間變項統一為分鐘／日，列出平均數、中位數，以及絕對差 |平均數−中位數|，由大到小排序。
+指出差距最大的變項；說明為什麼不能直接比較原始欄位的每日與每週數值。
+以每日上網時間為例，用 80–120 字描述典型位置及分散，包含有效 n、單位、中位數、IQR 及所選指標的理由。
+附上調查年份、青年樣本不等於在校學生、未加權且不能代表今日母體的限制。</pre><div class="prompt-check"><strong>自己覆核：</strong>統一每日單位後，電視差距 27.83 分鐘最大；雜誌日均差距為 5.97 分鐘。</div></article><article class="prompt-card"><div class="prompt-head"><h3>C · 加入一筆假設極端值</h3><button type="button" class="copy-button" data-copy="prompt-2" aria-label="複製任務 C 提示語">複製提示語</button></div><pre class="prompt-text" id="prompt-2">保留原始「每日使用網路分鐘」的 212 筆有效值，另建實驗副本。
+只在副本加入一筆 1,440 分鐘／日的假設觀察值，明確標示是假設值，不是新受訪者。
+比較加入前後的 n、平均數、中位數、樣本標準差及各項變化量。
+再用教學假設小樣本 [30,45,60,75,90] 加入相同的 1,440，重做比較。
+說明為什麼兩種樣本大小的變化幅度不同；不要宣稱中位數永遠不會改變。
+若真實資料出現一天 1,440 分鐘的作答，列出應回查的題意、時間單位及登錄內容。</pre><div class="prompt-check"><strong>自己覆核：</strong>真實資料實驗後 n=213；小樣本為 5→6 筆。比較結果可用頁面實驗室重算。</div></article>
+</section>
+
+<section id="deliver" class="lesson-section">
+<p class="section-kicker">07 / Deliver &amp; reflect</p><h2 class="section-title">本週交件：敘述統計摘要</h2>
+<div class="card"><h3>把結果整理成一頁</h3><ol><li>四個時間變項的統計表，含有效 n、缺失、平均數、中位數、最小／最大值、Q1、Q3、樣本標準差。</li><li>統一每日單位後的差距比較，以及「哪個差最多」的說明。</li><li>加入假設極端值前後的比較表，附上你的解釋。</li><li>80–120 字的典型位置描述，寫明指標選擇與至少兩項資料限制。</li></ol><p>繳交一頁成果（文件或網頁）與完整 AI 提示語紀錄。保留原始檔及實驗副本。</p><a href="assets/data/week03-成果模板.md" download>下載成果填寫模板（Markdown）↓</a></div>
+<div class="card"><h3>交件前逐項確認</h3><ul class="checklist"><li><label class="check-row"><input type="checkbox"><span>四個變項都有完整摘要，並列出各自的有效 n 與缺失 n。</span></label></li><li><label class="check-row"><input type="checkbox"><span>NA 沒有被補成 0；0 分鐘仍被視為有效值。</span></label></li><li><label class="check-row"><input type="checkbox"><span>原始表保留每日／每週單位；跨變項比較先換成每日。</span></label></li><li><label class="check-row"><input type="checkbox"><span>使用未加權樣本統計，標準差為 n−1，四分位數方法已註明。</span></label></li><li><label class="check-row"><input type="checkbox"><span>極端值實驗有前後比較，假設值與原始資料分開。</span></label></li><li><label class="check-row"><input type="checkbox"><span>「典型位置」的指標選擇有理由，並附上分散指標。</span></label></li><li><label class="check-row"><input type="checkbox"><span>來源、2015 年份與青年樣本限制已寫進成果。</span></label></li><li><label class="check-row"><input type="checkbox"><span>原始資料、完整 AI 提示語與成果都已保存。</span></label></li></ul><p id="check-progress" class="check-progress" aria-live="polite"></p></div>
+<details><summary>教師參考｜100 分鐘課堂流程</summary><div class="details-body"><div class="timeline"><b>0–10′</b><span>提問「平均上網四小時，等於大家都上網四小時嗎？」</span><b>10–30′</b><span>微講授六個指標，操作兩組同平均、不同分散的小例子。</span><b>30–45′</b><span>檢查 CSV 的 NA、時間單位與權數；執行任務 A。</span><b>45–65′</b><span>比較每日時間與平均／中位數差距；完成任務 B。</span><b>65–85′</b><span>操作極端值實驗，切換樣本數，完成任務 C。</span><b>85–100′</b><span>完成摘要、兩兩互評，銜接下週分布與箱型圖。</span></div></div></details>
+</section>
+
+<div class="toolbar"><button type="button" data-print>列印教材／另存 PDF</button><a class="fine" href="assets/data/資料來源與計算說明.md" download>下載資料來源與計算說明</a></div><nav class="week-nav" aria-label="上下週教材"><a href="week02.html"><span class="nn">‹ 上一週</span>第 2 週：誰是我們的受訪者？</a><a href="week04.html" class="next"><span class="nn">下一週 ›</span>第 4 週：分布與極端值</a></nav></main>
+<footer>臺北市立大學 公共事務學系｜資料探勘（郭毓倫）｜第 3 週教材<br>範例資料來源：中央研究院社會學研究所「2015 臺灣社會變遷基本調查」，僅限學術用途、禁止商用。</footer></body></html>
