@@ -2,37 +2,37 @@
   {
     "week": 1,
     "title": "用資料回答問題",
-    "slides": 14,
+    "slides": 15,
     "file": "week01.pptx"
   },
   {
     "week": 2,
     "title": "誰是我們的受訪者？",
-    "slides": 14,
+    "slides": 15,
     "file": "week02.pptx"
   },
   {
     "week": 3,
     "title": "學生一週花多少時間？",
-    "slides": 15,
+    "slides": 16,
     "file": "week03.pptx"
   },
   {
     "week": 4,
     "title": "房租與生活費是否差很多？",
-    "slides": 17,
+    "slides": 18,
     "file": "week04.pptx"
   },
   {
     "week": 5,
     "title": "不同群體的滿意度有差嗎？",
-    "slides": 15,
+    "slides": 16,
     "file": "week05.pptx"
   },
   {
     "week": 6,
     "title": "兩個變項是否一起改變？",
-    "slides": 16,
+    "slides": 17,
     "file": "week06.pptx"
   }
 ]
