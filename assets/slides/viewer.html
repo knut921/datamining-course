@@ -1,0 +1,5 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>課程簡報播放器</title><link rel="stylesheet" href="viewer.css"><script src="viewer.js" defer></script></head><body>
+<div id="viewer" aria-label="課程簡報"><div id="canvas-wrap"><div id="canvas" role="group" aria-label="投影片內容"></div></div>
+<div class="controls"><button id="prev" type="button" aria-label="上一張投影片">‹ 上一頁</button><label class="sr-only" for="jump">選擇投影片</label><select id="jump"></select><button id="next" type="button" aria-label="下一張投影片">下一頁 ›</button><button id="notes" type="button" aria-label="查看本頁備註及提示語">備註</button><button id="fullscreen" type="button">全螢幕</button></div><p id="status" class="sr-only" aria-live="polite"></p><p id="error" hidden>簡報載入失敗，請重新整理頁面，或使用下方 PPT 下載。</p></div>
+<dialog id="notes-dialog"><div class="notes-head"><h2>本頁備註／完整提示語</h2><button id="close-notes" type="button">關閉</button></div><pre id="notes-text"></pre></dialog>
+</body></html>
