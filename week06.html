@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="第 6 週資料探勘教材：散布圖與相關分析，附真實資料、互動實驗與 AI 任務單。">
+<title>第 6 週教材：兩個變項是否一起改變？｜資料探勘</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/lesson.css">
+<link rel="stylesheet" href="assets/week56.css">
+<script src="assets/week56-data.js" defer>
+</script>
+<script src="assets/lesson.js" defer>
+</script>
+<script src="assets/week56.js" defer>
+</script>
+</head>
+<body class="lesson-page" data-week="06">
+<a href="#main" class="skip">跳到教材內容</a>
+<header class="site-head">
+<div class="inner">
+<a class="brand" href="index.html">資料探勘 · Data Mining</a>
+<nav aria-label="課程導覽">
+<a href="index.html">課程大綱</a>
+<a href="index.html#pick">每週教材</a>
+<a href="#concepts">概念微講授</a>
+<a href="#dataset">本週資料</a>
+<a href="#tasks">Antigravity 任務單</a>
+</nav>
+</div>
+</header>
+<main id="main">
+<a class="backlink" href="index.html#pick">← 回每週教材選單</a>
+<section class="hero">
+<p class="kicker">Week 6 · 散布圖與相關分析</p>
+<h1>兩個變項是否一起改變？</h1>
+<p class="lead">用雙北租賃案件探索面積、屋齡與月租金，把資料事實與因果解釋分開。</p>
+<dl class="meta-grid">
+<div>
+<dt>概念微講授</dt>
+<dd>散布圖與相關分析</dd>
+</div>
+<div>
+<dt>核心動作</dt>
+<dd>散布圖 + Pearson r</dd>
+</div>
+<div>
+<dt>本週資料</dt>
+<dd>雙北租賃 11,250 筆</dd>
+</div>
+<div>
+<dt>當週成果</dt>
+<dd>相關分析短報告</dd>
+</div>
+</dl>
+<div class="actions">
+<a href="#lab" class="button">開始互動實驗 ↗</a>
+<a class="button secondary" href="assets/data/雙北住宅租金相關分析.csv" download>下載本週 CSV ↓</a>
+</div>
+</section>
+<nav class="lesson-toc" aria-label="本頁重點">
+<a href="#goals">學習目標</a>
+<a href="#worked">實算示範</a>
+<a href="#lab">互動實驗</a>
+<a href="#tasks">AI 任務單</a>
+<a href="#deliver">成果與檢核</a>
+</nav>
+<noscript>
+<p class="no-js">概念、實算表與下載仍可使用；互動圖表與複製功能需啟用 JavaScript。</p>
+</noscript>
+<section id="goals" class="lesson-section">
+<p class="section-kicker">01 / Week lesson</p>
+<h2 class="section-title">一起改變，不等於互相造成</h2>
+<div class="grid-2">
+<article class="mini">
+<h3>從圖找關係</h3>
+<p>用散布圖觀察面積／屋齡與月租金的方向、形狀及特殊案件。</p>
+</article>
+<article class="mini">
+<h3>算出相關係數</h3>
+<p>用相同的成對有效資料計算 Pearson r，知道它衡量線性關係。</p>
+</article>
+<article class="mini">
+<h3>比較合併與分組</h3>
+<p>切換臺北、新北，檢查城市組成是否改變整體相關。</p>
+</article>
+<article class="mini">
+<h3>區分三種說法</h3>
+<p>分開寫資料事實、可能解釋及未證實的因果，提出兩個第三變項。</p>
+</article>
+</div>
+</section>
+<section id="concepts" class="lesson-section">
+<p class="section-kicker">02 / Week lesson</p>
+<h2 class="section-title">散布圖先行，相關係數隨後</h2>
+<div class="grid-2">
+<article class="mini">
+<h3>散布圖｜一點是一件案件</h3>
+<p>橫軸放面積或屋齡，縱軸放月租金。同一批觀察值配成一對，不把兩欄各自排序後配對。</p>
+</article>
+<article class="mini">
+<h3>Pearson r｜線性關係的方向與程度</h3>
+<p>r 介於 −1 與 1。正值為同向、負值為反向；接近 0 不代表完全沒有關係，也可能有非線性。任一變項無變異時 r 未定義。</p>
+</article>
+<article class="mini">
+<h3>極端值與分析範圍</h3>
+<p>少數大面積或高租金案件可能影響 r。先回查用途與登錄品質，不因結果不符合期待就刪值。</p>
+</article>
+<article class="mini">
+<h3>第三變項與因果</h3>
+<p>城市、行政區、建物型態或樓層可能同時關聯面積及租金。分城市比較只是描述，不等於已控制所有干擾。</p>
+</article>
+</div>
+<div class="card">
+<h3>計算式</h3>
+<p>r＝Σ[(x−x̄)(y−ȳ)] ÷ √[Σ(x−x̄)² × Σ(y−ȳ)²]</p>
+<p>以成對有效資料計算平均與離均差；r 沒有單位。把 m² 一致換成坪不改變 r，但圖軸仍須標示正確單位。</p>
+</div>
+</section>
+<section id="dataset" class="lesson-section">
+<p class="section-kicker">03 / Week lesson</p>
+<h2 class="section-title">沿用雙北租賃案件，推導租賃時屋齡</h2>
+<div class="card">
+<p>共 11,250 筆，臺北市 3,710、新北市 7,540。來源為內政部實價登錄 114 年第 4 季下載版課堂子集，租賃日期為 2025/08/11–2025/11/10；不是今日租金，也不是學生專屬樣本。</p>
+<p>使用建物面積平方公尺、月租金元，並以（租賃日期−建築完成日期）的天數 ÷ 365.2425 推導屋齡。民國年先加 1911，年月日必須有效；日期缺失、無效或完成日晚於租賃日者，屋齡記缺失。</p>
+<p>面積與月租須為正數；屋齡可為 0。屋齡缺失只排除屋齡分析，不影響面積分析。資料仍含住商用等混合用途；本頁保留原始子集，不稱為純住宅市場。</p>
+<a href="assets/data/雙北住宅租金相關分析.csv" download>下載本週 CSV ↓</a>
+<p class="source">
+<a href="https://plvr.land.moi.gov.tw/DownloadOpenData">內政部資料來源</a>｜不將登錄樣本推論成所有租屋案件。</p>
+</div>
+</section>
+<section id="worked" class="lesson-section">
+<p class="section-kicker">04 / Week lesson</p>
+<h2 class="section-title">實算基準：同樣的租金，不同的配對樣本</h2>
+<div class="table-wrap" tabindex="0" role="region" aria-label="可左右捲動的資料表">
+<table>
+<thead>
+<tr>
+<th scope="col">範圍</th>
+<th scope="col">配對變項</th>
+<th scope="col">成對有效 n</th>
+<th scope="col">Pearson r</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>雙北合併</td>
+<td>面積 × 月租</td>
+<td>11250</td>
+<td>0.5950</td>
+</tr>
+<tr>
+<td>雙北合併</td>
+<td>屋齡 × 月租</td>
+<td>10803</td>
+<td>-0.1818</td>
+</tr>
+<tr>
+<td>臺北市</td>
+<td>面積 × 月租</td>
+<td>3710</td>
+<td>0.7538</td>
+</tr>
+<tr>
+<td>臺北市</td>
+<td>屋齡 × 月租</td>
+<td>3629</td>
+<td>-0.3652</td>
+</tr>
+<tr>
+<td>新北市</td>
+<td>面積 × 月租</td>
+<td>7540</td>
+<td>0.6398</td>
+</tr>
+<tr>
+<td>新北市</td>
+<td>屋齡 × 月租</td>
+<td>7174</td>
+<td>-0.2405</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>r 使用完整成對有效資料、保留極端值，未加權且未控制第三變項。面積分析與屋齡分析的 n 不同；比較係數時要同時看資料範圍、圖形與缺失。</p>
+</section>
+<section id="lab" class="lesson-section">
+<p class="section-kicker">05 / Week lesson</p>
+<h2 class="section-title">散布圖探索器：合併與分城市比較</h2>
+<div class="lab lab-panel">
+<div class="controls">
+<label for="city">資料範圍<select id="city">
+<option value="all">雙北合併</option>
+<option>臺北市</option>
+<option>新北市</option>
+</select>
+</label>
+<label for="xvar">橫軸變項<select id="xvar">
+<option value="1">建物面積（m²）</option>
+<option value="3">租賃時屋齡（年）</option>
+</select>
+</label>
+</div>
+<p id="correlation-summary" aria-live="polite">
+</p>
+<div class="chart-scroll" tabindex="0" role="region" aria-label="可左右捲動的散布圖">
+<svg id="scatter" class="chart" viewBox="0 0 660 360" role="img" aria-label="租金散布圖">
+</svg>
+</div>
+<p class="fine">每一點均為成對有效案件，全部繪出、無抽樣；重疊可能遮住密度。圖軸從 0 起，依目前資料範圍自動縮放，跨城市比較時請核對刻度。精確 n 與 r 見上方文字。</p>
+<button type="button" id="reset-correlation">重設探索器</button>
+</div>
+<div class="note">課堂練習：先寫下合併 r，再比較兩市 r。城市分組能提示組成差異，但無法單憑這三個係數證明城市造成了關係。</div>
+<div class="card" data-quiz>
+<p class="quiz-question">快速檢查｜面積與月租金呈正相關，能說什麼？</p>
+<div class="quiz-choices">
+<button type="button" aria-pressed="false" data-feedback="不能。觀察資料的相關不能直接證明因果，其他條件也可能不同。">A. 擴大面積一定造成租金上升</button>
+<button type="button" aria-pressed="false" data-feedback="對。這是資料事實；因果仍需額外設計與證據。">B. 本資料中兩者有同向線性關係</button>
+<button type="button" aria-pressed="false" data-feedback="不能。整體相關不保證每一對個案都照相同順序排列。">C. 每間大房子都比小房子貴</button>
+</div>
+<p class="quiz-feedback" aria-live="polite">選一個答案，查看理由。</p>
+</div>
+</section>
+<section id="tasks" class="lesson-section">
+<p class="section-kicker">06 / Week lesson</p>
+<h2 class="section-title">AI 任務單：先算、再解釋、最後設限</h2>
+<article class="prompt-card">
+<div class="prompt-head">
+<h3>A · 日期轉換與成對樣本</h3>
+<button type="button" class="copy-button" data-copy="prompt-A" aria-label="複製任務 A 提示語">複製提示語</button>
+</div>
+<pre class="prompt-text" id="prompt-A">讀取「雙北住宅租金相關分析.csv」，核對 11250 筆、兩市筆數、面積與月租金的缺失和非正數。把租賃年月日及建築完成年月按民國年月日解析，年加 1911，驗證日期。屋齡=(租賃日-完成日)天數/365.2425；缺失、無效日期或負屋齡記缺失，不用 0 填補。分別報面積×月租、屋齡×月租的成對有效 n、排除數與理由，保留案件編號供核查。</pre>
+<div class="prompt-check">
+<strong>自己覆核：</strong>面積分析不因屋齡缺失而刪掉有效案件。</div>
+</article>
+<article class="prompt-card">
+<div class="prompt-head">
+<h3>B · 散布圖與相關係數</h3>
+<button type="button" class="copy-button" data-copy="prompt-B" aria-label="複製任務 B 提示語">複製提示語</button>
+</div>
+<pre class="prompt-text" id="prompt-B">以全部、臺北、新北三種範圍，分別畫面積(m²)×月租金(元/月)與屋齡(年)×月租金散布圖，計算 Pearson r，共六種組合。使用相同成對有效資料畫圖及計算，保留極端值，報 n 與 r 至小數四位。若為效能抽樣畫圖須明講，但 r 仍用全部有效資料。核對頁面基準表。另把面積換成坪，檢查 r 是否不變。</pre>
+<div class="prompt-check">
+<strong>自己覆核：</strong>不能將兩欄各自排序後再配對。</div>
+</article>
+<article class="prompt-card">
+<div class="prompt-head">
+<h3>C · 事實、解釋與不能確認的因果</h3>
+<button type="button" class="copy-button" data-copy="prompt-C" aria-label="複製任務 C 提示語">複製提示語</button>
+</div>
+<pre class="prompt-text" id="prompt-C">用三欄寫報告：資料事實（含範圍、n、r）、可能解釋、不能確認的因果。提出至少兩個第三變項，例如行政區與建物型態，說明可能如何同時關聯面積及租金。比較分市及合併結果，但不聲稱已控制所有混雜。回查一筆高面積或高租金案件的用途，不自動刪除。最後指出登錄樣本、混合用途、缺失與年份限制。</pre>
+<div class="prompt-check">
+<strong>自己覆核：</strong>「可能」解釋不能改寫成已驗證的機制。</div>
+</article>
+</section>
+<section id="deliver" class="lesson-section">
+<p class="section-kicker">07 / Week lesson</p>
+<h2 class="section-title">本週交件：相關分析短報告</h2>
+<div class="card">
+<h3>相關分析短報告</h3>
+<p>交一頁重點報告，計算表、圖檔及完整提示語另附。每個結論都要能回到資料與分母。</p>
+<a href="assets/data/week06-成果模板.md" download>下載成果模板（Markdown）↓</a>
+<ul class="checklist">
+<li>
+<label class="check-row">
+<input type="checkbox">
+<span>交代資料範圍、日期轉換及屋齡推導規則。</span>
+</label>
+</li>
+<li>
+<label class="check-row">
+<input type="checkbox">
+<span>附兩張全體散布圖，標明軸名、單位、來源及 n。</span>
+</label>
+</li>
+<li>
+<label class="check-row">
+<input type="checkbox">
+<span>列出全體及兩市的六組 n 與 Pearson r，核對基準表。</span>
+</label>
+</li>
+<li>
+<label class="check-row">
+<input type="checkbox">
+<span>回查一筆特殊案件，留下用途與處理理由。</span>
+</label>
+</li>
+<li>
+<label class="check-row">
+<input type="checkbox">
+<span>分開寫資料事實、可能解釋與未證實的因果。</span>
+</label>
+</li>
+<li>
+<label class="check-row">
+<input type="checkbox">
+<span>提出兩個第三變項與資料限制，保留完整提示語。</span>
+</label>
+</li>
+</ul>
+<p id="check-progress" class="check-progress" aria-live="polite">
+</p>
+</div>
+<details>
+<summary>教師參考｜100 分鐘課堂流程</summary>
+<div class="details-body">
+<p>0–10 分：從上一週提問；10–30 分：概念與實算；30–50 分：操作互動探索器；50–75 分：執行 AI 任務、核對數值；75–90 分：寫一頁成果；90–100 分：互評推論限制。</p>
+</div>
+</details>
+</section>
+<div class="toolbar">
+<button type="button" data-print>列印教材／另存 PDF</button>
+<a href="assets/data/week56-資料來源與計算說明.md" download>下載資料來源與計算說明</a>
+</div>
+<nav class="week-nav" aria-label="上下週教材">
+<a href="week05.html">
+<span class="nn">‹ 上一週</span>第 5 週教材</a>
+<a href="index.html#pick" class="next">
+<span class="nn">課程總覽 ›</span>回每週教材選單</a>
+</nav>
+</main>
+<footer>臺北市立大學 公共事務學系｜資料探勘（郭毓倫）｜第 6 週教材<br>內政部實價登錄 114 年第 4 季下載版課堂子集。</footer>
+</body>
+</html>

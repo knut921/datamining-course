@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="第 5 週資料探勘教材：交叉分析與分組比較，附真實資料、互動實驗與 AI 任務單。">
+<title>第 5 週教材：不同群體的滿意度有差嗎？｜資料探勘</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/lesson.css">
+<link rel="stylesheet" href="assets/week56.css">
+<script src="assets/week56-data.js" defer>
+</script>
+<script src="assets/lesson.js" defer>
+</script>
+<script src="assets/week56.js" defer>
+</script>
+</head>
+<body class="lesson-page" data-week="05">
+<a href="#main" class="skip">跳到教材內容</a>
+<header class="site-head">
+<div class="inner">
+<a class="brand" href="index.html">資料探勘 · Data Mining</a>
+<nav aria-label="課程導覽">
+<a href="index.html">課程大綱</a>
+<a href="index.html#pick">每週教材</a>
+<a href="#concepts">概念微講授</a>
+<a href="#dataset">本週資料</a>
+<a href="#tasks">Antigravity 任務單</a>
+</nav>
+</div>
+</header>
+<main id="main">
+<a class="backlink" href="index.html#pick">← 回每週教材選單</a>
+<section class="hero">
+<p class="kicker">Week 5 · 交叉分析與分組比較</p>
+<h1>不同群體的滿意度有差嗎？</h1>
+<p class="lead">從未加權人數到加權百分比，辨認分母、缺失與小樣本，寫出有依據的群體比較。</p>
+<dl class="meta-grid">
+<div>
+<dt>概念微講授</dt>
+<dd>交叉分析與分組比較</dd>
+</div>
+<div>
+<dt>核心動作</dt>
+<dd>交叉表 + 加權百分比</dd>
+</div>
+<div>
+<dt>本週資料</dt>
+<dd>青年調查 212 筆</dd>
+</div>
+<div>
+<dt>當週成果</dt>
+<dd>群體比較圖卡</dd>
+</div>
+</dl>
+<div class="actions">
+<a href="#lab" class="button">開始互動實驗 ↗</a>
+<a class="button secondary" href="assets/data/臺灣青年群體滿意度.csv" download>下載本週 CSV ↓</a>
+</div>
+</section>
+<nav class="lesson-toc" aria-label="本頁重點">
+<a href="#goals">學習目標</a>
+<a href="#worked">實算示範</a>
+<a href="#lab">互動實驗</a>
+<a href="#tasks">AI 任務單</a>
+<a href="#deliver">成果與檢核</a>
+</nav>
+<noscript>
+<p class="no-js">概念、實算表與下載仍可使用；互動圖表與複製功能需啟用 JavaScript。</p>
+</noscript>
+<section id="goals" class="lesson-section">
+<p class="section-kicker">01 / Week lesson</p>
+<h2 class="section-title">先問「跟誰比」，再問「分母是誰」</h2>
+<div class="grid-2">
+<article class="mini">
+<h3>辨認分析單位</h3>
+<p>一列是一位受訪者。比較不同性別或年齡群的滿意比例，不能把人數多誤認為比例高。</p>
+</article>
+<article class="mini">
+<h3>說清楚比較口徑</h3>
+<p>先報未加權樣本數，再報加權百分比；辨認列、欄分母與無效回答。</p>
+</article>
+<article class="mini">
+<h3>核對 AI 的表格</h3>
+<p>自行驗算至少一格，確認未把 Not applicable 當不滿意，也未把權數加總當成人數。</p>
+</article>
+<article class="mini">
+<h3>完成比較圖卡</h3>
+<p>交出一項資料支持的發現，以及一項不可過度推論的內容。</p>
+</article>
+</div>
+</section>
+<section id="concepts" class="lesson-section">
+<p class="section-kicker">02 / Week lesson</p>
+<h2 class="section-title">同一張交叉表，可以回答不同問題</h2>
+<div class="grid-2">
+<article class="mini">
+<h3>交叉表與分組統計</h3>
+<p>將背景群組放在列，滿意／不滿意放在欄。先看每個格子的原始人數，再選適合研究問題的百分比。</p>
+</article>
+<article class="mini">
+<h3>列百分比｜群組內滿意多少？</h3>
+<p>分母是該列的有效樣本權數總和；每列滿意＋不滿意＝100%。適合比較各群組的滿意比例。</p>
+</article>
+<article class="mini">
+<h3>欄百分比｜滿意者由誰組成？</h3>
+<p>分母是該欄全部群組的權數總和；每欄合計＝100%。這是組成問題，不能直接當各群組滿意率。</p>
+</article>
+<article class="mini">
+<h3>抽樣權數與小樣本</h3>
+<p>加權比例＝符合條件者的權數和 ÷ 有效分母權數和。加權不會增加實際受訪人數，也不會自動消除非回應偏差。</p>
+</article>
+</div>
+<div class="note">本頁將原始回答中的 Very／Pretty／Fairly satisfied 合併為「滿意」，對應 dissatisfied 合併為「不滿意」。合併是教學操作定義，會犧牲程度資訊；不能把序位回答直接解讀成等距分數。</div>
+</section>
+<section id="dataset" class="lesson-section">
+<p class="section-kicker">03 / Week lesson</p>
+<h2 class="section-title">2015 青年滿意度：212 位受訪者</h2>
+<div class="card">
+<p>來源為中央研究院 2015 臺灣社會變遷基本調查，第七期第一次；由原始 2,034 筆篩選 18–24 歲，本 CSV 實際觀察年齡為 19–24 歲。性別為原始資料標籤，不自行補造類別。</p>
+<p>檔案含性別、年齡、地區代碼、教育程度、四項滿意度及抽樣權數。沒有「生活困擾」、「生涯資源使用」或明確在學狀況欄位，本週改以實際滿意度做交叉比較；地區代碼未解碼前不推定地名。</p>
+<p>Not applicable、No comment、Don't know 不列入有效滿意度分母；各題分開排除，不整列刪除所有題目。</p>
+<a href="assets/data/臺灣青年群體滿意度.csv" download>下載原始課堂 CSV ↓</a>
+<p class="source">
+<a href="https://www2.ios.sinica.edu.tw/sc/en/scDownload.php">中央研究院資料來源</a>｜僅限學術用途，禁止商用。這是 2015 年調查子集，不代表今日所有大學生。</p>
+</div>
+</section>
+<section id="worked" class="lesson-section">
+<p class="section-kicker">04 / Week lesson</p>
+<h2 class="section-title">先核對人數，再看加權結果</h2>
+<div class="table-wrap" tabindex="0" role="region" aria-label="可左右捲動的資料表">
+<table>
+<thead>
+<tr>
+<th scope="col">題目</th>
+<th scope="col">群組</th>
+<th scope="col">原始 n</th>
+<th scope="col">有效 n</th>
+<th scope="col">無效 n</th>
+<th scope="col">滿意 n</th>
+<th scope="col">加權列滿意率</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>整體生活滿意度</td>
+<td>女性</td>
+<td>105</td>
+<td>105</td>
+<td>0</td>
+<td>91</td>
+<td>86.90%</td>
+</tr>
+<tr>
+<td>整體生活滿意度</td>
+<td>男性</td>
+<td>107</td>
+<td>107</td>
+<td>0</td>
+<td>96</td>
+<td>89.67%</td>
+</tr>
+<tr>
+<td>政府施政滿意度</td>
+<td>女性</td>
+<td>105</td>
+<td>55</td>
+<td>50</td>
+<td>15</td>
+<td>27.76%</td>
+</tr>
+<tr>
+<td>政府施政滿意度</td>
+<td>男性</td>
+<td>107</td>
+<td>54</td>
+<td>53</td>
+<td>17</td>
+<td>32.02%</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>上表的 n 都是未加權筆數。以女性生活滿意率為例：女性中有效且滿意者的權數和，除以女性全部有效回答的權數和；不是除以 212，也不是用滿意人數直接除。</p>
+<div class="note warn">政府施政滿意度有大量無效回答，不能把這些人視為不滿意。生活滿意與施政滿意使用的有效樣本不同，不宜忽略分母直接比較。</div>
+</section>
+<section id="lab" class="lesson-section">
+<p class="section-kicker">05 / Week lesson</p>
+<h2 class="section-title">交叉表探索器：切換分母，看問題如何改變</h2>
+<div class="lab lab-panel">
+<div class="controls">
+<label for="group">分組方式<select id="group">
+<option value="性別">性別</option>
+<option value="年齡">年齡（逐歲）</option>
+</select>
+</label>
+<label for="question">滿意度題目<select id="question">
+<option>整體生活滿意度</option>
+<option>政府施政滿意度</option>
+</select>
+</label>
+<label for="denominator">百分比分母<select id="denominator">
+<option value="row">列百分比：各群組內</option>
+<option value="column">欄百分比：各回答類別內</option>
+</select>
+</label>
+<label for="weight">計算方式<select id="weight">
+<option value="weighted">抽樣權數加權</option>
+<option value="raw">未加權</option>
+</select>
+</label>
+</div>
+<p id="group-note" aria-live="polite">
+</p>
+<div id="group-table">
+</div>
+<div id="group-bars" aria-label="滿意百分比長條圖">
+</div>
+<p class="fine">有效 n＜30 標示「小樣本」，這是課堂提醒門檻，不是統計檢定。沒有複雜抽樣設計資訊，本頁不計算顯著性或信賴區間。</p>
+<button type="button" id="reset-group">重設探索器</button>
+</div>
+<div class="card" data-quiz>
+<p class="quiz-question">快速檢查｜比較不同性別「各自有多少比例滿意」，應選？</p>
+<div class="quiz-choices">
+<button type="button" aria-pressed="false" data-feedback="對。以各性別有效回答作分母，才是在比較群組內的滿意比例。">A. 列百分比</button>
+<button type="button" aria-pressed="false" data-feedback="欄百分比回答滿意者由哪些性別組成，問題不同。">B. 欄百分比</button>
+<button type="button" aria-pressed="false" data-feedback="群組大小不同，單看人數可能誤導。">C. 只比滿意人數</button>
+</div>
+<p class="quiz-feedback" aria-live="polite">選一個答案，查看理由。</p>
+</div>
+</section>
+<section id="tasks" class="lesson-section">
+<p class="section-kicker">06 / Week lesson</p>
+<h2 class="section-title">AI 任務單：讓分母與排除規則可追查</h2>
+<article class="prompt-card">
+<div class="prompt-head">
+<h3>A · 資料健檢與操作定義</h3>
+<button type="button" class="copy-button" data-copy="prompt-A" aria-label="複製任務 A 提示語">複製提示語</button>
+</div>
+<pre class="prompt-text" id="prompt-A">請讀取「臺灣青年群體滿意度.csv」。確認 212 筆、年齡範圍、性別人數、權數缺失或非正數，以及整體生活／政府施政滿意度的所有原始回答與頻數。將 Very／Pretty／Fairly satisfied 合為滿意，對應 dissatisfied 合為不滿意；其餘列為無效。每題分開排除，列出原始 n、有效 n、無效 n。不要虛構困擾、資源使用、在學狀況欄位。</pre>
+<div class="prompt-check">
+<strong>自己覆核：</strong>女性 105、男性 107；原始欄位與推導欄位分開。</div>
+</article>
+<article class="prompt-card">
+<div class="prompt-head">
+<h3>B · 交叉表、權數與分母</h3>
+<button type="button" class="copy-button" data-copy="prompt-B" aria-label="複製任務 B 提示語">複製提示語</button>
+</div>
+<pre class="prompt-text" id="prompt-B">以性別及逐歲年齡分組，對兩項滿意度分別列出未加權交叉人數表、加權列百分比、加權欄百分比。明列每格權數和及分母，驗證列或欄合計 100%（容許四捨五入誤差）。權數只用於百分比，n 報未加權人數。標出有效 n&lt;30 的群組，製作群組內滿意率長條圖，圖上註明分母、年份與來源。不要將欄百分比稱作各群組滿意率。</pre>
+<div class="prompt-check">
+<strong>自己覆核：</strong>用頁面探索器核對相同題目、群組、分母及加權選項。</div>
+</article>
+<article class="prompt-card">
+<div class="prompt-head">
+<h3>C · 寫一張不誇大差異的圖卡</h3>
+<button type="button" class="copy-button" data-copy="prompt-C" aria-label="複製任務 C 提示語">複製提示語</button>
+</div>
+<pre class="prompt-text" id="prompt-C">寫一項支持的發現，列出兩群的有效 n、加權滿意率與百分點差。另列一項不能推論的內容，討論年份、年齡子集、小樣本與無效回答。不得把差異說成性別或年齡造成，不宣稱統計顯著。附完整提示語、計算表與人工覆核的一格。</pre>
+<div class="prompt-check">
+<strong>自己覆核：</strong>百分點差＝兩百分比相減；描述性差異不是因果效果。</div>
+</article>
+</section>
+<section id="deliver" class="lesson-section">
+<p class="section-kicker">07 / Week lesson</p>
+<h2 class="section-title">本週交件：群體比較圖卡</h2>
+<div class="card">
+<h3>群體比較圖卡</h3>
+<p>交一頁重點報告，計算表、圖檔及完整提示語另附。每個結論都要能回到資料與分母。</p>
+<a href="assets/data/week05-成果模板.md" download>下載成果模板（Markdown）↓</a>
+<ul class="checklist">
+<li>
+<label class="check-row">
+<input type="checkbox">
+<span>寫出研究問題、群組與滿意度合併規則。</span>
+</label>
+</li>
+<li>
+<label class="check-row">
+<input type="checkbox">
+<span>列出原始 n、有效 n、無效 n，保留未加權交叉表。</span>
+</label>
+</li>
+<li>
+<label class="check-row">
+<input type="checkbox">
+<span>附加權列／欄百分比與明確分母，人工覆算一格。</span>
+</label>
+</li>
+<li>
+<label class="check-row">
+<input type="checkbox">
+<span>圖上標示題目、年份、來源及小樣本提醒。</span>
+</label>
+</li>
+<li>
+<label class="check-row">
+<input type="checkbox">
+<span>提出一項支持的發現，列兩群百分點差。</span>
+</label>
+</li>
+<li>
+<label class="check-row">
+<input type="checkbox">
+<span>列一項不能推論的內容，不宣稱因果或顯著性。</span>
+</label>
+</li>
+</ul>
+<p id="check-progress" class="check-progress" aria-live="polite">
+</p>
+</div>
+<details>
+<summary>教師參考｜100 分鐘課堂流程</summary>
+<div class="details-body">
+<p>0–10 分：從上一週提問；10–30 分：概念與實算；30–50 分：操作互動探索器；50–75 分：執行 AI 任務、核對數值；75–90 分：寫一頁成果；90–100 分：互評推論限制。</p>
+</div>
+</details>
+</section>
+<div class="toolbar">
+<button type="button" data-print>列印教材／另存 PDF</button>
+<a href="assets/data/week56-資料來源與計算說明.md" download>下載資料來源與計算說明</a>
+</div>
+<nav class="week-nav" aria-label="上下週教材">
+<a href="week04.html">
+<span class="nn">‹ 上一週</span>第 4 週教材</a>
+<a href="week06.html" class="next">
+<span class="nn">下一週 ›</span>第 6 週：相關分析</a>
+</nav>
+</main>
+<footer>臺北市立大學 公共事務學系｜資料探勘（郭毓倫）｜第 5 週教材<br>中央研究院 2015 臺灣社會變遷基本調查；僅限學術用途、禁止商用。</footer>
+</body>
+</html>
