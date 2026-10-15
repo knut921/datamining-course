@@ -1,0 +1,12 @@
+.chart line.ci-line{stroke:var(--brand);stroke-width:4;stroke-linecap:round}.chart .ci-point{fill:var(--accent);stroke:var(--surface);stroke-width:2}
+.chart line.truth-line{stroke:var(--accent);stroke-width:2;stroke-dasharray:5 4}.chart line.zero-line,.chart line.obs-line{stroke:var(--accent);stroke-width:2;stroke-dasharray:5 4}
+.chart line.draw-line{stroke:var(--brand);stroke-width:1.6;opacity:.55}.chart line.miss-line{stroke:var(--warn);stroke-width:2.4}
+.chart line.conv-line{stroke:var(--accent);stroke-width:4;stroke-linecap:round}.chart .conv-point{fill:var(--accent)}
+.chart text.sim-label{fill:var(--accent);font-weight:700}
+#sim-chart,#ci-chart,#diff-chart,#perm-chart,#sc-chart{min-width:520px}
+.comp-track{min-width:120px}.comp-track span{display:block;height:7px;border-radius:3px;background:var(--brand);margin:2px 0}.comp-track span.w{background:var(--accent)}
+.preset-row{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}.preset-row button,.lab-panel .actions-row button{min-height:44px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2);color:var(--brand);padding:8px 14px}
+.actions-row{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}
+.controls input[type=number]{min-height:44px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2);color:var(--ink);padding:9px 11px;font-size:14px;width:100%;max-width:180px}
+.legend .warn:before{background:var(--warn)}
+@media print{#sim-chart,#ci-chart,#diff-chart,#perm-chart,#sc-chart{min-width:0}.comp-track span{print-color-adjust:exact}}
