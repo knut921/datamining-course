@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="第 10 週資料探勘教材：簡單與多元迴歸，用雙北實價登錄租賃資料估計月租金，解讀斜率、截距、殘差、控制變項與類別基準組。">
+<title>第 10 週教材：房租可以如何估計？｜資料探勘</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/lesson.css">
+<link rel="stylesheet" href="assets/week56.css">
+<link rel="stylesheet" href="assets/week78.css">
+<link rel="stylesheet" href="assets/week913.css">
+<script src="assets/week10-data.js" defer>
+</script>
+<script src="assets/lesson.js" defer>
+</script>
+<script src="assets/week913.js" defer>
+</script>
+<link rel="stylesheet" href="assets/slides.css">
+</head>
+<body class="lesson-page" data-week="10">
+<a href="#main" class="skip">跳到教材內容</a>
+<header class="site-head">
+<div class="inner">
+<a class="brand" href="index.html">資料探勘 · Data Mining</a>
+<nav aria-label="課程導覽">
+<a href="index.html">課程大綱</a>
+<a href="index.html#pick">每週教材</a>
+<a href="#concepts">概念微講授</a>
+<a href="#dataset">本週資料</a>
+<a href="#tasks">Antigravity 任務單</a>
+</nav>
+</div>
+</header>
+<main id="main">
+<details class="slide-download" id="slides">
+<summary class="slide-summary"><span class="slide-summary-title">本週簡報 <span class="slide-count">17 頁</span></span><span class="slide-expand">點擊展開</span><span class="slide-collapse">收合簡報</span></summary>
+<div class="slide-content"><div class="slide-heading"><p>直接翻頁閱讀，或按「全螢幕」播放。</p><a class="slide-file" href="assets/slides/week10.pptx" download="資料探勘_Week10.pptx">另存 PPT ↓</a></div>
+<iframe class="slide-frame" src="assets/slides/viewer.html?week=10&amp;v=20261015" title="第 10 週簡報播放器" allow="fullscreen" allowfullscreen loading="lazy"></iframe>
+<p class="slide-meta">操作：上一頁／下一頁、選單跳頁；點入簡報後可用鍵盤 ← →。手機可左右滑動；完整提示語可按「備註」查看。</p></div>
+</details>
+
+
+<a class="backlink" href="index.html#pick">← 回每週教材選單</a>
+<section class="hero">
+<p class="kicker">Week 10 · 簡單到多元迴歸</p>
+<h1>房租可以如何估計？</h1>
+<p class="lead">先用一條直線以面積估計月租金，再逐步加入屋齡、地區、樓層與建物型態；學會把係數翻成白話，也看清模型做不到的事。</p>
+<dl class="meta-grid">
+<div>
+<dt>概念微講授</dt>
+<dd>斜率、截距、殘差、控制變項</dd>
+</div>
+<div>
+<dt>核心動作</dt>
+<dd>同一批資料比較多個模型</dd>
+</div>
+<div>
+<dt>本週資料</dt>
+<dd>雙北租賃 11,250 筆</dd>
+</div>
+<div>
+<dt>當週成果</dt>
+<dd>簡單與多元迴歸對照圖卡</dd>
+</div>
+</dl>
+<div class="actions">
+<a href="#lab" class="button">開始模型實驗 ↗</a>
+<a class="button secondary" href="assets/data/雙北住宅租金迴歸.csv" download>下載本週 CSV ↓</a>
+</div>
+</section>
+<nav class="lesson-toc" aria-label="本頁重點">
+<a href="#goals">學習目標</a>
+<a href="#worked">實算示範</a>
+<a href="#lab">互動實驗</a>
+<a href="#tasks">AI 任務單</a>
+<a href="#deliver">成果與檢核</a>
+</nav>
+<noscript>
+<p class="no-js">概念、實算表與下載仍可使用；互動模型、圖表與複製功能需啟用 JavaScript。</p>
+</noscript>
+<section id="goals" class="lesson-section">
+<p class="section-kicker">01 / Week lesson</p>
+<h2 class="section-title">從「一條線」到「控制其他條件」</h2>
+<div class="grid-2">
+<article class="mini">
+<h3>讀懂簡單迴歸</h3>
+<p>說出斜率、截距的單位與意思，用直線做預測，並用殘差檢查估計差多少。</p>
+</article>
+<article class="mini">
+<h3>建立多元迴歸</h3>
+<p>加入屋齡、地區、樓層與建物型態，理解「其他條件相同時」的比較。</p>
+</article>
+<article class="mini">
+<h3>處理類別變項</h3>
+<p>認識虛擬變項與對照組（基準組），知道換了基準組，係數的意思也跟著變。</p>
+</article>
+<article class="mini">
+<h3>找出 AI 的誤讀</h3>
+<p>檢查單位、基準組、因果用語與高度相關變項，寫出模型不適用的情境。</p>
+</article>
+</div>
+</section>
+<section id="concepts" class="lesson-section">
+<p class="section-kicker">02 / Week lesson</p>
+<h2 class="section-title">迴歸的五個關鍵詞</h2>
+<div class="grid-2">
+<article class="mini">
+<h3>斜率與截距</h3>
+<p>月租 ＝ 截距 ＋ 斜率 × 面積。斜率是「面積多 1 坪，估計月租平均多幾元」；截距是面積為 0 時的值，常常沒有實際意義，只是讓直線定位。</p>
+</article>
+<article class="mini">
+<h3>預測與殘差</h3>
+<p>把條件代入公式得到估計值；殘差＝實際值－估計值。殘差為正，表示實際比模型估計貴。迴歸線讓殘差平方和最小（最小平方法）。</p>
+</article>
+<article class="mini">
+<h3>多元迴歸與控制</h3>
+<p>同時放入多個變項後，每個係數是「其他放入的變項維持不變時」的平均差距。沒放進模型的條件（例如裝潢、景觀）仍然沒有被控制。</p>
+</article>
+<article class="mini">
+<h3>R² 與 RMSE</h3>
+<p>R² 是模型解釋了月租變異的比例（0–1）；RMSE 是典型的估計誤差，單位是元。比較模型時必須用同一批資料，n 不同就不能直接比 R²。</p>
+</article>
+</div>
+<div class="note warn">迴歸係數描述的是<strong>資料中的平均關係</strong>，不是因果效果。「面積係數 720 元／坪」不代表把房子隔大 1 坪，房東就能多收 720 元；本資料也只包含有登錄的租賃案件。</div>
+</section>
+<section id="dataset" class="lesson-section">
+<p class="section-kicker">03 / Week lesson</p>
+<h2 class="section-title">雙北租賃 11,250 筆，分析使用其中 10,274 筆</h2>
+<div class="card">
+<p>內政部實價登錄租賃資料 114 年第 4 季下載版之雙北課堂子集，與第 4、6 週同一份資料（20 欄，CSV 未改寫）。月租金單位為元，面積本週用<strong>坪</strong>（CSV 已有「建物面積坪」欄）。</p>
+<p>為了讓所有模型使用<strong>同一批案件</strong>，依序篩選：只保留公寓、華廈、住宅大樓三種集合住宅（10,711 筆；排除透天厝、店面、辦公等 539 筆）→ 屋齡可計算（10,304 筆；沿用第 6 週規則，民國年＋1911，屋齡＝租賃日－建築完成日的天數 ÷ 365.2425）→ 「租賃層次」可轉成樓層數字（10,274 筆；排除「見其他登記事項」「地下一層」等 30 筆）。</p>
+<p>分析樣本月租 3,900–380,000 元（中位數 20,000），面積 1.68–150.32 坪（中位數 24.65），屋齡 0.3–82.2 年，樓層 1–41 樓。極端案件保留，未刪除。</p>
+<a href="assets/data/雙北住宅租金迴歸.csv" download>下載原始課堂 CSV ↓</a>
+<p class="source">
+<a href="https://plvr.land.moi.gov.tw/DownloadOpenData">內政部實價登錄資料供應系統</a>｜只代表有登錄的租賃案件，不等於所有租屋或學生租屋市場。</p>
+</div>
+</section>
+<section id="worked" class="lesson-section">
+<p class="section-kicker">04 / Week lesson</p>
+<h2 class="section-title">實算：同一批 10,274 筆，四個模型</h2>
+<div class="table-wrap" tabindex="0" role="region" aria-label="可左右捲動的模型比較表">
+<table class="numeric">
+<thead>
+<tr>
+<th scope="col">模型</th>
+<th scope="col">放入的變項</th>
+<th scope="col">面積（元／坪）</th>
+<th scope="col">屋齡（元／年）</th>
+<th scope="col">R²</th>
+<th scope="col">RMSE（元）</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>M1</td><td>面積</td><td>+719.5</td><td>—</td><td>0.3174</td><td>15,386</td></tr>
+<tr><td>M2</td><td>面積＋屋齡</td><td>+695.6</td><td>−60.2</td><td>0.3198</td><td>15,359</td></tr>
+<tr><td>M3</td><td>＋縣市（對照：新北市）</td><td>+715.3</td><td>−178.6</td><td>0.4559</td><td>13,737</td></tr>
+<tr><td>M4</td><td>＋樓層＋建物型態（對照：公寓）</td><td>+712.0</td><td>−177.1</td><td>0.4595</td><td>13,691</td></tr>
+</tbody>
+</table>
+</div>
+<p>M1：月租 ≈ 5,912 ＋ 719.5 × 坪。面積 25 坪的估計值約 5,912＋719.5×25 ≈ 23,900 元；單靠面積可解釋約 32% 的月租變異，典型誤差約 1.5 萬元。</p>
+<p><strong>屋齡係數為什麼從 −60 變成 −179？</strong>臺北市案件平均屋齡 37.6 年、新北市 27.8 年：老房子多在臺北市，而臺北市租金較高（M3 中臺北市比新北市平均高約 15,277 元）。沒控制縣市時，「老」和「在臺北」的效果混在一起，互相抵銷；加入縣市後，才看到同縣市內屋齡較高、租金較低的關係。這就是遺漏變項造成的誤讀。</p>
+<p class="fine">M4 其餘係數：臺北市 +15,661.9、樓層每高 1 層 +104.9、華廈 −2,616.9、住宅大樓 −209.6（皆相對公寓）。建物型態和樓層、屋齡高度相關（住宅大樓平均屋齡 18.2 年、平均 9.5 樓；公寓 45.6 年、3.2 樓），型態係數很容易被誤讀，不要單獨拿來說「大樓比較便宜」。改用 34 個行政區（M5）R² 為 0.5516；再加入出租型態（M6）為 0.5652。</p>
+</section>
+<section id="lab" class="lesson-section">
+<p class="section-kicker">05 / Week lesson</p>
+<h2 class="section-title">互動實驗：自己組一個模型</h2>
+<div class="lab lab-panel">
+<h3>實驗一｜簡單迴歸：面積 × 月租</h3>
+<div class="chart-scroll" tabindex="0" role="region" aria-label="可左右捲動的散布圖">
+<svg id="reg-scatter" class="chart" viewBox="0 0 660 280" role="img" aria-label="面積與月租金散布圖及迴歸線">
+</svg>
+</div>
+<p class="lab-description">10,274 個點皆畫出（縱軸上限 40 萬元）；橘線為 M1 的最小平方迴歸線。點越往右上越分散：面積大的房子，月租的不確定性也越大。</p>
+</div>
+<div class="lab lab-panel">
+<h3>實驗二｜多元迴歸：勾選要控制的條件</h3>
+<div class="preset-row">
+<button type="button" data-model="m1">M1 面積</button>
+<button type="button" data-model="m2">M2 ＋屋齡</button>
+<button type="button" data-model="m3">M3 ＋縣市</button>
+<button type="button" data-model="m4">M4 ＋樓層＋型態</button>
+</div>
+<div class="controls">
+<label class="check-inline"><input type="checkbox" checked disabled>面積（必選）</label>
+<label class="check-inline" for="reg-age"><input type="checkbox" id="reg-age">屋齡</label>
+<label class="check-inline" for="reg-floor"><input type="checkbox" id="reg-floor">樓層</label>
+<label for="reg-region">地區<select id="reg-region">
+<option value="none">不放</option>
+<option value="city">縣市（2 類）</option>
+<option value="district">行政區（34 類）</option>
+</select>
+</label>
+<label class="check-inline" for="reg-type"><input type="checkbox" id="reg-type">建物型態</label>
+<label class="check-inline" for="reg-elev"><input type="checkbox" id="reg-elev">有無電梯</label>
+<label class="check-inline" for="reg-rt"><input type="checkbox" id="reg-rt">出租型態</label>
+</div>
+<div id="reg-stats" class="stats" aria-live="polite">
+</div>
+<p id="reg-warning" class="note warn" hidden></p>
+<div id="reg-coef">
+</div>
+<h3>殘差分布</h3>
+<div class="chart-scroll" tabindex="0" role="region" aria-label="可左右捲動的殘差分布圖">
+<svg id="reg-resid" class="chart" viewBox="0 0 660 196" role="img" aria-label="殘差分布直方圖">
+</svg>
+</div>
+<p class="lab-description">殘差集中在 0 附近，但右側拖得很長：少數高價案件比模型估計貴很多。這些案件會把直線往上拉，也是 RMSE 偏大的主因。</p>
+<h3>模型比較（同一批 10,274 筆）</h3>
+<div id="reg-ladder">
+</div>
+<button type="button" id="reset-reg">重設為 M1</button>
+</div>
+<div class="lab lab-panel">
+<h3>實驗三｜用目前的模型估計一間房子</h3>
+<div class="controls">
+<label for="p-area">面積（坪）<input id="p-area" type="number" min="1" max="300" step="0.5" value="25"></label>
+<label for="p-age">屋齡（年）<input id="p-age" type="number" min="0" max="120" step="1" value="30"></label>
+<label for="p-floor">樓層<input id="p-floor" type="number" min="1" max="60" step="1" value="4"></label>
+<label for="p-dist">行政區<select id="p-dist"></select></label>
+<label for="p-type">建物型態<select id="p-type"></select></label>
+</div>
+<p id="p-result" class="lab-description" aria-live="polite">
+</p>
+<p class="fine">估計使用實驗二目前勾選的模型；沒放入模型的條件不影響結果。超出資料範圍的輸入屬外推，模型沒有看過類似案件。</p>
+</div>
+<div class="card" data-quiz>
+<p class="quiz-question">快速檢查｜AI 寫道：「屋齡係數為 −177，所以房子每老一年，房東就會降租 177 元。」問題在哪？</p>
+<div class="quiz-choices">
+<button type="button" aria-pressed="false" data-feedback="單位沒錯（元／年），問題在於把平均關係寫成因果，以及「房東會」這種資料無法支持的行為推論。">A. 單位寫錯了，應該是元／坪</button>
+<button type="button" aria-pressed="false" data-feedback="對。係數是「其他放入條件相同時，屋齡高 1 年的案件平均月租低約 177 元」，是不同房子之間的比較，不是同一間房子隨時間的變化，也不是因果。">B. 把不同案件的平均差距寫成同一間房的因果變化</button>
+<button type="button" aria-pressed="false" data-feedback="負號的意思是屋齡越高、估計月租越低，方向本身沒有錯。">C. 負號代表模型錯了</button>
+</div>
+<p class="quiz-feedback" aria-live="polite">選一個答案，查看理由。</p>
+</div>
+</section>
+<section id="tasks" class="lesson-section">
+<p class="section-kicker">06 / Week lesson</p>
+<h2 class="section-title">AI 任務單：建模、翻譯、找誤讀</h2>
+<article class="prompt-card">
+<div class="prompt-head">
+<h3>A · 建立分析樣本與簡單迴歸</h3>
+<button type="button" class="copy-button" data-copy="prompt-A" aria-label="複製任務 A 提示語">複製提示語</button>
+</div>
+<pre class="prompt-text" id="prompt-A">請讀取「雙北住宅租金迴歸.csv」（11,250 筆）。依序篩選並報告每一步剩下的筆數：(1) 建物型態只保留公寓(5樓含以下無電梯)、華廈(10層含以下有電梯)、住宅大樓(11層含以上有電梯)；(2) 以「租賃年月日」與「建築完成年月」計算屋齡：民國年加 1911，屋齡＝兩日期相差天數 ÷ 365.2425，日期缺失、無效或完成日晚於租賃日者排除；(3) 把「租賃層次」的中文樓層（如「十二層」）轉成數字，無法轉換者排除。接著以「建物面積坪」預測「月租金元」做簡單線性迴歸，報告截距、斜率、R²、RMSE，畫散布圖加迴歸線，並用白話說明斜率與截距的意思和單位。</pre>
+<div class="prompt-check">
+<strong>自己覆核：</strong>筆數 10,711 → 10,304 → 10,274；斜率約 719.5 元／坪，R²≈0.317。</div>
+</article>
+<article class="prompt-card">
+<div class="prompt-head">
+<h3>B · 多元迴歸與類別變項</h3>
+<button type="button" class="copy-button" data-copy="prompt-B" aria-label="複製任務 B 提示語">複製提示語</button>
+</div>
+<pre class="prompt-text" id="prompt-B">用同一批 10,274 筆，依序建立 M2（面積＋屋齡）、M3（再加縣市，新北市為對照組）、M4（再加樓層與建物型態，公寓為對照組）。整理一張模型比較表：每個模型的 n、R²、RMSE，以及面積與屋齡係數。把 M4 每個係數翻成白話，必須寫出「其他條件相同時」與對照組。說明屋齡係數從 M2 到 M3 為什麼改變。最後試著在 M4 再加入「有無電梯」，報告發生什麼事並解釋原因。</pre>
+<div class="prompt-check">
+<strong>自己覆核：</strong>M4 R²≈0.4595；臺北市 +15,662；「有無電梯」與建物型態完全重疊，無法同時估計。</div>
+</article>
+<article class="prompt-card">
+<div class="prompt-head">
+<h3>C · 找出誤讀，寫出不適用情境</h3>
+<button type="button" class="copy-button" data-copy="prompt-C" aria-label="複製任務 C 提示語">複製提示語</button>
+</div>
+<pre class="prompt-text" id="prompt-C">請檢查以下三句話是否正確，逐句說明問題並改寫：(1)「截距 5,912 元代表 0 坪的房子月租 5,912 元」；(2)「建物型態係數顯示住宅大樓比公寓便宜，所以租大樓比較划算」；(3)「屋齡每多一年，房東會降租 177 元」。接著整理三項主要發現（含數字與單位），並列出至少三個模型不適用的情境，例如面積超過 150 坪的案件、透天厝或店面、非雙北地區、未登錄的私下租賃、想推論因果時。</pre>
+<div class="prompt-check">
+<strong>自己覆核：</strong>每句改寫都要點名問題類型：外推、遺漏變項／高度相關、因果誤讀。</div>
+</article>
+</section>
+<section id="deliver" class="lesson-section">
+<p class="section-kicker">07 / Week lesson</p>
+<h2 class="section-title">本週交件：簡單與多元迴歸對照圖卡</h2>
+<div class="card">
+<h3>簡單與多元迴歸對照圖卡</h3>
+<p>一頁圖卡：左邊是簡單迴歸散布圖與公式，右邊是多元迴歸比較表與白話翻譯，下方列三項主要發現與模型不適用的情境。完整提示語另附。</p>
+<a href="assets/data/week10-成果模板.md" download>下載成果模板（Markdown）↓</a>
+<ul class="checklist">
+<li>
+<label class="check-row">
+<input type="checkbox">
+<span>報告篩選步驟與每一步的筆數，所有模型使用同一批資料。</span>
+</label>
+</li>
+<li>
+<label class="check-row">
+<input type="checkbox">
+<span>簡單迴歸：散布圖、迴歸線、截距與斜率（含單位）及白話說明。</span>
+</label>
+</li>
+<li>
+<label class="check-row">
+<input type="checkbox">
+<span>多元迴歸比較表：n、R²、RMSE、主要係數。</span>
+</label>
+</li>
+<li>
+<label class="check-row">
+<input type="checkbox">
+<span>每個類別係數都寫出對照組，並解釋一個係數改變的原因。</span>
+</label>
+</li>
+<li>
+<label class="check-row">
+<input type="checkbox">
+<span>人工覆算一個預測值（代入公式），並指出一項 AI 的誤讀。</span>
+</label>
+</li>
+<li>
+<label class="check-row">
+<input type="checkbox">
+<span>三項主要發現與至少三個模型不適用的情境，不宣稱因果。</span>
+</label>
+</li>
+</ul>
+<p id="check-progress" class="check-progress" aria-live="polite">
+</p>
+</div>
+<details>
+<summary>教師參考｜100 分鐘課堂流程</summary>
+<div class="details-body">
+<p>0–10 分：讓學生猜 25 坪公寓的月租，引出「估計」；10–30 分：斜率、截距、殘差、R²；30–50 分：互動實驗，逐步加入變項，討論屋齡係數變號與電梯共線；50–75 分：執行 AI 任務 A、B 並核對數值；75–90 分：任務 C 找誤讀；90–100 分：交換圖卡，互查是否寫出對照組與不適用情境。</p>
+</div>
+</details>
+</section>
+<div class="toolbar">
+<button type="button" data-print>列印教材／另存 PDF</button>
+<a href="assets/data/week913-資料來源與計算說明.md" download>下載資料來源與計算說明</a>
+</div>
+<nav class="week-nav" aria-label="上下週教材">
+<a href="week09.html">
+<span class="nn">‹ 上一週</span>第 9 週教材</a>
+<a href="week11.html" class="next">
+<span class="nn">下一週 ›</span>第 11 週教材</a>
+</nav>
+</main>
+<footer>臺北市立大學 公共事務學系｜資料探勘（郭毓倫）｜第 10 週教材<br>內政部實價登錄租賃資料 114 年第 4 季下載版之雙北課堂子集。</footer>
+</body>
+</html>

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="第 9 週資料探勘教材：期中一頁式發現網站，三項發現各附證據，含評分規準、發現產生器、AI 任務單、同儕回饋單與修正對照表。">
+<title>第 9 週教材：期中報告與討論｜資料探勘</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/lesson.css">
+<link rel="stylesheet" href="assets/week56.css">
+<link rel="stylesheet" href="assets/week78.css">
+<link rel="stylesheet" href="assets/week913.css">
+<script src="assets/week09-data.js" defer>
+</script>
+<script src="assets/lesson.js" defer>
+</script>
+<script src="assets/week913.js" defer>
+</script>
+<link rel="stylesheet" href="assets/slides.css">
+</head>
+<body class="lesson-page" data-week="09">
+<a href="#main" class="skip">跳到教材內容</a>
+<header class="site-head">
+<div class="inner">
+<a class="brand" href="index.html">資料探勘 · Data Mining</a>
+<nav aria-label="課程導覽">
+<a href="index.html">課程大綱</a>
+<a href="index.html#pick">每週教材</a>
+<a href="#concepts">發現怎麼寫</a>
+<a href="#dataset">本週資料</a>
+<a href="#tasks">Antigravity 任務單</a>
+</nav>
+</div>
+</header>
+<main id="main">
+<details class="slide-download" id="slides">
+<summary class="slide-summary"><span class="slide-summary-title">本週簡報 <span class="slide-count">16 頁</span></span><span class="slide-expand">點擊展開</span><span class="slide-collapse">收合簡報</span></summary>
+<div class="slide-content"><div class="slide-heading"><p>直接翻頁閱讀，或按「全螢幕」播放。</p><a class="slide-file" href="assets/slides/week09.pptx" download="資料探勘_Week09.pptx">另存 PPT ↓</a></div>
+<iframe class="slide-frame" src="assets/slides/viewer.html?week=09&amp;v=20261015" title="第 9 週簡報播放器" allow="fullscreen" allowfullscreen loading="lazy"></iframe>
+<p class="slide-meta">操作：上一頁／下一頁、選單跳頁；點入簡報後可用鍵盤 ← →。手機可左右滑動；完整提示語可按「備註」查看。</p></div>
+</details>
+
+
+<a class="backlink" href="index.html#pick">← 回每週教材選單</a>
+<section class="hero">
+<p class="kicker">Week 9 · 期中報告與討論</p>
+<h1>期中報告：一頁式發現網站</h1>
+<p class="lead">用前八週學到的方法，從同一份青年調查中找出三項發現；每一項都要有數字、圖表與限制，並在 8 分鐘內讓同學看懂。</p>
+<dl class="meta-grid">
+<div>
+<dt>報告形式</dt>
+<dd>一頁式網站＋口頭發表</dd>
+</div>
+<div>
+<dt>核心動作</dt>
+<dd>主張 + 證據 + 限制</dd>
+</div>
+<div>
+<dt>本週資料</dt>
+<dd>青年調查 212 筆、24 欄</dd>
+</div>
+<div>
+<dt>當週成果</dt>
+<dd>網站、回饋單、修正對照表</dd>
+</div>
+</dl>
+<div class="actions">
+<a href="#lab" class="button">開始發現產生器 ↗</a>
+<a class="button secondary" href="assets/data/期中_臺灣青年生活.csv" download>下載期中 CSV ↓</a>
+</div>
+</section>
+<nav class="lesson-toc" aria-label="本頁重點">
+<a href="#goals">報告規格</a>
+<a href="#worked">示範發現</a>
+<a href="#lab">發現產生器</a>
+<a href="#rubric">評分規準</a>
+<a href="#tasks">AI 任務單</a>
+<a href="#deliver">交件與回饋</a>
+</nav>
+<noscript>
+<p class="no-js">規格、規準、示範表與下載仍可使用；發現產生器與複製功能需啟用 JavaScript。</p>
+</noscript>
+<section id="goals" class="lesson-section">
+<p class="section-kicker">01 / Midterm</p>
+<h2 class="section-title">報告規格：一份資料、三項發現、一個網站</h2>
+<div class="grid-2">
+<article class="mini">
+<h3>資料與範圍</h3>
+<p>使用教師提供的「期中_臺灣青年生活.csv」（212 筆、24 欄）。必須包含<strong>樣本描述</strong>，以及<strong>至少一項群體比較或相關分析</strong>。</p>
+</article>
+<article class="mini">
+<h3>三項發現</h3>
+<p>網站呈現三項發現；每項都要有一句主張、一張支持的圖表或數據表、有效 n 與分母，以及一項限制。</p>
+</article>
+<article class="mini">
+<h3>AI 使用揭露</h3>
+<p>展示至少一段用於分析或建置網站的自然語言提示，以及<strong>一項經人工查核後修正的 AI 結果</strong>（原本錯在哪、怎麼發現、改成什麼）。</p>
+</article>
+<article class="mini">
+<h3>發表流程</h3>
+<p>每組 8 分鐘展示網站，4 分鐘同儕提問與教師講評。發表後填同儕回饋單，並在一週內交「回饋—修正對照表」。</p>
+</article>
+</div>
+</section>
+<section id="concepts" class="lesson-section">
+<p class="section-kicker">02 / Midterm</p>
+<h2 class="section-title">一項好發現＝主張＋證據＋限制</h2>
+<div class="grid-2">
+<article class="mini">
+<h3>主張：一句話、有數字</h3>
+<p>例如「男性對健康滿意的比例比女性高約 14 個百分點」。避免「性別影響健康」這種超出資料的說法。</p>
+</article>
+<article class="mini">
+<h3>證據：圖表＋n＋分母</h3>
+<p>圖表要有標題、軸名、單位與資料來源；表格列出各組有效 n。加權或未加權要寫清楚（第 2、5、7 週）。</p>
+</article>
+<article class="mini">
+<h3>不確定性：差多少、有多確定</h3>
+<p>比較兩組時，報告差距與差距的 95% 區間（第 8 週）。兩組各自的區間重疊，不等於差距不顯著。</p>
+</article>
+<article class="mini">
+<h3>限制：誠實說資料不能回答的事</h3>
+<p>2015 年 19–24 歲子樣本、觀察資料不能推論因果、小樣本（n＜30）、自填時間是估計值。</p>
+</article>
+</div>
+<div class="note warn"><strong>討論焦點：</strong>三項發現是否各有清楚證據？網站是否易讀易懂？是否誤把相關當因果？內容是否超出資料可支持的範圍？同儕提問與講評都會圍繞這四題。</div>
+</section>
+<section id="dataset" class="lesson-section">
+<p class="section-kicker">03 / Midterm</p>
+<h2 class="section-title">期中資料：2015 青年生活調查 212 位受訪者</h2>
+<div class="card">
+<p>來源為中央研究院 2015 臺灣社會變遷基本調查（第七期第一次），由原始 2,034 筆篩選 18–24 歲，本檔實際年齡 19–24 歲。與第 1 週「資料健檢」為同一批受訪者、同樣 24 欄，內容未改寫。</p>
+<p>欄位分四類：<strong>背景</strong>（性別、年齡、地區代碼、教育程度、是否完成學業、家庭月收入）、<strong>媒體時間</strong>（報紙、電視、網路為每日分鐘，雜誌為每週分鐘）、<strong>滿意度與感受</strong>（經濟、施政、民主、生活、健康、朋友、工作、快樂、自評健康、沒有希望、收入是否足夠）、<strong>其他</strong>（樣本編號、低生活滿意度 0／1、抽樣權數）。</p>
+<p>注意：經濟、施政、民主滿意度各有 99 人為 Not applicable；工作滿意度有 87 人為 I am currently unemployed；家庭月收入有 64 人答 Don't know。這些都要按題排除或說明，不能當成「不滿意」。</p>
+<a href="assets/data/期中_臺灣青年生活.csv" download>下載原始期中 CSV ↓</a>
+<p class="source">
+<a href="https://www2.ios.sinica.edu.tw/sc/en/scDownload.php">中央研究院資料來源</a>｜僅限學術用途，禁止商用，網站須註明來源。這是 2015 年調查子集，不代表今日所有大學生。</p>
+</div>
+</section>
+<section id="worked" class="lesson-section">
+<p class="section-kicker">04 / Midterm</p>
+<h2 class="section-title">示範：把一項發現從草稿改到可以上網站</h2>
+<div class="table-wrap" tabindex="0" role="region" aria-label="可左右捲動的示範資料表">
+<table class="numeric">
+<thead>
+<tr>
+<th scope="col">性別</th>
+<th scope="col">有效 n</th>
+<th scope="col">對健康滿意 n</th>
+<th scope="col">加權滿意率</th>
+<th scope="col">95% 信賴區間</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>女性</td><td>105</td><td>73</td><td>69.48%</td><td>60.5%–78.4%</td></tr>
+<tr><td>男性</td><td>107</td><td>89</td><td>83.22%</td><td>76.0%–90.4%</td></tr>
+<tr><td>差距（男−女）</td><td>—</td><td>—</td><td>+13.75 個百分點</td><td>+2.3 至 +25.2</td></tr>
+</tbody>
+</table>
+</div>
+<p class="fine">「健康滿意度」Pretty／Fairly satisfied 合為滿意，212 人皆為有效回答。加權比例；標準誤用 Kish 有效樣本數，常態近似，未納入抽樣設計效果。</p>
+<div class="grid-2">
+<article class="mini">
+<h3>草稿（不合格）</h3>
+<p>「男生比女生健康，因為男生比較常運動。」——把「對健康滿意」寫成「健康」，又加上資料裡沒有的原因（運動）。</p>
+</article>
+<article class="mini">
+<h3>定稿（可以上網站）</h3>
+<p>「2015 年 19–24 歲受訪者中，男性對自己健康感到滿意的比例（83%）比女性（69%）高約 14 個百分點（95% 區間約 +2 至 +25）。這是自評滿意度，不是醫學健康指標，也不能說明原因。」</p>
+</article>
+</div>
+<div class="note">兩組各自的區間（60.5–78.4%、76.0–90.4%）有重疊，但差距本身的區間不含 0。判斷「有沒有差」要看差距的區間，不是看兩條區間是否碰在一起。</div>
+</section>
+<section id="lab" class="lesson-section">
+<p class="section-kicker">05 / Midterm</p>
+<h2 class="section-title">發現產生器：先探索，再挑三項寫進網站</h2>
+<div class="lab lab-panel">
+<h3>選一個指標與一種分組</h3>
+<div class="controls">
+<label for="f-outcome">指標<select id="f-outcome">
+<option value="health">健康滿意</option>
+<option value="life">生活滿意</option>
+<option value="friends">朋友關係滿意</option>
+<option value="happy">近期快樂</option>
+<option value="goodhealth">自評健康「好」以上</option>
+<option value="income">收入夠用</option>
+</select>
+</label>
+<label for="f-group">分組<select id="f-group">
+<option value="sex">性別</option>
+<option value="age">年齡（19–21／22–24）</option>
+<option value="study">學業狀態</option>
+<option value="net">每日上網（≤240／＞240 分鐘）</option>
+</select>
+</label>
+<label for="f-weight">計算方式<select id="f-weight">
+<option value="weighted">抽樣權數加權</option>
+<option value="raw">未加權</option>
+</select>
+</label>
+</div>
+<div id="f-table">
+</div>
+<div id="f-stats" class="stats" aria-live="polite">
+</div>
+<div class="chart-scroll" tabindex="0" role="region" aria-label="可左右捲動的群組比較圖">
+<svg id="f-chart" class="chart" viewBox="0 0 660 124" role="img" aria-label="各群組比例與 95% 信賴區間">
+</svg>
+</div>
+<p id="f-card" class="finding-card" aria-live="polite">
+</p>
+<p class="fine">長條為比例，橘色線為 95% 信賴區間。「收入夠用」排除 Don't know 3 人；學業狀態「不適用」34 人另列一組，不併入任何一類。發現卡只是草稿，放上網站前請改寫成自己的話並人工覆核。</p>
+<button type="button" id="reset-finding">重設</button>
+</div>
+<div class="card" data-quiz>
+<p class="quiz-question">快速檢查｜哪一句最適合放在期中網站上？</p>
+<div class="quiz-choices">
+<button type="button" aria-pressed="false" data-feedback="資料只有 2015 年 19–24 歲的受訪者，也沒有隨機分派，不能推論「上網造成」任何結果。">A. 上網太久會讓年輕人不快樂</button>
+<button type="button" aria-pressed="false" data-feedback="對。有樣本範圍、數字、分母與限制，沒有因果說法。">B. 2015 年 19–24 歲受訪者中，仍在學者的生活滿意率約 94%（n=60），已畢業者約 86%（n=99）；差距的區間跨過 0，不能說兩組確定不同</button>
+<button type="button" aria-pressed="false" data-feedback="未畢業組只有 19 人，區間非常寬；而且「沒前途」是價值判斷，不是資料能支持的結論。">C. 沒念完書的年輕人生活最不滿意，代表學歷決定前途</button>
+</div>
+<p class="quiz-feedback" aria-live="polite">選一個答案，查看理由。</p>
+</div>
+</section>
+<section id="rubric" class="lesson-section">
+<p class="section-kicker">06 / Midterm</p>
+<h2 class="section-title">評分規準：五個面向，各占 20%</h2>
+<div class="table-wrap" tabindex="0" role="region" aria-label="可左右捲動的評分規準">
+<table class="rubric">
+<thead>
+<tr>
+<th scope="col">面向</th>
+<th scope="col">優秀</th>
+<th scope="col">達標</th>
+<th scope="col">待加強</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>問題與資料適用</td><td>三項發現各回答一個清楚的問題，欄位與分母選擇有說明</td><td>問題明確，但有一項與資料欄位對應不清</td><td>只有描述數字，沒有問題；或用了不適合的欄位</td></tr>
+<tr><td>方法正確性</td><td>樣本描述＋群體比較／相關皆正確，標示加權、有效 n 與區間</td><td>方法大致正確，少數表格缺 n 或分母</td><td>把無效回答當不滿意、分母錯誤或方法誤用</td></tr>
+<tr><td>AI 驗證與修正</td><td>展示提示語與一項具體修正，說明如何發現錯誤</td><td>有提示語與修正，但修正理由不清楚</td><td>沒有揭露 AI 使用，或沒有任何人工查核</td></tr>
+<tr><td>網站易讀性</td><td>一頁看得懂，圖表有標題、軸名、單位與來源，手機也能讀</td><td>內容完整，但圖表標示或排版有缺</td><td>圖表無法判讀，或需要口頭補充才看得懂</td></tr>
+<tr><td>解讀與限制</td><td>事實與推論分開，沒有因果誇大，限制具體</td><td>有限制但較籠統</td><td>把相關寫成因果，或結論超出資料範圍</td></tr>
+</tbody>
+</table>
+</div>
+<p class="fine">對應課程大綱「評分標準（五大面向）」；期中報告占學期成績 20%。</p>
+</section>
+<section id="tasks" class="lesson-section">
+<p class="section-kicker">07 / Midterm</p>
+<h2 class="section-title">AI 任務單：從資料到網站</h2>
+<article class="prompt-card">
+<div class="prompt-head">
+<h3>A · 資料健檢與樣本描述</h3>
+<button type="button" class="copy-button" data-copy="prompt-A" aria-label="複製任務 A 提示語">複製提示語</button>
+</div>
+<pre class="prompt-text" id="prompt-A">請讀取「期中_臺灣青年生活.csv」。確認 212 筆、24 欄，列出每欄型態、缺失數，以及 Not applicable、Don't know、No comment、I am currently unemployed 等特殊回答的次數。接著做樣本描述：性別、年齡、學業狀態的人數與加權百分比（用「抽樣權數」，並說明權數總和不是人數）。最後提出 5 個可以用這份資料回答的問題，每個問題註明要用哪些欄位、分母是誰。不要先下結論。</pre>
+<div class="prompt-check">
+<strong>自己覆核：</strong>男 107、女 105；學業狀態 Not applicable 34 人；經濟／施政／民主滿意度各 99 人為 Not applicable。</div>
+</article>
+<article class="prompt-card">
+<div class="prompt-head">
+<h3>B · 三項發現與證據</h3>
+<button type="button" class="copy-button" data-copy="prompt-B" aria-label="複製任務 B 提示語">複製提示語</button>
+</div>
+<pre class="prompt-text" id="prompt-B">從上面的問題中挑三個，各做一項分析：至少一項是群體比較（例如性別×健康滿意），可再加一項相關分析（例如每日上網分鐘與看電視分鐘的散布圖與 Pearson r）。每項請輸出：一張有標題、軸名、單位與資料來源的圖；一張表列出各組有效 n、符合 n、加權比例；兩組比較時加上差距與差距的 95% 信賴區間（各組標準誤用 Kish 有效樣本數，常態近似）。再為每項寫一句主張（含數字）與一項限制。不得把相關寫成因果，不得把無效回答當成不滿意。</pre>
+<div class="prompt-check">
+<strong>自己覆核：</strong>健康滿意（加權）女 69.48%、男 83.22%，差距 +13.75 個百分點，區間約 +2.3 至 +25.2。</div>
+</article>
+<article class="prompt-card">
+<div class="prompt-head">
+<h3>C · 建立一頁式網站並自我查核</h3>
+<button type="button" class="copy-button" data-copy="prompt-C" aria-label="複製任務 C 提示語">複製提示語</button>
+</div>
+<pre class="prompt-text" id="prompt-C">請把三項發現做成一個單一 HTML 檔的一頁式網站：最上方是題目與一句總結；接著是「資料說明」（來源、年份、樣本範圍、212 筆、加權方式）；然後三個發現區塊，每塊依序為主張、圖表、數據表、限制；最後是「AI 使用揭露」區，放一段實際使用的提示語，以及一項 AI 原本算錯或寫錯、經人工查核後修正的內容（原內容／發現方式／修正後）。版面要在手機上可讀，圖表有替代文字。完成後，請逐項檢查：每個數字能否回到 CSV 重算？有沒有任何句子把相關寫成因果？</pre>
+<div class="prompt-check">
+<strong>自己覆核：</strong>打開網站逐一點數字回查；修正紀錄必須是你們真的發現的錯誤，不能事後編造。</div>
+</article>
+</section>
+<section id="deliver" class="lesson-section">
+<p class="section-kicker">08 / Midterm</p>
+<h2 class="section-title">交件：網站、同儕回饋單、回饋—修正對照表</h2>
+<div class="card">
+<h3>期中一頁式網站（三項發現）</h3>
+<p>發表前一天繳交網站檔案或網址；發表時每組 8 分鐘。發表後填寫其他組的同儕回饋單，並在一週內交回饋—修正對照表。</p>
+<p><a href="assets/data/week09-成果模板.md" download>下載期中規劃模板 ↓</a>｜<a href="assets/data/week09-同儕回饋單.md" download>同儕回饋單 ↓</a>｜<a href="assets/data/week09-回饋修正對照表.md" download>回饋—修正對照表 ↓</a></p>
+<ul class="checklist">
+<li>
+<label class="check-row">
+<input type="checkbox">
+<span>網站包含樣本描述，以及至少一項群體比較或相關分析。</span>
+</label>
+</li>
+<li>
+<label class="check-row">
+<input type="checkbox">
+<span>三項發現都有一句含數字的主張、一張圖表、有效 n 與分母。</span>
+</label>
+</li>
+<li>
+<label class="check-row">
+<input type="checkbox">
+<span>群體比較附差距與 95% 區間，並標示加權或未加權。</span>
+</label>
+</li>
+<li>
+<label class="check-row">
+<input type="checkbox">
+<span>每項發現寫出一項具體限制，沒有把相關寫成因果。</span>
+</label>
+</li>
+<li>
+<label class="check-row">
+<input type="checkbox">
+<span>AI 使用揭露：至少一段提示語，以及一項人工查核後修正的結果。</span>
+</label>
+</li>
+<li>
+<label class="check-row">
+<input type="checkbox">
+<span>網站註明資料來源（中央研究院 2015 臺灣社會變遷基本調查）與學術用途限制。</span>
+</label>
+</li>
+<li>
+<label class="check-row">
+<input type="checkbox">
+<span>發表後完成同儕回饋單與回饋—修正對照表。</span>
+</label>
+</li>
+</ul>
+<p id="check-progress" class="check-progress" aria-live="polite">
+</p>
+</div>
+<details>
+<summary>教師參考｜100 分鐘發表流程</summary>
+<div class="details-body">
+<p>以 6 組為例：0–5 分說明規準與回饋單；5–77 分每組 12 分鐘（8 分鐘發表＋4 分鐘提問講評），其他組同步填回饋單；77–92 分各組閱讀回饋、圈出要修正的兩項；92–100 分全班整理最常見的三個問題（多為缺分母、區間重疊誤判、因果用語）。組數較多時，可分兩節或改為海報式巡迴。</p>
+</div>
+</details>
+</section>
+<div class="toolbar">
+<button type="button" data-print>列印教材／另存 PDF</button>
+<a href="assets/data/week913-資料來源與計算說明.md" download>下載資料來源與計算說明</a>
+</div>
+<nav class="week-nav" aria-label="上下週教材">
+<a href="week08.html">
+<span class="nn">‹ 上一週</span>第 8 週教材</a>
+<a href="week10.html" class="next">
+<span class="nn">下一週 ›</span>第 10 週教材</a>
+</nav>
+</main>
+<footer>臺北市立大學 公共事務學系｜資料探勘（郭毓倫）｜第 9 週教材<br>中央研究院 2015 臺灣社會變遷基本調查；僅限學術用途、禁止商用。</footer>
+</body>
+</html>
