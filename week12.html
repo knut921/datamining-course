@@ -37,7 +37,7 @@
 </header>
 <main id="main">
 <details class="slide-download" id="slides">
-<summary class="slide-summary"><span class="slide-summary-title">本週簡報 <span class="slide-count">16 頁</span></span><span class="slide-expand">點擊展開</span><span class="slide-collapse">收合簡報</span></summary>
+<summary class="slide-summary"><span class="slide-summary-title">本週簡報 <span class="slide-count">17 頁</span></span><span class="slide-expand">點擊展開</span><span class="slide-collapse">收合簡報</span></summary>
 <div class="slide-content"><div class="slide-heading"><p>直接翻頁閱讀，或按「全螢幕」播放。</p><a class="slide-file" href="assets/slides/week12.pptx" download="資料探勘_Week12.pptx">另存 PPT ↓</a></div>
 <iframe class="slide-frame" src="assets/slides/viewer.html?week=12&amp;v=20261015" title="第 12 週簡報播放器" allow="fullscreen" allowfullscreen loading="lazy"></iframe>
 <p class="slide-meta">操作：上一頁／下一頁、選單跳頁；點入簡報後可用鍵盤 ← →。手機可左右滑動；完整提示語可按「備註」查看。</p></div>
@@ -48,19 +48,19 @@
 <section class="hero">
 <p class="kicker">Week 12 · 分群概念</p>
 <h1>如何找出相似的使用者？</h1>
-<p class="lead">沒有標準答案的分類：讓演算法依媒體時間與生活感受把青年分成幾群，再判斷這些群是否穩定、是否說得出意義，以及名字有沒有說過頭。</p>
+<p class="lead">班上同學可以依興趣、作息分成好幾「掛」。電腦也能做類似的事：依照上網、看電視、讀報的時間和生活感受，把青年分成幾群。但分出來的群真的存在嗎？取的名字公平嗎？</p>
 <dl class="meta-grid">
 <div>
-<dt>概念微講授</dt>
-<dd>分群、群數、尺度、輪廓</dd>
+<dt>本週主角</dt>
+<dd>分群：把相似的人放一起</dd>
 </div>
 <div>
 <dt>核心動作</dt>
-<dd>比較群數，檢查穩定度</dd>
+<dd>換群數，看結果穩不穩</dd>
 </div>
 <div>
-<dt>本週資料</dt>
-<dd>青年調查 212 筆、9 個特徵</dd>
+<dt>使用資料</dt>
+<dd>212 位青年、9 個特徵</dd>
 </div>
 <div>
 <dt>當週成果</dt>
@@ -84,106 +84,150 @@
 </noscript>
 <section id="goals" class="lesson-section">
 <p class="section-kicker">01 / Week lesson</p>
-<h2 class="section-title">分群是「找相似」，不是「找答案」</h2>
-<div class="grid-2">
-<article class="mini">
-<h3>理解分群在做什麼</h3>
-<p>沒有標籤，只依特徵距離把相近的人放在同一群；每一群用平均特徵（輪廓）描述。</p>
-</article>
-<article class="mini">
-<h3>處理特徵尺度</h3>
-<p>分鐘數與 1–5 分的量尺單位不同，先轉換、標準化，避免某個特徵獨占距離。</p>
-</article>
-<article class="mini">
-<h3>選擇群數並檢查穩定</h3>
-<p>比較 2–5 群的輪廓係數、群大小與重跑後是否一致，再決定要用幾群。</p>
-</article>
-<article class="mini">
-<h3>寫出負責任的人物誌</h3>
-<p>依實際特徵命名，避免貼標籤；說明群組只是平均輪廓，不代表群內每個人。</p>
-</article>
+<h2 class="section-title">分群是「找相似」，不是「找標準答案」</h2>
+<div class="flow" aria-label="本週五步驟"><span><b>STEP 1</b>選要比的特徵</span><span><b>STEP 2</b>統一尺度</span><span><b>STEP 3</b>電腦分群</span><span><b>STEP 4</b>看每群長怎樣</span><span><b>STEP 5</b>公平地取名字</span></div>
+<div class="table-wrap" tabindex="0" role="region" aria-label="可左右捲動的分類與分群比較表">
+<table class="glossary">
+<thead><tr><th scope="col">比較</th><th scope="col">上週：分類</th><th scope="col">本週：分群</th></tr></thead>
+<tbody>
+<tr><td>有沒有答案</td><td>有（誰是低滿意已經知道）</td><td>沒有（電腦自己找相似的人）</td></tr>
+<tr><td>要決定什麼</td><td>門檻</td><td>要分幾群、用哪些特徵</td></tr>
+<tr><td>怎麼檢查</td><td>數對錯</td><td>看群之間差多少、重跑結果穩不穩</td></tr>
+<tr><td>生活例子</td><td>判斷一封信是不是垃圾信</td><td>把班上同學依興趣分成幾掛</td></tr>
+</tbody>
+</table>
 </div>
 </section>
 <section id="concepts" class="lesson-section">
 <p class="section-kicker">02 / Week lesson</p>
-<h2 class="section-title">四個概念：分群、群數、尺度、輪廓</h2>
-<div class="grid-2">
-<article class="mini">
-<h3>k-means 分群</h3>
-<p>先隨機放 k 個中心，把每個人分給最近的中心，再把中心移到群內平均；重複到不再變動。結果會受起始點影響，所以要多次起始、取最好的一次。</p>
-</article>
-<article class="mini">
-<h3>群數 k</h3>
-<p>k 是人決定的。可參考輪廓係數（−1～1，越高表示群內越緊、群間越分開；0.25 以下代表結構很弱），但最後還要看每群夠不夠大、說不說得出意義。</p>
-</article>
-<article class="mini">
-<h3>特徵尺度</h3>
-<p>網路分鐘差距可達數百，滿意度只差 1–3 分。不處理的話，距離幾乎只由分鐘決定。本週把四項媒體時間取 log(1+分鐘) 降低極端值影響，再把 9 個特徵都標準化（平均 0、標準差 1）。</p>
-</article>
-<article class="mini">
-<h3>群組輪廓與人物誌</h3>
-<p>輪廓＝每群各特徵的平均，和全體比高或低。人物誌把輪廓寫成可理解的描述，但名稱要忠於資料、不帶貶意。</p>
-</article>
+<h2 class="section-title">分群怎麼做？一張圖看懂</h2>
+<figure class="diagram">
+<svg class="chart" viewBox="0 0 660 230" role="img" aria-label="k-means 分群示意圖：三群點與各自的中心">
+<title>k-means 分群示意圖</title>
+<g class="d-brand" style="fill-opacity:.75"><circle cx="110" cy="70" r="7"/><circle cx="140" cy="55" r="7"/><circle cx="130" cy="95" r="7"/><circle cx="165" cy="80" r="7"/><circle cx="95" cy="105" r="7"/></g>
+<g class="d-acc" style="fill-opacity:.75"><circle cx="330" cy="160" r="7"/><circle cx="360" cy="175" r="7"/><circle cx="310" cy="185" r="7"/><circle cx="350" cy="140" r="7"/><circle cx="380" cy="160" r="7"/><circle cx="335" cy="200" r="7"/></g>
+<g class="d-good" style="fill-opacity:.75"><circle cx="520" cy="60" r="7"/><circle cx="555" cy="80" r="7"/><circle cx="500" cy="90" r="7"/><circle cx="540" cy="45" r="7"/></g>
+<g class="d-soft" style="fill-opacity:.6"><circle cx="250" cy="110" r="7"/><circle cx="430" cy="110" r="7"/></g>
+<g style="stroke:var(--ink);stroke-width:3"><path d="M120 72 l12 12 m0 -12 l-12 12"/><path d="M337 162 l12 12 m0 -12 l-12 12"/><path d="M523 62 l12 12 m0 -12 l-12 12"/></g>
+<text x="128" y="132" text-anchor="middle">群 1</text><text x="343" y="222" text-anchor="middle">群 2</text><text x="529" y="118" text-anchor="middle">群 3</text>
+<text x="250" y="138" text-anchor="middle">在中間的人？</text><text x="430" y="138" text-anchor="middle">在中間的人？</text>
+</svg>
+<figcaption>每個點是一個人，✕ 是每群的「中心」（平均）。電腦會把每個人分給最近的中心，再把中心移到群內平均，一直重複到不再變動（這個方法叫 k-means）。灰點夾在兩群中間，分到哪一群都說得通：群和群的界線不一定清楚。</figcaption>
+</figure>
+<div class="table-wrap" tabindex="0" role="region" aria-label="可左右捲動的名詞表">
+<table class="glossary">
+<thead><tr><th scope="col">名詞</th><th scope="col">白話說明</th><th scope="col">要注意</th></tr></thead>
+<tbody>
+<tr><td>群數 k</td><td>要分成幾群，由人決定</td><td>分 2 群或 5 群都「分得出來」，要看哪個說得出意義</td></tr>
+<tr><td>特徵尺度</td><td>每個特徵的數字範圍</td><td>分鐘數可差幾百，滿意度只有 1～4 分</td></tr>
+<tr><td>標準化</td><td>把每個特徵換成同樣的尺度再比較</td><td>不做的話，分鐘數會蓋過滿意度</td></tr>
+<tr><td>群組輪廓</td><td>每一群的平均特徵，跟全體比高或低</td><td>是平均，不代表群裡每個人</td></tr>
+<tr><td>輪廓係數</td><td>群分得清不清楚的分數（−1～1）</td><td>低於 0.25 表示界線很模糊</td></tr>
+<tr><td>穩定度</td><td>換個起點重跑，結果是不是一樣（0～1）</td><td>越接近 1 越穩定</td></tr>
+</tbody>
+</table>
 </div>
-<div class="note warn">分群一定會「分出」群，即使資料裡沒有明顯的群。看到群組時先問：換個群數或起始點，結果還在嗎？群與群的差距大到有實務意義嗎？</div>
+<h3>為什麼要統一尺度？</h3>
+<div class="table-wrap" tabindex="0" role="region" aria-label="可左右捲動的尺度示範表">
+<table class="vtable">
+<thead><tr><th scope="col">兩個人的差別</th><th scope="col">差了多少（原始數字）</th><th scope="col">電腦眼中的份量</th></tr></thead>
+<tbody>
+<tr><td>每天上網時間</td><td>差 120 分鐘</td><td class="vb acc" style="--v:98">120</td></tr>
+<tr><td>生活滿意度</td><td>差 2 分（很滿意 vs 有點不滿意）</td><td class="vb acc" style="--v:1.6">2</td></tr>
+</tbody>
+</table>
+</div>
+<p>不處理的話，電腦幾乎只看時間，滿意度的差別被忽略。所以本週先把時間「取對數」（讓 0 分鐘和 900 分鐘的差距不會太誇張），再把 9 個特徵都標準化。</p>
+<div class="note warn">電腦<strong>一定</strong>會分出群，就算資料裡其實沒有明顯的群。看到結果時先問：換個群數或重跑，結果還在嗎？群和群的差別大到有意義嗎？</div>
 </section>
 <section id="dataset" class="lesson-section">
 <p class="section-kicker">03 / Week lesson</p>
 <h2 class="section-title">212 位青年，9 個分群特徵</h2>
 <div class="card">
-<p>來源為中央研究院 2015 臺灣社會變遷基本調查，同一批 212 位 19–24 歲受訪者。CSV 共 26 欄：原本 24 欄，加上課程產製時附上的「分群編號」與「分群名稱」，供核對用。</p>
-<p>分群特徵：每日使用網路、每日看電視、每日閱讀報紙（分鐘）、每週閱讀雜誌（分鐘）、整體生活滿意度、健康滿意度、朋友關係滿意度（Pretty dissatisfied＝1 至 Pretty satisfied＝4）、近期快樂程度（Pretty unhappy＝1 至 Pretty happy＝4）、自評健康（Poor＝1 至 Excellent＝5）。報紙缺 2 人、雜誌缺 1 人，以中位數（0 分鐘）代入。</p>
-<p>分群未使用性別、年齡與權數；這兩項只在輪廓中描述。</p>
+<p>同一批 2015 年受訪的 212 位青年。CSV 有 26 欄：原本的 24 欄，加上課程準備時附上的「分群編號」和「分群名稱」，讓你可以對照。</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="可左右捲動的特徵表">
+<table class="glossary">
+<thead><tr><th scope="col">特徵類型</th><th scope="col">欄位</th><th scope="col">數字範圍</th></tr></thead>
+<tbody>
+<tr><td>媒體時間</td><td>每天上網、看電視、讀報紙（分鐘）；每週看雜誌（分鐘）</td><td>0～900 分鐘</td></tr>
+<tr><td>滿意度</td><td>整體生活、健康、朋友關係</td><td>1（很不滿意）～4（很滿意）</td></tr>
+<tr><td>快樂程度</td><td>近期快樂程度</td><td>1（很不快樂）～4（很快樂）</td></tr>
+<tr><td>自評健康</td><td>覺得自己健康嗎</td><td>1（很差）～5（極好）</td></tr>
+</tbody>
+</table>
+</div>
+<p class="fine">報紙有 2 人、雜誌有 1 人沒回答，用中間值（0 分鐘）補上。分群沒有用性別、年齡和權數，這兩項只拿來描述每一群。</p>
 <a href="assets/data/臺灣青年生活型態分群.csv" download>下載原始課堂 CSV ↓</a>
 <p class="source">
-<a href="https://www2.ios.sinica.edu.tw/sc/en/scDownload.php">中央研究院資料來源</a>｜僅限學術用途，禁止商用。</p>
+<a href="https://www2.ios.sinica.edu.tw/sc/en/scDownload.php">中央研究院資料來源</a>｜只能用在學習與研究，不能拿來賺錢。</p>
 </div>
 </section>
 <section id="worked" class="lesson-section">
 <p class="section-kicker">04 / Week lesson</p>
-<h2 class="section-title">實算：CSV 附的三群，各長什麼樣子？</h2>
+<h2 class="section-title">實算：CSV 裡的三群，各長什麼樣子？</h2>
 <div class="table-wrap" tabindex="0" role="region" aria-label="可左右捲動的群組輪廓表">
-<table class="numeric">
+<table class="vtable">
 <thead>
 <tr>
-<th scope="col">CSV 分群名稱</th>
-<th scope="col">n</th>
-<th scope="col">網路</th>
-<th scope="col">電視</th>
-<th scope="col">報紙</th>
-<th scope="col">雜誌／週</th>
-<th scope="col">生活滿意</th>
-<th scope="col">健康滿意</th>
-<th scope="col">自評健康</th>
+<th scope="col">CSV 的名稱</th>
+<th scope="col">人數</th>
+<th scope="col">每天上網</th>
+<th scope="col">每天讀報</th>
+<th scope="col">生活滿意（1–4）</th>
+<th scope="col">自評健康（1–5）</th>
 </tr>
 </thead>
 <tbody>
-<tr><td>1 均衡樂活型</td><td>61</td><td>238.5</td><td>107.5</td><td>3.7</td><td>48.3</td><td>3.54</td><td>3.54</td><td>3.82</td></tr>
-<tr><td>2 傳統閱讀型</td><td>47</td><td>237.4</td><td>114.9</td><td>25.2</td><td>52.7</td><td>2.91</td><td>2.72</td><td>2.53</td></tr>
-<tr><td>3 數位沉浸型</td><td>104</td><td>272.3</td><td>94.6</td><td>0.05</td><td>32.7</td><td>2.91</td><td>2.63</td><td>2.30</td></tr>
+<tr><td>1 均衡樂活型</td><td class="vb" style="--v:28.8">61</td><td class="vb" style="--v:79.5">239 分</td><td class="vb acc" style="--v:14.7">3.7 分</td><td class="vb" style="--v:88.5">3.54</td><td class="vb" style="--v:76.4">3.82</td></tr>
+<tr><td>2 傳統閱讀型</td><td class="vb" style="--v:22.2">47</td><td class="vb" style="--v:79.1">237 分</td><td class="vb acc" style="--v:100">25.2 分</td><td class="vb" style="--v:72.8">2.91</td><td class="vb" style="--v:50.6">2.53</td></tr>
+<tr><td>3 數位沉浸型</td><td class="vb" style="--v:49.1">104</td><td class="vb" style="--v:90.8">272 分</td><td class="vb acc" style="--v:0.2">0.05 分</td><td class="vb" style="--v:72.8">2.91</td><td class="vb" style="--v:46.0">2.30</td></tr>
+<tr class="hl"><td>全體</td><td>212</td><td>255 分</td><td>7 分</td><td>3.09</td><td>2.79</td></tr>
 </tbody>
 </table>
 </div>
-<p class="fine">時間單位為分鐘（雜誌為每週，其餘每日），量尺為平均分數。以同樣的前處理與 k-means（k＝3、多次起始）重算，結果與 CSV 的分群編號 212 人完全一致。</p>
-<p><strong>名稱忠於資料嗎？</strong>「數位沉浸型」每日上網平均 272 分鐘，只比另兩群多約 34 分鐘；真正把它分出來的是<strong>幾乎不讀報紙</strong>（104 人平均 0.05 分鐘）與較低的健康感受。「沉浸」還帶有成癮的暗示。較忠於資料的說法可能是「不讀報、健康感受偏低」。</p>
-<p><strong>結構強不強？</strong>三群的輪廓係數只有 0.165；只用單一起始點重跑 20 次，與這個結果的一致程度（ARI）平均 0.54、最低 0.31。這表示群與群的界線模糊，人物誌只能當作「粗略的描述」，不能當成青年真的分成三種人。</p>
+<p class="fine">用同樣的步驟重新算一次，212 人的分群結果和 CSV 完全一樣。</p>
+<h3>這些名字取得公平嗎？</h3>
+<div class="table-wrap" tabindex="0" role="region" aria-label="可左右捲動的命名檢查表">
+<table class="vtable">
+<thead><tr><th scope="col">原本的名字</th><th scope="col">資料實際顯示</th><th scope="col">檢查結果</th><th scope="col">比較好的說法</th></tr></thead>
+<tbody>
+<tr><td>均衡樂活型</td><td>各種滿意度、健康都最高</td><td><span class="chip good">大致符合</span></td><td>「滿意度與健康感受都高」</td></tr>
+<tr><td>傳統閱讀型</td><td>讀報最多（每天 25 分鐘），滿意度中等偏低</td><td><span class="chip warn">只說了一半</span></td><td>「常讀報、快樂感偏低」</td></tr>
+<tr><td>數位沉浸型</td><td>上網只比別群多約 34 分鐘；真正特別的是<strong>幾乎不讀報</strong></td><td><span class="chip bad">誇大、帶貶意</span></td><td>「不讀報、健康感受偏低」</td></tr>
+</tbody>
+</table>
+</div>
+<p>「沉浸」聽起來像上網成癮，但資料並沒有支持這一點。替群取名字時，要用資料裡真的看得到的特徵，避免替人貼標籤。</p>
+<h3>這三群分得清楚嗎？</h3>
+<div class="table-wrap" tabindex="0" role="region" aria-label="可左右捲動的群數比較表">
+<table class="vtable">
+<thead><tr><th scope="col">分幾群</th><th scope="col">各群人數</th><th scope="col">分得清不清楚（輪廓係數）</th><th scope="col">重跑穩不穩（0～1）</th></tr></thead>
+<tbody>
+<tr><td>2 群</td><td>140／72</td><td class="vb acc" style="--v:35.2">0.176</td><td class="vb" style="--v:92.1">0.92</td></tr>
+<tr class="hl"><td>3 群</td><td>61／47／104</td><td class="vb acc" style="--v:33.0">0.165</td><td class="vb" style="--v:54.1">0.54</td></tr>
+<tr><td>4 群</td><td>84／59／44／25</td><td class="vb acc" style="--v:34.0">0.170</td><td class="vb" style="--v:57.0">0.57</td></tr>
+<tr><td>5 群</td><td>64／56／36／31／25</td><td class="vb acc" style="--v:32.2">0.161</td><td class="vb" style="--v:50.0">0.50</td></tr>
+</tbody>
+</table>
+</div>
+<p>輪廓係數都只有 0.16～0.18（長條的滿格是 0.5），表示群和群的界線很模糊。分 3 群時，換個起點重跑，結果只有約一半一樣。所以這些「人物誌」只能當作粗略的描述，不能說青年真的就分成這三種人。</p>
 </section>
 <section id="lab" class="lesson-section">
 <p class="section-kicker">05 / Week lesson</p>
 <h2 class="section-title">互動實驗：換群數、換尺度，結果還一樣嗎？</h2>
 <div class="lab lab-panel">
-<h3>比較不同群數與前處理</h3>
+<h3>比較不同群數與處理方式</h3>
 <div class="controls">
-<label for="cl-k">群數 k<select id="cl-k">
+<label for="cl-k">分幾群<select id="cl-k">
 <option value="2">2 群</option>
 <option value="3" selected>3 群</option>
 <option value="4">4 群</option>
 <option value="5">5 群</option>
 </select>
 </label>
-<label for="cl-scale">特徵前處理<select id="cl-scale">
-<option value="std">媒體時間取對數後，全部標準化</option>
-<option value="raw">原始數值，不標準化</option>
+<label for="cl-scale">特徵處理<select id="cl-scale">
+<option value="std">統一尺度（建議）</option>
+<option value="raw">直接用原始數字</option>
 </select>
 </label>
 </div>
@@ -193,20 +237,20 @@
 <svg id="cl-heat" class="chart" viewBox="0 0 622 132" role="img" aria-label="各群特徵與全體平均的差距">
 </svg>
 </div>
-<p class="fine">格內數字為「群平均－全體平均」除以全體標準差；橘色高於全體、藍色低於全體，顏色越深差距越大。</p>
+<p class="fine">橘色＝比全體平均高，藍色＝比全體平均低，顏色越深差越多。格子裡的數字是「差了幾個標準差」：±1 左右就算很明顯。</p>
 <div id="cl-table">
 </div>
 <p id="cl-description" class="lab-description" aria-live="polite">
 </p>
-<p class="fine">k-means 每種設定皆以 200 個起始點取最佳結果（固定亂數種子）；群編號依人數排序，k＝3 標準化版本則對齊 CSV 的分群編號。穩定度為只用單一起始點重跑 20 次、與最佳結果的平均調整蘭德指數（ARI，1＝完全一致）。原始數值版本的輪廓係數在未標準化的空間計算，數字較高只是因為少數極端值被單獨分出來，不能和標準化版本直接比較。</p>
+<p class="fine">每種設定都讓電腦試 200 個起點，取最好的結果；群的編號依人數排序（3 群、統一尺度的版本對齊 CSV 的編號）。「重跑穩不穩」是只試 1 個起點、重跑 20 次，和最好結果的平均相似度。用原始數字時，分數看起來比較高，只是因為少數極端的人被單獨分出去，不能和統一尺度的分數直接比。</p>
 <button type="button" id="reset-cl">重設</button>
 </div>
 <div class="card" data-quiz>
-<p class="quiz-question">快速檢查｜不標準化時，k＝3 出現一個只有 3 人的群。最可能的原因是？</p>
+<p class="quiz-question">快速檢查｜直接用原始數字分 3 群時，出現一個只有 3 人的群。最可能的原因是？</p>
 <div class="quiz-choices">
-<button type="button" aria-pressed="false" data-feedback="這 3 人是被極端的雜誌時間（平均每週 960 分鐘）拉出來的；滿意度在距離裡幾乎沒有份量。">A. 找到了一群特別不滿意的人</button>
-<button type="button" aria-pressed="false" data-feedback="對。分鐘數的差距是滿意度量尺的上百倍，距離幾乎只看時間；少數極端值就足以自成一群。">B. 分鐘數的尺度遠大於滿意度，極端時間值主導了距離</button>
-<button type="button" aria-pressed="false" data-feedback="群數是人選的，但 3 人小群的出現和前處理有關；換成標準化後就不會出現。">C. k 選錯了，應該選 2</button>
+<button type="button" aria-pressed="false" data-feedback="這 3 人是被極端的雜誌時間（平均每週 960 分鐘）拉出來的；滿意度在計算距離時幾乎沒有份量。">A. 找到了一群特別不滿意的人</button>
+<button type="button" aria-pressed="false" data-feedback="對。分鐘數的差距是滿意度的上百倍，電腦幾乎只看時間；少數時間特別長的人就自成一群。">B. 分鐘數比滿意度大太多，極端的時間值決定了分群</button>
+<button type="button" aria-pressed="false" data-feedback="出現 3 人小群跟處理方式有關；改成「統一尺度」就不會出現。">C. 群數選錯了，應該選 2</button>
 </div>
 <p class="quiz-feedback" aria-live="polite">選一個答案，查看理由。</p>
 </div>
@@ -214,6 +258,7 @@
 <section id="tasks" class="lesson-section">
 <p class="section-kicker">06 / Week lesson</p>
 <h2 class="section-title">AI 任務單：分群、比較、寫人物誌</h2>
+<div class="flow" aria-label="三個任務"><span><b>任務 A</b>處理資料、分 3 群</span><span><b>任務 B</b>比較群數與穩定度</span><span><b>任務 C</b>人物誌與命名檢查</span></div>
 <article class="prompt-card">
 <div class="prompt-head">
 <h3>A · 前處理與建立分群</h3>
@@ -221,16 +266,16 @@
 </div>
 <pre class="prompt-text" id="prompt-A">請讀取「臺灣青年生活型態分群.csv」（212 筆）。使用 9 個特徵：每日使用網路、每日看電視、每日閱讀報紙、每週閱讀雜誌（分鐘），整體生活滿意度、健康滿意度、朋友關係滿意度（Pretty dissatisfied＝1 到 Pretty satisfied＝4）、近期快樂程度（Pretty unhappy＝1 到 Pretty happy＝4）、自評健康（Poor＝1 到 Excellent＝5）。先報告各特徵的缺失數並以中位數代入；四項時間取 log(1+分鐘)，再把 9 個特徵標準化。用 k-means（k＝3，至少 100 個起始點，固定亂數種子）分群，列出每群人數與 9 個特徵的原始單位平均，並與 CSV 的「分群編號」做交叉表核對。</pre>
 <div class="prompt-check">
-<strong>自己覆核：</strong>三群人數 61、47、104，與 CSV 分群編號一致。</div>
+<strong>自己檢查：</strong>三群人數 61、47、104，和 CSV 的分群編號一致。</div>
 </article>
 <article class="prompt-card">
 <div class="prompt-head">
 <h3>B · 比較群數與穩定度</h3>
 <button type="button" class="copy-button" data-copy="prompt-B" aria-label="複製任務 B 提示語">複製提示語</button>
 </div>
-<pre class="prompt-text" id="prompt-B">在同樣的前處理下，分別做 k＝2、3、4、5，整理一張表：每群人數、最小群人數、輪廓係數。再對每個 k 只用單一起始點、換 20 個亂數種子重跑，計算與最佳結果的調整蘭德指數（ARI）平均與最小值。接著不做對數與標準化，直接用原始數值做 k＝3，比較兩種結果的群大小與輪廓，說明特徵尺度造成的差異。最後建議用幾群，理由要同時包含統計指標與「說不說得出意義」。</pre>
+<pre class="prompt-text" id="prompt-B">在同樣的前處理下，分別做 k＝2、3、4、5，整理一張表：每群人數、最小群人數、輪廓係數。再對每個 k 只用單一起始點、換 20 個亂數種子重跑，計算與最佳結果的調整蘭德指數（ARI）平均與最小值。接著不做對數與標準化，直接用原始數值做 k＝3，比較兩種結果的群大小與輪廓，說明特徵尺度造成的差異。最後建議用幾群，理由要同時包含統計指標與「說不說得出意義」，並用高中生聽得懂的話解釋。</pre>
 <div class="prompt-check">
-<strong>自己覆核：</strong>標準化後輪廓係數都在 0.16–0.18；不標準化的 k＝3 會出現只有 3 人的群。</div>
+<strong>自己檢查：</strong>統一尺度後輪廓係數都在 0.16–0.18；不統一尺度分 3 群，會出現只有 3 人的群。</div>
 </article>
 <article class="prompt-card">
 <div class="prompt-head">
@@ -239,7 +284,7 @@
 </div>
 <pre class="prompt-text" id="prompt-C">為你選定的群數寫人物誌，每群包含：人數與占比、和全體相比最突出的 2–3 個特徵（附數字）、性別與平均年齡的描述、一個忠於資料且不帶貶意的名稱。請檢查 CSV 原有的「數位沉浸型」等名稱是否與實際平均相符，並提出修改。最後列出使用限制：輪廓係數低代表什麼、群組是平均輪廓不是每個人、2015 年資料、不得用於對個人貼標籤或差別待遇。</pre>
 <div class="prompt-check">
-<strong>自己覆核：</strong>「數位沉浸型」上網只比其他群多約 34 分鐘；最明顯的差異是幾乎不讀報紙。</div>
+<strong>自己檢查：</strong>「數位沉浸型」上網只比其他群多約 34 分鐘；最明顯的差別是幾乎不讀報紙。</div>
 </article>
 </section>
 <section id="deliver" class="lesson-section">
@@ -247,43 +292,55 @@
 <h2 class="section-title">本週交件：三至四組使用者人物誌</h2>
 <div class="card">
 <h3>使用者人物誌與使用限制</h3>
-<p>每組一張人物誌卡（名稱、人數、突出特徵與數字），加上一張群數比較表與一段使用限制。完整提示語另附。</p>
+<p>每一群做一張人物誌卡（名字、人數、最突出的特徵和數字），再加一張「分幾群」的比較表和一段使用限制。完整 AI 指令另附。</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="可左右捲動的人物誌卡範例">
+<table class="glossary">
+<thead><tr><th scope="col">人物誌卡欄位</th><th scope="col">範例（群 1）</th></tr></thead>
+<tbody>
+<tr><td>名字</td><td>滿意度與健康感受都高</td></tr>
+<tr><td>人數與占比</td><td>61 人（29%）</td></tr>
+<tr><td>最突出的特徵</td><td>健康滿意 3.54 分（全體 2.91）；自評健康 3.82 分（全體 2.79）</td></tr>
+<tr><td>其他描述</td><td>女性 46%，平均 21.2 歲；上網時間和全體差不多</td></tr>
+<tr><td>使用限制</td><td>群的界線模糊；只是平均，不代表每個人；2015 年資料</td></tr>
+</tbody>
+</table>
+</div>
 <a href="assets/data/week12-成果模板.md" download>下載成果模板（Markdown）↓</a>
 <ul class="checklist">
 <li>
 <label class="check-row">
 <input type="checkbox">
-<span>列出 9 個特徵、量尺轉換、缺失處理與標準化方式。</span>
+<span>列出 9 個特徵、怎麼換成分數、怎麼補缺失、怎麼統一尺度。</span>
 </label>
 </li>
 <li>
 <label class="check-row">
 <input type="checkbox">
-<span>附 k＝2–5 的比較表（群大小、輪廓係數、穩定度）與選擇理由。</span>
+<span>附 2～5 群的比較表（人數、分得清不清楚、穩不穩），並說明選幾群的理由。</span>
 </label>
 </li>
 <li>
 <label class="check-row">
 <input type="checkbox">
-<span>說明標準化前後結果的差異。</span>
+<span>說明統一尺度前後結果有什麼不同。</span>
 </label>
 </li>
 <li>
 <label class="check-row">
 <input type="checkbox">
-<span>每群人物誌附人數與至少兩個有數字的突出特徵。</span>
+<span>每群人物誌都有人數，和至少兩個附數字的突出特徵。</span>
 </label>
 </li>
 <li>
 <label class="check-row">
 <input type="checkbox">
-<span>名稱忠於資料、不帶貶意，並檢查一個原有名稱是否誇大。</span>
+<span>名字忠於資料、不帶貶意，並檢查一個原有名稱是否說過頭。</span>
 </label>
 </li>
 <li>
 <label class="check-row">
 <input type="checkbox">
-<span>寫出使用限制：結構強弱、平均輪廓、年份、不得對個人貼標籤。</span>
+<span>寫出使用限制：界線模糊、只是平均、年份、不能替個人貼標籤。</span>
 </label>
 </li>
 </ul>

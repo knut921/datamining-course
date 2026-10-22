@@ -24,16 +24,16 @@
     const o=OUT9[$('f-outcome').value],g=G9[$('f-group').value],weighted=$('f-weight').value==='weighted';
     const valid=rows.filter(r=>!o.bad.includes(r[o.col])),labels=[...new Set(valid.map(g.fn))].sort((a,b)=>a.localeCompare(b,'zh-Hant'));
     const res=labels.map(l=>{const m=valid.filter(r=>g.fn(r)===l);let sw=0,sw2=0,sh=0,hits=0;m.forEach(r=>{const w=weighted?r.抽樣權數:1;sw+=w;sw2+=w*w;if(o.pos.includes(r[o.col])){sh+=w;hits++;}});const p=sh/sw,neff=sw*sw/sw2,se=Math.sqrt(p*(1-p)/neff);return {l,n:m.length,hits,p,lo:p-Z95*se,hi:p+Z95*se};});
-    $('f-table').innerHTML=table('群組比較結果',['群組','有效 n','符合 n',weighted?'加權 %':'未加權 %','95% 信賴區間','提醒'],res.map(r=>[r.l,r.n,r.hits,pct(r.p),`${pct(Math.max(0,r.lo))}–${pct(Math.min(1,r.hi))}`,r.n<30?'小樣本':'—']));
+    $('f-table').innerHTML=table('群組比較結果',['群組','人數','符合的人',weighted?'比例（加權）':'比例（不加權）','可能的範圍','提醒'],res.map(r=>[r.l,r.n,r.hits,`<span class="vb-inline" style="--v:${(100*r.p).toFixed(1)}">${pct(r.p)}</span>`,`${pct(Math.max(0,r.lo))}～${pct(Math.min(1,r.hi))}`,r.n<30?'<span class="chip warn">人數少，要小心</span>':'—']));
     const hi=res.reduce((a,b)=>b.p>a.p?b:a),lo=res.reduce((a,b)=>b.p<a.p?b:a),small=res.filter(r=>r.n<30);
     // Difference interval as in week 8: SE = √(SE₁² + SE₂²). Overlapping group intervals alone do not imply "no difference".
     const dse=Math.sqrt(((hi.hi-hi.p)/Z95)**2+((lo.hi-lo.p)/Z95)**2),diff=hi.p-lo.p,dlo=diff-Z95*dse,dhi=diff+Z95*dse,clear=dlo>0;
-    $('f-stats').innerHTML=stat('最高群組',pct(hi.p),`${hi.l}（n=${hi.n}）`)+stat('最低群組',pct(lo.p),`${lo.l}（n=${lo.n}）`)+stat('差距（高−低）',`${fmt(100*diff,1)} 個百分點`,`95% 區間 ${signed(100*dlo,1)} 至 ${signed(100*dhi,1)}`);
+    $('f-stats').innerHTML=stat('比例最高',pct(hi.p),`${hi.l}（${hi.n} 人）`)+stat('比例最低',pct(lo.p),`${lo.l}（${lo.n} 人）`)+stat('差距',`${fmt(100*diff,1)} 個百分點`,`可能範圍 ${signed(100*dlo,1)} ～ ${signed(100*dhi,1)}${clear?'｜差距明確':'｜不確定有沒有差'}`);
     const x=v=>170+v*440;let s=`<title>${o.label}：依${g.label}比較</title><desc>${res.map(r=>`${r.l} ${pct(r.p)}`).join('；')}</desc>`;
     for(let i=0;i<=10;i+=2)s+=`<line class="gridline" x1="${x(i/10)}" x2="${x(i/10)}" y1="8" y2="${18+res.length*40}"/><text class="tick" x="${x(i/10)}" y="${34+res.length*40}" text-anchor="middle">${i*10}%</text>`;
     res.forEach((r,i)=>{const y=14+i*40;s+=`<text x="160" y="${y+16}" text-anchor="end">${r.l}（n=${r.n}）</text><rect class="bar" x="170" y="${y+4}" width="${x(r.p)-170}" height="18" rx="3"/><line class="ci-line" x1="${x(Math.max(0,r.lo))}" x2="${x(Math.min(1,r.hi))}" y1="${y+13}" y2="${y+13}"/>`;});
     $('f-chart').setAttribute('viewBox',`0 0 660 ${44+res.length*40}`);$('f-chart').innerHTML=s;
-    $('f-card').textContent=`發現卡草稿｜在 2015 年 19–24 歲受訪者中，${hi.l}的「${o.label.replace(/（.*）/,'')}」比例為 ${pct(hi.p)}，${lo.l}為 ${pct(lo.p)}，相差 ${fmt(100*(hi.p-lo.p),1)} 個百分點（${weighted?'加權':'未加權'}；有效 n=${valid.length}）。差距的 95% 區間為 ${signed(100*dlo,1)} 至 ${signed(100*dhi,1)} 個百分點，`+(clear?'沒有跨過 0，差距較明確；但這仍是描述，不能說是群組身分造成。':'跨過 0，資料無法排除兩組其實沒差，寫成「看不出明顯差異」較穩妥。')+(hi.lo<=lo.hi&&clear?' 兩組各自的區間雖然重疊，差距的區間仍不含 0：判斷差異要看差距本身的區間。':'')+(small.length?` 注意：${small.map(r=>r.l).join('、')} 有效 n＜30，結論要更保守。`:'')+' 區間為常態近似，未納入抽樣設計效果；超出 0–100% 的部分已截斷。';
+    $('f-card').textContent=`發現卡草稿｜2015 年 19–24 歲的受訪者中，${hi.l}「${o.label.replace(/（.*）/,'')}」的比例是 ${pct(hi.p)}，${lo.l}是 ${pct(lo.p)}，相差 ${fmt(100*(hi.p-lo.p),1)} 個百分點（${weighted?'加權':'不加權'}，共 ${valid.length} 人）。差距的可能範圍是 ${signed(100*dlo,1)} 到 ${signed(100*dhi,1)} 個百分點，`+(clear?'不包含 0，所以差距是比較確定的；但這只是描述，不能說是因為身分不同才造成。':'包含 0，代表兩組也可能其實沒差，寫成「看不出明顯差異」比較穩當。')+(hi.lo<=lo.hi&&clear?' 雖然兩組各自的範圍有重疊，但差距的範圍不含 0，判斷有沒有差要看差距本身。':'')+(small.length?` 注意：${small.map(r=>r.l).join('、')}不到 30 人，數字容易大起大落，結論要更保守。`:'')+' （可能範圍超過 0%～100% 的部分已截掉。）';
     window.week9Finding={key:$('f-outcome').value+'-'+$('f-group').value,weighted,diff,dlo,dhi,groups:Object.fromEntries(res.map(r=>[r.l,{n:r.n,hits:r.hits,p:r.p,lo:r.lo,hi:r.hi}]))};
   }
   if($('f-outcome')){
@@ -83,18 +83,18 @@
     if(c.key==='area')return `其他條件相同時，面積每多 1 坪，估計月租平均${v>=0?'多':'少'} ${fmt(Math.abs(v),0)} 元。`;
     if(c.key==='age')return `其他條件相同時，屋齡每多 1 年，估計月租平均${v>=0?'多':'少'} ${fmt(Math.abs(v),0)} 元。`;
     if(c.key==='floor')return `其他條件相同時，樓層每高 1 層，估計月租平均${v>=0?'多':'少'} ${fmt(Math.abs(v),0)} 元。`;
-    if(c.name==='截距')return '所有數值變項為 0、類別為對照組時的估計值；面積 0 坪不存在，只是讓直線定位的常數。';
-    return `與對照組相比，其他條件相同時估計月租平均${v>=0?'高':'低'} ${fmt(Math.abs(v),0)} 元。`;
+    if(c.name==='截距')return '估計線的起點。0 坪的房子不存在，所以這個數字不用解讀。';
+    return `跟對照組比，其他條件相同時，月租平均${v>=0?'貴':'便宜'} ${fmt(Math.abs(v),0)} 元。`;
   }
   function updateModel(){
     const m=fitOls(readSpec());model10=m;
-    $('reg-stats').innerHTML=stat('R²',fmt(m.r2,4),`調整後 R² ${fmt(m.adj,4)}`)+stat('RMSE（典型誤差）',`${fmt(m.rmse,0)} 元`,'實際月租與估計值的平方平均根')+stat('樣本與係數',`n=${fmt(m.n,0)}`,`${m.k} 個係數（含截距）`);
+    $('reg-stats').innerHTML=stat('解釋了幾成（R²）',pct(m.r2,1),`R²＝${fmt(m.r2,4)}；越接近 100% 越好`)+stat('平均估錯多少（RMSE）',`${fmt(m.rmse,0)} 元`,'越小越準')+stat('用了多少資料',`${fmt(m.n,0)} 間`,`算出 ${m.k} 個數字（含起點）`);
     const main=m.cols.map((c,i)=>[c,m.beta[i]]).filter(([c])=>!c.group),groups=m.cols.map((c,i)=>[c,m.beta[i]]).filter(([c])=>c.group);
-    let html=table('迴歸係數',['項目','係數（元／月）','白話翻譯'],main.map(([c,v])=>[c.name,signed(v,1),plain(c,v)]));
-    const names={district:'行政區',type:'建物型態',rt:'出租型態'};
-    ['type','rt','district'].forEach(g=>{const rows=groups.filter(([c])=>c.group===g);if(!rows.length)return;const t=table(names[g]+'係數',['類別','係數（元／月）'],rows.map(([c,v])=>[c.name,signed(v,1)]));html+=g==='district'?`<details class="coef-details"><summary>${names[g]}：${rows.length} 個虛擬變項（展開）</summary>${t}</details>`:`<h4>${names[g]}</h4>${t}`;});
+    let html=table('迴歸係數',['條件','數字（元／月）','白話翻譯'],main.map(([c,v])=>[c.name,signed(v,1),plain(c,v)]));
+    const names={district:'行政區',type:'建物型態',rt:'出租方式'};
+    ['type','rt','district'].forEach(g=>{const rows=groups.filter(([c])=>c.group===g);if(!rows.length)return;const t=table(names[g]+'係數',['類別','數字（元／月，跟對照組比）'],rows.map(([c,v])=>[c.name,signed(v,1)]));html+=g==='district'?`<details class="coef-details"><summary>${names[g]}：${rows.length} 個虛擬變項（展開）</summary>${t}</details>`:`<h4>${names[g]}</h4>${t}`;});
     $('reg-coef').innerHTML=html;
-    $('reg-warning').hidden=!m.dropped.length;$('reg-warning').textContent=m.dropped.length?`無法同時估計：${m.dropped.join('、')}。它和已放入的變項完全重疊（本子集「有電梯」恰好等於華廈＋住宅大樓），電腦只能自動刪掉一個；不是「電梯沒有影響」。`:'';
+    $('reg-warning').hidden=!m.dropped.length;$('reg-warning').textContent=m.dropped.length?`「${m.dropped.join('、')}」被電腦自動拿掉了：在這份資料裡，華廈和住宅大樓一定有電梯、公寓一定沒有，所以「有無電梯」和「建物型態」說的是同一件事，電腦分不出誰的影響。這不代表電梯不重要。`:'';
     const res=window.WEEK10_DATA.rows.map(r=>r[8]-m.predict(r)),bw=5000,bins=Array(24).fill(0);res.forEach(e=>{const i=Math.floor((e+60000)/bw);if(i>=0&&i<24)bins[i]++;});
     const out=res.filter(e=>e<-60000||e>=60000).length,top=Math.max(...bins),x=v=>50+(v+60000)/120000*560,y=v=>150-v/top*130;
     let s=`<title>殘差分布</title><desc>殘差＝實際月租－估計月租；−6 萬至 +6 萬之間分 24 組，範圍外 ${out} 筆。</desc>`;
@@ -102,7 +102,7 @@
     for(let v=-60000;v<=60000;v+=20000)s+=`<text class="tick" x="${x(v)}" y="168" text-anchor="middle">${signed(v/10000,0)} 萬</text>`;
     s+=`<line class="zero-line" x1="${x(0)}" x2="${x(0)}" y1="12" y2="152"/><text x="630" y="190" text-anchor="end">殘差（實際－估計，元）；範圍外 ${out} 筆未畫出</text>`;
     $('reg-resid').innerHTML=s;
-    if(ladder)$('reg-ladder').innerHTML=table('模型比較',['模型','放入的變項','n','R²','RMSE（元）'],ladder.map(([k,label,f])=>[k.toUpperCase(),label,fmt(f.n,0),fmt(f.r2,4),fmt(f.rmse,0)]));
+    if(ladder)$('reg-ladder').innerHTML=table('模型比較',['模型','放了哪些條件','筆數','解釋了幾成（R²）','平均估錯（元）'],ladder.map(([k,label,f])=>[k.toUpperCase(),label,fmt(f.n,0),`<span class="vb-inline" style="--v:${(100*f.r2).toFixed(1)}">${pct(f.r2,1)}</span>`,fmt(f.rmse,0)]));
     updatePredict();
     window.week10Model={spec:m.spec,n:m.n,k:m.k,r2:m.r2,adj:m.adj,rmse:m.rmse,dropped:m.dropped,coef:Object.fromEntries(m.cols.map((c,i)=>[c.name,m.beta[i]]))};
   }
@@ -111,7 +111,7 @@
     if(!(area>0&&age>=0&&fl>=1)){$('p-result').textContent='請輸入大於 0 的面積、非負屋齡與至少 1 樓。';return;}
     const r=[area,age,fl,dist>=d.taipeiStart?1:0,dist,type,0,type?1:0,0];
     const v=model10.predict(r),warn=[];if(area>150||area<1.68)warn.push('面積超出資料範圍（1.68–150.32 坪）');if(age>82)warn.push('屋齡超出資料範圍');if(fl>41)warn.push('樓層超出資料範圍');if(type===0&&fl>5)warn.push('公寓（無電梯）通常不超過 5 樓');
-    $('p-result').textContent=`目前模型估計：每月約 ${fmt(Math.round(v/100)*100,0)} 元（典型誤差約 ±${fmt(model10.rmse,0)} 元）。${model10.spec.rt?'出租型態以「整棟(戶)出租」計算。':''}${model10.spec.region==='none'?'目前模型沒有放地區，選擇的行政區不影響估計。':''}${warn.length?' 注意：'+warn.join('；')+'，屬外推，估計不可靠。':''} 這是平均估計，不是特定房屋的合理租金或鑑價。`;
+    $('p-result').textContent=`目前的模型估計：每月約 ${fmt(Math.round(v/100)*100,0)} 元（平均可能估錯 ±${fmt(model10.rmse,0)} 元）。${model10.spec.rt?'出租方式以「整層出租」計算。':''}${model10.spec.region==='none'?'目前模型沒有放地區，選哪一區都不影響結果。':''}${warn.length?' 注意：'+warn.join('；')+'，模型沒看過類似的房子，估計不可靠。':''} 這只是平均的估計，不是這間房子「應該」的租金。`;
   }
   if($('reg-age')){
     const d=window.WEEK10_DATA;d.taipeiStart=d.rows.reduce((m,r)=>r[3]?Math.min(m,r[4]):m,Infinity);
@@ -139,23 +139,23 @@
   function updateThreshold(){
     const d=window.WEEK11_DATA,th=Number($('th').value),c=conf(d.rows,th),n=d.rows.length;
     $('th-label').textContent=fmt(th,2);
-    $('cm').innerHTML=`<div class="table-wrap" tabindex="0" role="region" aria-label="混淆矩陣"><table class="cm-table"><thead><tr><th scope="col">實際＼模型判定</th><th scope="col">標記「優先關懷」</th><th scope="col">未標記</th><th scope="col">合計</th></tr></thead><tbody><tr><th scope="row">實際低生活滿意（25 人）</th><td class="cm-good">正確找到 TP<strong>${c.tp}</strong></td><td class="cm-bad">漏判 FN<strong>${c.fn}</strong></td><td>${c.tp+c.fn}</td></tr><tr><th scope="row">實際非低滿意（187 人）</th><td class="cm-warn">誤報 FP<strong>${c.fp}</strong></td><td class="cm-good">正確排除 TN<strong>${c.tn}</strong></td><td>${c.fp+c.tn}</td></tr><tr><th scope="row">合計</th><td>${c.tp+c.fp}</td><td>${c.fn+c.tn}</td><td>${n}</td></tr></tbody></table></div>`;
-    $('th-stats').innerHTML=stat('召回率（找到幾成）',ratio(c.tp,c.tp+c.fn),`25 位低滿意者中找到 ${c.tp} 位、漏掉 ${c.fn} 位`)+stat('精確率（標記中幾成真的是）',ratio(c.tp,c.tp+c.fp),`標記 ${c.tp+c.fp} 人，其中誤報 ${c.fp} 人`)+stat('正確率',ratio(c.tp+c.tn,n),`對照：全部判為「不需要」也有 ${pct(187/212)}`);
+    $('cm').innerHTML=`<div class="table-wrap" tabindex="0" role="region" aria-label="混淆矩陣"><table class="cm-table"><thead><tr><th scope="col">實際＼電腦判斷</th><th scope="col">電腦說「要關心」</th><th scope="col">電腦說「不用」</th><th scope="col">合計</th></tr></thead><tbody><tr><th scope="row">實際上需要（25 人）</th><td class="cm-good">找對了 ✓<strong>${c.tp}</strong></td><td class="cm-bad">漏掉了 ✗<strong>${c.fn}</strong></td><td>${c.tp+c.fn}</td></tr><tr><th scope="row">實際上不需要（187 人）</th><td class="cm-warn">誤會了 ✗<strong>${c.fp}</strong></td><td class="cm-good">正確排除 ✓<strong>${c.tn}</strong></td><td>${c.fp+c.tn}</td></tr><tr><th scope="row">合計</th><td>${c.tp+c.fp}</td><td>${c.fn+c.tn}</td><td>${n}</td></tr></tbody></table></div>`;
+    $('th-stats').innerHTML=stat('召回率：需要的人找到幾成',ratio(c.tp,c.tp+c.fn),`25 人中找到 ${c.tp} 人、漏掉 ${c.fn} 人`)+stat('精確率：被標記的人幾成真的需要',ratio(c.tp,c.tp+c.fp),`標記 ${c.tp+c.fp} 人，其中誤會 ${c.fp} 人`)+stat('正確率（小心會騙人）',ratio(c.tp+c.tn,n),`全部說「不用」也有 ${pct(187/212)}`);
     const x=v=>40+v*580;let s=`<title>每位受訪者的交叉驗證預測機率</title><desc>上排為實際低生活滿意 25 人，下排為其他 187 人；虛線為門檻 ${th}。</desc>`;
     for(let i=0;i<=10;i++)s+=`<line class="gridline" x1="${x(i/10)}" x2="${x(i/10)}" y1="10" y2="132"/><text class="tick" x="${x(i/10)}" y="148" text-anchor="middle">${fmt(i/10,1)}</text>`;
-    s+='<text x="40" y="22">實際低生活滿意</text><text x="40" y="82">實際非低滿意</text>';
+    s+='<text x="40" y="22">實際上需要（對生活不滿意）</text><text x="40" y="82">實際上不需要</text>';
     d.rows.forEach((r,i)=>{const y=(r[2]?36:96)+((i*37)%17)-8;s+=`<circle class="${r[2]?'pos-dot':'neg-dot'}${r[3]>=th-1e-12?' flagged':''}" cx="${x(r[3]).toFixed(1)}" cy="${y}" r="4"/>`;});
-    s+=`<line class="th-line" x1="${x(th)}" x2="${x(th)}" y1="6" y2="134"/><text x="620" y="168" text-anchor="end">預測機率（5 折交叉驗證，模型沒看過該筆資料）</text>`;
+    s+=`<line class="th-line" x1="${x(th)}" x2="${x(th)}" y1="6" y2="134"/><text x="620" y="168" text-anchor="end">電腦估計的可能性（用沒看過這個人的模型算出）</text>`;
     $('th-chart').innerHTML=s;
     const regions=[...new Set(d.rows.map(r=>r[0]))].sort((a,b)=>a-b);
-    $('region-table').innerHTML=table('各地區錯誤',['地區代碼','n','低滿意人數','找到','漏判','誤報','召回率','誤報率'],regions.map(g=>{const rs=d.rows.filter(r=>r[0]===g),c=conf(rs,th);return ['代碼 '+g,rs.length,c.tp+c.fn,c.tp,c.fn,c.fp,ratio(c.tp,c.tp+c.fn),ratio(c.fp,c.fp+c.tn)];}));
+    $('region-table').innerHTML=table('各地區錯誤',['地區代碼','人數','需要的人','找對了','漏掉了','誤會了','找到幾成','誤會幾成'],regions.map(g=>{const rs=d.rows.filter(r=>r[0]===g),c=conf(rs,th);return ['代碼 '+g,rs.length,c.tp+c.fn,c.tp,c.fn,c.fp,ratio(c.tp,c.tp+c.fn),ratio(c.fp,c.fp+c.tn)];}));
     window.week11={th,...c,regions:Object.fromEntries(regions.map(g=>[g,conf(d.rows.filter(r=>r[0]===g),th)]))};
   }
   const RULE={'收入足夠日常開支':[v=>v<=2.5?'收入「不太夠」或「非常不夠」':'收入「剛好」或更寬裕'],'健康滿意度':[v=>v<=2.5?'對健康不滿意':'對健康滿意'],'女性':[v=>v<=.5?'男性':'女性'],'每日使用網路分鐘':[(v,t)=>v<=t?`每日上網 ≤${fmt(t,0)} 分鐘`:`每日上網 ＞${fmt(t,0)} 分鐘`],'年齡':[(v,t)=>v<=t?`${Math.floor(t)} 歲以下`:`${Math.ceil(t)} 歲以上`],'近期快樂程度':[v=>v<=2.5?'近期不快樂':'近期快樂'],'自評健康':[(v,t)=>v<=t?'自評健康較差':'自評健康較好'],'朋友關係滿意度':[v=>v<=2.5?'對朋友關係不滿意':'對朋友關係滿意'],'覺得生活沒有希望':[(v,t)=>v<=t?'較少覺得沒希望':'較常覺得沒希望'],};
   const cond=(f,t,left)=>(RULE[f]?RULE[f][0]:(v=>`${f}${v<=t?'≤':'＞'}${t}`))(left?t-1e-9:t+1e-9,t);
   function treeHtml(node,path,th){
-    const rate=node.pos/node.n,label=`n=${node.n}｜低滿意 ${node.pos} 人（${pct(rate,0)}）`;
-    if(!node.feature)return `<li><div class="tree-node leaf${rate>=th-1e-12?' flagged':''}"><span>${path.length?esc(path[path.length-1]):'全部'}</span><strong>${label}</strong><em>${rate>=th-1e-12?'→ 標記優先關懷':'→ 不標記'}</em></div></li>`;
+    const rate=node.pos/node.n,label=`${node.n} 人｜其中不滿意 ${node.pos} 人（${pct(rate,0)}）`;
+    if(!node.feature)return `<li><div class="tree-node leaf${rate>=th-1e-12?' flagged':''}"><span>${path.length?esc(path[path.length-1]):'全部'}</span><strong>${label}</strong><em>${rate>=th-1e-12?'→ 標記「要關心」':'→ 不標記'}</em></div></li>`;
     const l=cond(node.feature,node.threshold,true),r=cond(node.feature,node.threshold,false);
     return `<li><div class="tree-node"><span>${path.length?esc(path[path.length-1]):'全部 212 人'}</span><strong>${label}</strong><em>依「${esc(node.feature)}」分支</em></div><ul>${treeHtml(node.left,[...path,l],th)}${treeHtml(node.right,[...path,r],th)}</ul></li>`;
   }
@@ -164,9 +164,9 @@
     const d=window.WEEK11_DATA,depth=$('tree-depth').value,th=$('tree-th').value,t=d.trees[depth],tr=t.train[th],cv=t.cv[th];
     $('tree-view').innerHTML=`<ul class="tree">${treeHtml(t.root,[],Number(th))}</ul>`;
     const rr=rules(t.root,[],[]).filter(x=>x.node.pos/x.node.n>=Number(th)-1e-12);
-    $('tree-rules').innerHTML=rr.length?'<ul>'+rr.map(x=>`<li>若 ${x.path.map(esc).join('，且 ')} → 標記（該葉 ${x.node.n} 人中 ${x.node.pos} 人低滿意）</li>`).join('')+'</ul>':'<p>在這個門檻下，沒有任何葉節點被標記：模型等於「全部判為不需要」。</p>';
-    $('tree-table').innerHTML=table('訓練與交叉驗證比較',['評估方式','找到','漏判','誤報','召回率','精確率','AUC'],[['用同一批資料評估（訓練）',tr.tp,tr.fn,tr.fp,ratio(tr.tp,tr.tp+tr.fn),ratio(tr.tp,tr.tp+tr.fp),fmt(t.trainAuc,3)],['5 折交叉驗證（沒看過的資料）',cv.tp,cv.fn,cv.fp,ratio(cv.tp,cv.tp+cv.fn),ratio(cv.tp,cv.tp+cv.fp),fmt(t.cvAuc,3)]]);
-    $('tree-description').textContent=`深度 ${depth}，共 ${t.leaves} 個葉節點；每個葉節點至少 10 人。`+(Number(depth)===3?'第三層開始用「性別」「上網分鐘」「年齡」切分，訓練 AUC 升到 '+fmt(t.trainAuc,3)+'，交叉驗證反而降到 '+fmt(t.cvAuc,3)+'：這就是過度配適，樹在背這 212 人的細節。':'比較訓練與交叉驗證兩列：差距越大，越可能是過度配適。');
+    $('tree-rules').innerHTML=rr.length?'<ul>'+rr.map(x=>`<li>如果 ${x.path.map(esc).join('，而且 ')} → 標記「要關心」（這群 ${x.node.n} 人中有 ${x.node.pos} 人對生活不滿意）</li>`).join('')+'</ul>':'<p>在這個標準下，沒有任何一群被標記：等於「全部說不用」。</p>';
+    $('tree-table').innerHTML=table('練習資料與沒看過的資料比較',['怎麼考','找對了','漏掉了','誤會了','找到幾成','標記中幾成正確','整體分數（AUC）'],[['用練習過的資料考',tr.tp,tr.fn,tr.fp,ratio(tr.tp,tr.tp+tr.fn),ratio(tr.tp,tr.tp+tr.fp),fmt(t.trainAuc,3)],['用沒看過的資料考（輪流考試）',cv.tp,cv.fn,cv.fp,ratio(cv.tp,cv.tp+cv.fn),ratio(cv.tp,cv.tp+cv.fp),fmt(t.cvAuc,3)]]);
+    $('tree-description').textContent=`最多問 ${depth} 層，最後分成 ${t.leaves} 群，每群至少 10 人。`+(Number(depth)===3?'第三層開始用「性別」「上網時間」「年齡」來分，練習資料的分數升到 '+fmt(t.trainAuc,3)+'，沒看過的資料卻降到 '+fmt(t.cvAuc,3)+'：這就是過度配適，像只背考古題答案，換了題目就不會。':'比較上下兩列：練習資料考得好、沒看過的資料考不好，差距越大，越可能是在「背答案」（過度配適）。');
     window.week11Tree={depth:Number(depth),th:Number(th),leaves:t.leaves,flagged:rr.length};
   }
   if($('th')){
@@ -181,15 +181,15 @@
     const d=window.WEEK12_DATA,key=$('cl-scale').value+'-'+$('cl-k').value,lab=d.clusters[key],k=Number($('cl-k').value),cfg=d.configs[key],F=d.features.length;
     const all=d.features.map((_,j)=>{const v=d.rows.map(r=>r[j]),m=v.reduce((a,b)=>a+b,0)/v.length;return {m,sd:Math.sqrt(v.reduce((a,b)=>a+(b-m)**2,0)/(v.length-1))};});
     const prof=[...Array(k).keys()].map(c=>{const idx=lab.map((l,i)=>l===c?i:-1).filter(i=>i>=0),n=idx.length;return {c,n,female:idx.filter(i=>d.female[i]).length/n,age:idx.reduce((s,i)=>s+d.age[i],0)/n,means:d.features.map((_,j)=>idx.reduce((s,i)=>s+d.rows[i][j],0)/n)};});
-    $('cl-stats').innerHTML=stat('各群人數',prof.map(p=>p.n).join('／'),`共 212 人；最小群 ${Math.min(...prof.map(p=>p.n))} 人`)+stat('輪廓係數',fmt(cfg.silhouette,3),'−1～1；0.25 以下表示群間界線模糊')+stat('穩定度（ARI）',fmt(cfg.stabilityMean,2),`換 20 個起始點；最低 ${fmt(cfg.stabilityMin,2)}`);
+    $('cl-stats').innerHTML=stat('各群人數',prof.map(p=>p.n).join('／'),`共 212 人；最小的一群 ${Math.min(...prof.map(p=>p.n))} 人`)+stat('分得清不清楚（輪廓係數）',fmt(cfg.silhouette,3),cfg.silhouette<.25?'低於 0.25：界線模糊':'看起來較清楚，但要檢查原因')+stat('重跑穩不穩（0～1）',fmt(cfg.stabilityMean,2),`重跑 20 次的平均；最低 ${fmt(cfg.stabilityMin,2)}`);
     const name=c=>`群 ${c+1}`;
-    $('cl-table').innerHTML=table('群組輪廓',['群組','n','女性','平均年齡'].concat(SHORT),prof.map(p=>[name(p.c),p.n,pct(p.female,0),fmt(p.age,1)].concat(p.means.map((v,j)=>fmt(v,j<4?0:2)))).concat([['全體',212,pct(d.female.reduce((a,b)=>a+b,0)/212,0),fmt(d.age.reduce((a,b)=>a+b,0)/212,1)].concat(all.map((a,j)=>fmt(a.m,j<4?0:2)))]));
+    $('cl-table').innerHTML=table('群組輪廓',['群組','人數','女性','平均年齡'].concat(SHORT),prof.map(p=>[name(p.c),p.n,pct(p.female,0),fmt(p.age,1)].concat(p.means.map((v,j)=>fmt(v,j<4?0:2)))).concat([['全體',212,pct(d.female.reduce((a,b)=>a+b,0)/212,0),fmt(d.age.reduce((a,b)=>a+b,0)/212,1)].concat(all.map((a,j)=>fmt(a.m,j<4?0:2)))]));
     const cw=58,x0=96;let s=`<title>各群特徵與全體平均的差距（標準差單位）</title><desc>橘色表示高於全體平均，藍色表示低於。</desc>`;
     SHORT.forEach((h,j)=>s+=`<text class="tick" x="${x0+j*cw+cw/2}" y="14" text-anchor="middle">${h}</text>`);
     prof.forEach((p,i)=>{const y=22+i*34;s+=`<text x="${x0-8}" y="${y+21}" text-anchor="end">${name(p.c)}（${p.n}）</text>`;p.means.forEach((v,j)=>{const z=(v-all[j].m)/all[j].sd,a=Math.min(1,Math.abs(z)/1.2);s+=`<rect class="${z>=0?'heat-hi':'heat-lo'}" x="${x0+j*cw+1}" y="${y}" width="${cw-2}" height="30" rx="3" style="fill-opacity:${(.08+.82*a).toFixed(2)}"/><text class="heat-num" x="${x0+j*cw+cw/2}" y="${y+19}" text-anchor="middle">${signed(z,1)}</text>`;});});
     $('cl-heat').setAttribute('viewBox',`0 0 ${x0+F*cw+4} ${30+k*34}`);$('cl-heat').innerHTML=s;
     const big=prof.map(p=>{const z=p.means.map((v,j)=>[(v-all[j].m)/all[j].sd,SHORT[j]]).sort((a,b)=>Math.abs(b[0])-Math.abs(a[0])).slice(0,2);return `${name(p.c)}（${p.n} 人）最突出的是${z.map(([v,h])=>`${h}${v>0?'較高':'較低'}`).join('、')}`;});
-    $('cl-description').textContent=($('cl-scale').value==='raw'?'未標準化：分鐘數的數值範圍遠大於 1–5 分的滿意度，距離幾乎只由媒體時間（特別是雜誌與網路的極端值）決定，才會出現只有 3 人的群。':'對數轉換後標準化：每個特徵的影響力相近。')+' '+big.join('；')+'。'+(key==='std-3'?` 這組結果與 CSV 的「分群編號」完全一致：群 1＝${d.csvNames[1]}、群 2＝${d.csvNames[2]}、群 3＝${d.csvNames[3]}。`:'');
+    $('cl-description').textContent=($('cl-scale').value==='raw'?'直接用原始數字：分鐘數比 1～5 分的滿意度大太多，電腦幾乎只看媒體時間，少數時間特別長的人就會被單獨分成一群。':'統一尺度後：每個特徵的份量差不多。')+' '+big.join('；')+'。'+(key==='std-3'?` 這組結果和 CSV 的「分群編號」完全一致：群 1＝${d.csvNames[1]}、群 2＝${d.csvNames[2]}、群 3＝${d.csvNames[3]}。`:'');
     window.week12={key,sizes:prof.map(p=>p.n),means:prof.map(p=>p.means),silhouette:cfg.silhouette};
   }
   if($('cl-k')){['cl-k','cl-scale'].forEach(id=>$(id).addEventListener('change',updateCluster));$('reset-cl').addEventListener('click',()=>{$('cl-k').value='3';$('cl-scale').value='std';updateCluster();});updateCluster();}
@@ -218,19 +218,19 @@
   function updateWords(){
     const d=window.WEEK13_DATA,{key,list,by}=wordList(),n=Number($('wf-top').value),top=list.slice(0,n),fieldName=$('wf-field').selectedOptions[0].textContent,year=$('wf-year').value;
     const docs=year==='all'?Object.values(d.years).reduce((a,b)=>a+b,0):d.years[year];
-    $('wf-stats').innerHTML=stat('提案數',fmt(docs,0),year==='all'?'2020–2024 全部':`${year} 年`)+stat('第一名',esc(top[0][0]),`${fmt(top[0][1],0)} 次｜${fmt(top[0][2],0)} 件提案（${pct(top[0][2]/docs)}）`)+stat('顯示詞數',`${top.length}`,`欄位：${fieldName}`);
+    $('wf-stats').innerHTML=stat('提案件數',fmt(docs,0),year==='all'?'2020–2024 全部':`${year} 年`)+stat('第一名',esc(top[0][0]),`出現 ${fmt(top[0][1],0)} 次｜在 ${fmt(top[0][2],0)} 件提案（${pct(top[0][2]/docs)}）`)+stat('文字雲詞數',`${top.length}`,`欄位：${fieldName}`);
     const c=cloud(top,by);$('wf-cloud').innerHTML=c.svg;
     const b=top.slice(0,15),bmax=b[0][by],x=v=>110+v/bmax*470;let s=`<title>前 15 名高頻詞</title><desc>${b.map(r=>r[0]+' '+r[by]).join('；')}</desc>`;
     b.forEach((r,i)=>{const y=8+i*24;s+=`<text x="100" y="${y+15}" text-anchor="end">${esc(r[0])}</text><rect class="bar" x="110" y="${y+3}" width="${x(r[by])-110}" height="16" rx="3"/><text class="tick" x="${x(r[by])+6}" y="${y+15}">${fmt(r[by],0)}</text>`;});
     $('wf-bars').innerHTML=s;
-    $('wf-table').innerHTML=table('高頻詞表',['名次','詞','出現次數','出現的提案數','提案占比'],list.slice(0,30).map((r,i)=>[i+1,esc(r[0]),fmt(r[1],0),fmt(r[2],0),pct(r[2]/docs)]));
-    $('wf-description').textContent=`${$('wf-dict').value==='user'?'加入自訂詞典':'jieba 預設詞典'}；只保留 2 字以上的中文詞，網址、數字、英文與標點已移除。${$('wf-stop').checked?'已移除一般停用詞。':'未移除停用詞：前幾名多半是「可以」「我們」這類沒有主題資訊的詞。'}${$('wf-domain').checked?'已移除領域停用詞（政府、台灣、建議等每篇都可能出現的詞）。':''} 文字雲最多放 ${n} 個詞，實際放入 ${c.placed} 個；字的大小${by===2?'依出現的提案數':'依出現次數'}，位置與顏色沒有意義。`;
+    $('wf-table').innerHTML=table('高頻詞表',['名次','詞','出現次數','出現在幾件提案','占全部提案'],list.slice(0,30).map((r,i)=>[i+1,esc(r[0]),fmt(r[1],0),fmt(r[2],0),pct(r[2]/docs)]));
+    $('wf-description').textContent=`${$('wf-dict').value==='user'?'用了自訂詞典':'只用預設詞典'}；只數兩個字以上的中文詞，網址、數字、英文和標點都已去掉。${$('wf-stop').checked?'已刪除一般停用詞。':'沒有刪停用詞：前幾名多半是「可以」「我們」這種看不出主題的詞。'}${$('wf-domain').checked?'也刪除了領域停用詞（政府、台灣、建議等幾乎每件都有的詞）。':''} 文字雲放了 ${c.placed} 個詞；字越大代表${by===2?'出現在越多件提案':'出現越多次'}，位置和顏色沒有意義。`;
     window.week13={key,by,top:top.slice(0,20).map(r=>[r[0],r[by]]),placed:c.placed};
   }
   if($('wf-field')){
     ['wf-field','wf-year','wf-dict','wf-stop','wf-domain','wf-measure','wf-top'].forEach(id=>$(id).addEventListener('change',updateWords));$('wf-custom').addEventListener('input',updateWords);
     $('reset-wf').addEventListener('click',()=>{$('wf-field').value='title';$('wf-year').value='all';$('wf-dict').value='user';$('wf-stop').checked=true;$('wf-domain').checked=false;$('wf-measure').value='tf';$('wf-top').value='60';$('wf-custom').value='';updateWords();});
-    const ex=window.WEEK13_DATA.examples;$('seg-table').innerHTML=table('斷詞比較',['原句','jieba 預設詞典','加入自訂詞典後'],ex.sentences.map((s,i)=>[esc(s),esc(ex.default[i]),esc(ex.user[i])]));
+    const ex=window.WEEK13_DATA.examples;$('seg-table').innerHTML=table('斷詞比較',['原句','只用預設詞典','加入自訂詞典後'],ex.sentences.map((s,i)=>[esc(s),esc(ex.default[i]),esc(ex.user[i])]));
     updateWords();
   }
 })();

@@ -17,3 +17,22 @@
 .finding-card{border-left:4px solid var(--accent);background:var(--accent-soft);border-radius:8px;padding:14px 16px;font-size:14.5px;margin-top:16px}
 @media(max-width:620px){.controls input[type=range]{width:100%}.tree ul{padding-left:12px;margin-left:6px}}
 @media print{#f-chart,#reg-scatter,#reg-resid,#th-chart,#cl-heat,#wf-bars,#wf-cloud{min-width:0}.cm-table td,.chart rect{print-color-adjust:exact}}
+/* visual tables: data-bar cells, chips, glossary, diagrams */
+.vtable td.vb{position:relative;min-width:120px;background:linear-gradient(90deg,color-mix(in srgb,var(--brand) 26%,transparent) calc(var(--v)*1%),transparent 0);font-weight:700;font-variant-numeric:tabular-nums}
+.vtable td.vb.acc{background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 30%,transparent) calc(var(--v)*1%),transparent 0)}
+.vtable td.vb.neg{background:linear-gradient(270deg,color-mix(in srgb,var(--accent) 30%,transparent) calc(var(--v)*1%),transparent 0);text-align:right}
+.vtable tr.hl td{background-color:var(--accent-soft)}
+.chip{display:inline-block;border-radius:999px;padding:2px 10px;font-size:12.5px;font-weight:700;white-space:nowrap;background:var(--brand-soft);color:var(--brand)}
+.chip.good{background:color-mix(in srgb,var(--good) 16%,var(--surface));color:var(--good)}.chip.bad{background:color-mix(in srgb,var(--accent) 18%,var(--surface));color:var(--accent)}.chip.warn{background:color-mix(in srgb,var(--warn) 20%,var(--surface));color:color-mix(in srgb,var(--warn) 70%,var(--ink))}
+.glossary td:first-child{font-weight:700;color:var(--brand);white-space:nowrap}.glossary td:nth-child(3){color:var(--ink-soft)}
+.diagram{margin:18px 0;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}.diagram figcaption{font-size:13.5px;color:var(--ink-soft);margin-top:8px}
+.diagram .chart{min-width:0}.diagram .d-brand{fill:var(--brand)}.diagram .d-acc{fill:var(--accent)}.diagram .d-good{fill:var(--good)}.diagram .d-soft{fill:var(--ink-soft)}
+.diagram line.d-line{stroke:var(--accent);stroke-width:3}.diagram line.d-res{stroke:var(--ink-soft);stroke-width:1.5;stroke-dasharray:4 3}.diagram line.d-axis{stroke:var(--line);stroke-width:1.5}
+.matrix-demo{display:grid;grid-template-columns:auto 1fr 1fr;gap:6px;max-width:560px;margin:14px 0;font-size:14px}
+.matrix-demo>div{border-radius:8px;padding:10px 12px;border:1px solid var(--line)}.matrix-demo .h{background:none;border:none;font-weight:700;color:var(--ink-soft);font-size:12.5px;display:flex;align-items:end}
+.matrix-demo .g{background:color-mix(in srgb,var(--good) 14%,var(--surface))}.matrix-demo .b{background:color-mix(in srgb,var(--accent) 18%,var(--surface))}.matrix-demo .w{background:color-mix(in srgb,var(--warn) 18%,var(--surface))}
+.matrix-demo strong{display:block}.matrix-demo span{font-size:12.5px;color:var(--ink-soft)}
+.flow>span{min-width:0}.flow.arrows>span{position:relative}
+@media print{.vtable td.vb,.matrix-demo>div,.chip{print-color-adjust:exact}}
+.vb-inline{display:inline-block;min-width:110px;padding:2px 6px;border-radius:4px;font-weight:700;font-variant-numeric:tabular-nums;background:linear-gradient(90deg,color-mix(in srgb,var(--brand) 26%,transparent) calc(var(--v)*1%),transparent 0)}
+@media print{.vb-inline{print-color-adjust:exact}}
