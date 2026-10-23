@@ -19,6 +19,8 @@
 </script>
 <script src="assets/week913.js" defer>
 </script>
+<script src="assets/week913-viz.js" defer>
+</script>
 <link rel="stylesheet" href="assets/slides.css">
 </head>
 <body class="lesson-page" data-week="10">
@@ -37,7 +39,7 @@
 </header>
 <main id="main">
 <details class="slide-download" id="slides">
-<summary class="slide-summary"><span class="slide-summary-title">本週簡報 <span class="slide-count">18 頁</span></span><span class="slide-expand">點擊展開</span><span class="slide-collapse">收合簡報</span></summary>
+<summary class="slide-summary"><span class="slide-summary-title">本週簡報 <span class="slide-count">20 頁</span></span><span class="slide-expand">點擊展開</span><span class="slide-collapse">收合簡報</span></summary>
 <div class="slide-content"><div class="slide-heading"><p>直接翻頁閱讀，或按「全螢幕」播放。</p><a class="slide-file" href="assets/slides/week10.pptx" download="資料探勘_Week10.pptx">另存 PPT ↓</a></div>
 <iframe class="slide-frame" src="assets/slides/viewer.html?week=10&amp;v=20261015" title="第 10 週簡報播放器" allow="fullscreen" allowfullscreen loading="lazy"></iframe>
 <p class="slide-meta">操作：上一頁／下一頁、選單跳頁；點入簡報後可用鍵盤 ← →。手機可左右滑動；完整提示語可按「備註」查看。</p></div>
@@ -223,11 +225,26 @@
 <h2 class="section-title">互動實驗：自己組一個模型</h2>
 <div class="lab lab-panel">
 <h3>實驗一｜一個條件：面積 × 月租</h3>
+<div class="controls">
+<label for="scatter-mode">畫法<select id="scatter-mode">
+<option value="hex">蜂巢密度圖（看哪裡最擠）</option>
+<option value="dots">每間房子一個點</option>
+</select>
+</label>
+</div>
+<div id="hex-legend" class="viz-legend"></div>
 <div class="chart-scroll" tabindex="0" role="region" aria-label="可左右捲動的散布圖">
 <svg id="reg-scatter" class="chart" viewBox="0 0 660 280" role="img" aria-label="面積與月租金散布圖及迴歸線">
 </svg>
 </div>
-<p class="lab-description">10,274 間房子全部畫出來（縱軸最高到 40 萬元）。橘線是 M1 的估計線。越往右，點越散開：房子越大，租金的差異也越大。</p>
+<p class="lab-description">10,274 間房子全部畫進去（縱軸最高到 40 萬元）。一萬多個點會疊在一起看不清楚，所以預設改成<strong>蜂巢密度圖</strong>：每個六角形是一小塊區域，顏色越深代表那裡的房子越多。橘線是 M1 的估計線。大部分房子擠在 10～35 坪、1～4 萬元；越往右越分散，大房子的租金差異也越大。</p>
+</div>
+<div class="lab lab-panel">
+<h3>各行政區比一比：棒棒糖圖</h3>
+<p>在面積、屋齡、樓層、建物型態都相同的情況下，各區的月租平均比<strong>淡水區</strong>貴多少？（用 M5 模型算出）</p>
+<div id="dist-legend" class="viz-legend"></div>
+<div class="chart-scroll" tabindex="0" role="region" aria-label="可左右捲動的各行政區租金差距棒棒糖圖"><svg id="dist-lollipop" class="viz" viewBox="0 0 660 614" role="img" aria-label="各行政區租金差距棒棒糖圖"></svg></div>
+<p class="fine">每一顆糖代表一個行政區，棒子越長代表跟淡水區差越多。這是「條件相同時」的平均差距，不代表該區每一間房子都比較貴。</p>
 </div>
 <div class="lab lab-panel">
 <h3>實驗二｜多個條件：勾選要放進去的條件</h3>

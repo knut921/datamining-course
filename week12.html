@@ -19,6 +19,8 @@
 </script>
 <script src="assets/week913.js" defer>
 </script>
+<script src="assets/week913-viz.js" defer>
+</script>
 <link rel="stylesheet" href="assets/slides.css">
 </head>
 <body class="lesson-page" data-week="12">
@@ -37,7 +39,7 @@
 </header>
 <main id="main">
 <details class="slide-download" id="slides">
-<summary class="slide-summary"><span class="slide-summary-title">本週簡報 <span class="slide-count">17 頁</span></span><span class="slide-expand">點擊展開</span><span class="slide-collapse">收合簡報</span></summary>
+<summary class="slide-summary"><span class="slide-summary-title">本週簡報 <span class="slide-count">22 頁</span></span><span class="slide-expand">點擊展開</span><span class="slide-collapse">收合簡報</span></summary>
 <div class="slide-content"><div class="slide-heading"><p>直接翻頁閱讀，或按「全螢幕」播放。</p><a class="slide-file" href="assets/slides/week12.pptx" download="資料探勘_Week12.pptx">另存 PPT ↓</a></div>
 <iframe class="slide-frame" src="assets/slides/viewer.html?week=12&amp;v=20261015" title="第 12 週簡報播放器" allow="fullscreen" allowfullscreen loading="lazy"></iframe>
 <p class="slide-meta">操作：上一頁／下一頁、選單跳頁；點入簡報後可用鍵盤 ← →。手機可左右滑動；完整提示語可按「備註」查看。</p></div>
@@ -230,9 +232,20 @@
 <option value="raw">直接用原始數字</option>
 </select>
 </label>
+<label class="check-inline" for="pca-arrows"><input type="checkbox" id="pca-arrows" checked>地圖上顯示特徵箭頭</label>
 </div>
 <div id="cl-stats" class="stats" aria-live="polite">
 </div>
+<h4>① 分群地圖：大家在哪裡？</h4>
+<div id="cl-legend" class="viz-legend"></div>
+<div class="chart-scroll" tabindex="0" role="region" aria-label="可左右捲動的分群地圖"><svg id="pca-map" class="viz" viewBox="0 0 660 440" role="img" aria-label="分群地圖"></svg></div>
+<p id="pca-note" class="fine"></p>
+<h4>② 雷達圖：每一群的「形狀」</h4>
+<p class="fine">虛線圓圈是全體平均；往外凸代表這群在該特徵高於平均，往內凹代表低於平均。</p>
+<div class="chart-scroll" tabindex="0" role="region" aria-label="可左右捲動的各群雷達圖"><svg id="radar" class="viz" viewBox="0 0 660 420" role="img" aria-label="各群雷達圖"></svg></div>
+<h4>③ 平行座標圖：每個人 9 個特徵的高低</h4>
+<p class="fine">細線是每一個人，粗線是各群平均。把滑鼠移到粗線上，就會只亮起那一群人的線。</p>
+<div class="chart-scroll" tabindex="0" role="region" aria-label="可左右捲動的平行座標圖"><svg id="parcoord" class="viz" viewBox="0 0 680 292" role="img" aria-label="平行座標圖"></svg></div>
 <div class="chart-scroll" tabindex="0" role="region" aria-label="可左右捲動的群組特徵熱度圖">
 <svg id="cl-heat" class="chart" viewBox="0 0 622 132" role="img" aria-label="各群特徵與全體平均的差距">
 </svg>
@@ -243,6 +256,16 @@
 <p id="cl-description" class="lab-description" aria-live="polite">
 </p>
 <p class="fine">每種設定都讓電腦試 200 個起點，取最好的結果；群的編號依人數排序（3 群、統一尺度的版本對齊 CSV 的編號）。「重跑穩不穩」是只試 1 個起點、重跑 20 次，和最好結果的平均相似度。用原始數字時，分數看起來比較高，只是因為少數極端的人被單獨分出去，不能和統一尺度的分數直接比。</p>
+<h4>④ 輪廓圖：每個人和自己這群合不合？</h4>
+<div class="chart-scroll" tabindex="0" role="region" aria-label="可左右捲動的輪廓圖"><svg id="sil-plot" class="viz" viewBox="0 0 700 256" role="img" aria-label="輪廓圖"></svg></div>
+<p id="sil-note" class="fine"></p>
+<h4>⑤ 沖積圖：換群數時，人怎麼移動？</h4>
+<p class="fine">從左到右依序是分 2、3、4、5 群。彩帶表示同一批人從某一群移到另一群；彩帶亂成一團，代表群數一換，大家就被重新洗牌。</p>
+<div class="chart-scroll" tabindex="0" role="region" aria-label="可左右捲動的換群數時的人員流動沖積圖"><svg id="alluvial" class="viz" viewBox="0 0 660 356" role="img" aria-label="換群數時的人員流動沖積圖"></svg></div>
+<h4>⑥ 環狀樹狀圖：換一種方法分群，結果一樣嗎？</h4>
+<p class="fine">中間的樹是「階層式分群」：越相似的人越早被接在一起，樹枝顏色是切成目前群數後的分群。最外圈的小圓點是 k-means 的結果。兩圈顏色對得越整齊，代表兩種方法看法越一致。</p>
+<div class="chart-scroll" tabindex="0" role="region" aria-label="可左右捲動的環狀樹狀圖"><svg id="dendro" class="viz viz-small" viewBox="0 0 460 460" role="img" aria-label="環狀樹狀圖"></svg></div>
+<p id="dendro-note" class="lab-description"></p>
 <button type="button" id="reset-cl">重設</button>
 </div>
 <div class="card" data-quiz>

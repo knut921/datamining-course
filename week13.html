@@ -19,6 +19,8 @@
 </script>
 <script src="assets/week913.js" defer>
 </script>
+<script src="assets/week913-viz.js" defer>
+</script>
 <link rel="stylesheet" href="assets/slides.css">
 </head>
 <body class="lesson-page" data-week="13">
@@ -37,7 +39,7 @@
 </header>
 <main id="main">
 <details class="slide-download" id="slides">
-<summary class="slide-summary"><span class="slide-summary-title">本週簡報 <span class="slide-count">17 頁</span></span><span class="slide-expand">點擊展開</span><span class="slide-collapse">收合簡報</span></summary>
+<summary class="slide-summary"><span class="slide-summary-title">本週簡報 <span class="slide-count">19 頁</span></span><span class="slide-expand">點擊展開</span><span class="slide-collapse">收合簡報</span></summary>
 <div class="slide-content"><div class="slide-heading"><p>直接翻頁閱讀，或按「全螢幕」播放。</p><a class="slide-file" href="assets/slides/week13.pptx" download="資料探勘_Week13.pptx">另存 PPT ↓</a></div>
 <iframe class="slide-frame" src="assets/slides/viewer.html?week=13&amp;v=20261015" title="第 13 週簡報播放器" allow="fullscreen" allowfullscreen loading="lazy"></iframe>
 <p class="slide-meta">操作：上一頁／下一頁、選單跳頁；點入簡報後可用鍵盤 ← →。手機可左右滑動；完整提示語可按「備註」查看。</p></div>
@@ -291,6 +293,13 @@
 </div>
 <p id="wf-description" class="lab-description" aria-live="polite">
 </p>
+<h4>樹狀矩形圖：前 30 名詞</h4>
+<p class="fine">方塊面積代表出現多少，顏色越深代表「同一件提案裡重複寫越多次」：深色大方塊要特別小心，可能只是少數提案一直重複。</p>
+<div id="treemap-legend" class="viz-legend"></div>
+<div class="chart-scroll" tabindex="0" role="region" aria-label="可左右捲動的前 30 名詞樹狀矩形圖"><svg id="wf-treemap" class="viz" viewBox="0 0 660 330" role="img" aria-label="前 30 名詞樹狀矩形圖"></svg></div>
+<h4>排名變化圖：每年的熱門詞</h4>
+<div class="chart-scroll" tabindex="0" role="region" aria-label="可左右捲動的每年熱門詞排名變化圖"><svg id="wf-bump" class="viz" viewBox="0 0 700 330" role="img" aria-label="每年熱門詞排名變化圖"></svg></div>
+<p id="bump-note" class="fine"></p>
 <details>
 <summary>展開前 30 名詞頻表</summary>
 <div id="wf-table">

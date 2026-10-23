@@ -19,6 +19,8 @@
 </script>
 <script src="assets/week913.js" defer>
 </script>
+<script src="assets/week913-viz.js" defer>
+</script>
 <link rel="stylesheet" href="assets/slides.css">
 </head>
 <body class="lesson-page" data-week="11">
@@ -37,7 +39,7 @@
 </header>
 <main id="main">
 <details class="slide-download" id="slides">
-<summary class="slide-summary"><span class="slide-summary-title">本週簡報 <span class="slide-count">18 頁</span></span><span class="slide-expand">點擊展開</span><span class="slide-collapse">收合簡報</span></summary>
+<summary class="slide-summary"><span class="slide-summary-title">本週簡報 <span class="slide-count">21 頁</span></span><span class="slide-expand">點擊展開</span><span class="slide-collapse">收合簡報</span></summary>
 <div class="slide-content"><div class="slide-heading"><p>直接翻頁閱讀，或按「全螢幕」播放。</p><a class="slide-file" href="assets/slides/week11.pptx" download="資料探勘_Week11.pptx">另存 PPT ↓</a></div>
 <iframe class="slide-frame" src="assets/slides/viewer.html?week=11&amp;v=20261015" title="第 11 週簡報播放器" allow="fullscreen" allowfullscreen loading="lazy"></iframe>
 <p class="slide-meta">操作：上一頁／下一頁、選單跳頁；點入簡報後可用鍵盤 ← →。手機可左右滑動；完整提示語可按「備註」查看。</p></div>
@@ -213,6 +215,8 @@
 </tbody>
 </table>
 </div>
+<div id="coef-legend" class="viz-legend"></div>
+<div class="chart-scroll" tabindex="0" role="region" aria-label="可左右捲動的各欄位影響力棒棒糖圖"><svg id="coef-lollipop" class="viz" viewBox="0 0 660 286" role="img" aria-label="各欄位影響力棒棒糖圖"></svg></div>
 <p class="fine">這是邏輯斯迴歸的係數絕對值（各欄位先換成相同尺度）。整體分辨能力（AUC）0.71：隨機挑一位不滿意和一位滿意的人，電腦給前者較高可能性的機會約 71%。朋友關係、自評健康的數字是小小的正值，和直覺相反，是因為它們和健康滿意度很像、互相搶功勞，不代表「朋友越好越不滿意」。</p>
 <h3>決策樹（問兩層）</h3>
 <div class="table-wrap" tabindex="0" role="region" aria-label="可左右捲動的決策樹葉節點表">
@@ -242,11 +246,19 @@
 </div>
 <div id="th-stats" class="stats" aria-live="polite">
 </div>
+<h4>212 人的對錯格子圖</h4>
+<p class="fine">每一格是一個人。拖動門檻，看綠色（找對了）、紅色（漏掉了）、黃色（誤會了）怎麼互相消長。</p>
+<div id="waffle-legend" class="viz-legend"></div>
+<div class="chart-scroll" tabindex="0" role="region" aria-label="可左右捲動的212 人的對錯格子圖"><svg id="waffle" class="viz" viewBox="0 0 648 192" role="img" aria-label="212 人的對錯格子圖"></svg></div>
 <div class="chart-scroll" tabindex="0" role="region" aria-label="可左右捲動的預測機率圖">
 <svg id="th-chart" class="chart" viewBox="0 0 660 176" role="img" aria-label="每位受訪者的預測機率與門檻">
 </svg>
 </div>
-<p class="lab-description">每個點是一個人；有深色外框的是被標記的人。上排橘點如果在虛線左邊，就是「漏掉了」；下排藍點如果在虛線右邊，就是「誤會了」。</p>
+<h4>門檻曲線：ROC 曲線與召回率／精確率</h4>
+<div id="roc-legend" class="viz-legend"></div>
+<div class="chart-scroll" tabindex="0" role="region" aria-label="可左右捲動的ROC 曲線與門檻曲線"><svg id="roc-pr" class="viz" viewBox="0 0 700 300" role="img" aria-label="ROC 曲線與門檻曲線"></svg></div>
+<p class="fine">左圖：門檻從高到低移動時，「找到的比例」和「被誤會的比例」一起上升；曲線越往左上鼓，模型越有用，對角虛線等於亂猜。右圖：門檻越高，精確率通常越高、召回率越低；把滑鼠移到圖上可看每個門檻的數字。</p>
+<p class="lab-description">（下圖）每個點是一個人；有深色外框的是被標記的人。上排橘點如果在虛線左邊，就是「漏掉了」；下排藍點如果在虛線右邊，就是「誤會了」。</p>
 <h3>不同地區的人，被漏掉的比例一樣嗎？</h3>
 <div id="region-table">
 </div>
@@ -270,9 +282,12 @@
 </label>
 </div>
 <div class="tree-wrap">
-<div id="tree-view">
+<div id="tree-view"><div class="chart-scroll" tabindex="0" role="region" aria-label="可左右捲動的決策樹"><svg id="tree-view-svg" class="viz" viewBox="0 0 660 420" role="img" aria-label="決策樹"></svg></div></div>
 </div>
-</div>
+<p class="fine">方塊越橘，代表裡面對生活不滿意的人越多；方塊下方的小長條也是同一個比例。連線越粗，代表走這條路的人越多。黑框的方塊是會被標記的群。</p>
+<h4>212 人怎麼一路被分下去（桑基圖）</h4>
+<div id="tree-legend" class="viz-legend"></div>
+<div class="chart-scroll" tabindex="0" role="region" aria-label="可左右捲動的決策樹桑基圖"><svg id="tree-sankey" class="viz" viewBox="0 0 760 300" role="img" aria-label="決策樹桑基圖"></svg></div>
 <h4>白話規則（會被標記的路徑）</h4>
 <div id="tree-rules">
 </div>

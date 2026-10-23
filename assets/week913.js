@@ -19,11 +19,17 @@
   };
   const STUDY={'No, I am still a student':'仍在學','Yes, I graduated':'已畢業',"No, I didn't graduate":'未畢業（肄業）','Not applicable':'不適用'};
   const G9={sex:{label:'性別',fn:r=>r.性別==='Female'?'女性':'男性'},age:{label:'年齡',fn:r=>r.年齡<=21?'19–21 歲':'22–24 歲'},study:{label:'學業狀態',fn:r=>STUDY[r.是否完成學業]},net:{label:'每日上網時間',fn:r=>r.每日使用網路分鐘<=240?'上網 ≤240 分鐘':'上網 ＞240 分鐘'}};
-  function updateFinding(){
-    const d=window.WEEK09_DATA,rows=d.rows.map(r=>Object.fromEntries(d.fields.map((f,i)=>[f,r[i]])));
-    const o=OUT9[$('f-outcome').value],g=G9[$('f-group').value],weighted=$('f-weight').value==='weighted';
+  // Weighted share per group with Kish n_eff; also used by the dumbbell chart in week913-viz.js
+  function rates9(oKey,gKey,weighted){
+    const d=window.WEEK09_DATA,rows=d.rows.map(r=>Object.fromEntries(d.fields.map((f,i)=>[f,r[i]]))),o=OUT9[oKey],g=G9[gKey];
     const valid=rows.filter(r=>!o.bad.includes(r[o.col])),labels=[...new Set(valid.map(g.fn))].sort((a,b)=>a.localeCompare(b,'zh-Hant'));
-    const res=labels.map(l=>{const m=valid.filter(r=>g.fn(r)===l);let sw=0,sw2=0,sh=0,hits=0;m.forEach(r=>{const w=weighted?r.抽樣權數:1;sw+=w;sw2+=w*w;if(o.pos.includes(r[o.col])){sh+=w;hits++;}});const p=sh/sw,neff=sw*sw/sw2,se=Math.sqrt(p*(1-p)/neff);return {l,n:m.length,hits,p,lo:p-Z95*se,hi:p+Z95*se};});
+    return labels.map(l=>{const m=valid.filter(r=>g.fn(r)===l);let sw=0,sw2=0,sh=0,hits=0;m.forEach(r=>{const w=weighted?r.抽樣權數:1;sw+=w;sw2+=w*w;if(o.pos.includes(r[o.col])){sh+=w;hits++;}});const p=sh/sw,neff=sw*sw/sw2,se=Math.sqrt(p*(1-p)/neff);return {l,n:m.length,hits,p,lo:p-Z95*se,hi:p+Z95*se};});
+  }
+  window.W9rates=rates9;
+  function updateFinding(){
+    const o=OUT9[$('f-outcome').value],g=G9[$('f-group').value],weighted=$('f-weight').value==='weighted';
+    const valid=window.WEEK09_DATA.rows.filter(r=>!o.bad.includes(r[window.WEEK09_DATA.fields.indexOf(o.col)]));
+    const res=rates9($('f-outcome').value,$('f-group').value,weighted);
     $('f-table').innerHTML=table('群組比較結果',['群組','人數','符合的人',weighted?'比例（加權）':'比例（不加權）','可能的範圍','提醒'],res.map(r=>[r.l,r.n,r.hits,`<span class="vb-inline" style="--v:${(100*r.p).toFixed(1)}">${pct(r.p)}</span>`,`${pct(Math.max(0,r.lo))}～${pct(Math.min(1,r.hi))}`,r.n<30?'<span class="chip warn">人數少，要小心</span>':'—']));
     const hi=res.reduce((a,b)=>b.p>a.p?b:a),lo=res.reduce((a,b)=>b.p<a.p?b:a),small=res.filter(r=>r.n<30);
     // Difference interval as in week 8: SE = √(SE₁² + SE₂²). Overlapping group intervals alone do not imply "no difference".
@@ -123,13 +129,14 @@
     document.querySelectorAll('[data-model]').forEach(b=>b.addEventListener('click',()=>setSpec(PRESET10[b.dataset.model])));
     ['p-area','p-age','p-floor','p-dist','p-type'].forEach(id=>$(id).addEventListener('input',updatePredict));
     $('reset-reg').addEventListener('click',()=>setSpec(PRESET10.m1));
-    // static scatter of area × rent with the simple regression line (all analysis rows)
-    const m1=ladder[0][2],x=v=>50+v/160*570,y=v=>230-Math.min(v,400000)/400000*210;let s='<title>面積與月租金散布圖及簡單迴歸線</title><desc>'+fmt(d.rows.length,0)+' 筆；直線：月租＝'+fmt(m1.beta[0],0)+'＋'+fmt(m1.beta[1],1)+'×坪。</desc>';
-    for(let v=0;v<=160;v+=20)s+=`<line class="gridline" x1="${x(v)}" x2="${x(v)}" y1="16" y2="232"/><text class="tick" x="${x(v)}" y="248" text-anchor="middle">${v}</text>`;
-    for(let v=0;v<=400000;v+=100000)s+=`<text class="tick" x="44" y="${y(v)+4}" text-anchor="end">${v/10000} 萬</text>`;
-    s+='<g class="dots">'+d.rows.map(r=>`<circle cx="${x(r[0]).toFixed(1)}" cy="${y(r[8]).toFixed(1)}" r="1.6"/>`).join('')+'</g>';
-    s+=`<line class="fit-line" x1="${x(0)}" y1="${y(m1.beta[0])}" x2="${x(160)}" y2="${y(m1.beta[0]+160*m1.beta[1])}"/><text x="620" y="270" text-anchor="end">建物面積（坪）；縱軸：月租金（元）</text>`;
-    $('reg-scatter').innerHTML=s;
+    // area × rent with the simple regression line; dots mode draws every row, hex mode is filled in by week913-viz.js
+    const drawScatter=()=>{const m1=ladder[0][2],x=v=>50+v/160*570,y=v=>230-Math.min(v,400000)/400000*210,dots=$('scatter-mode').value==='dots';let s='<title>面積與月租金散布圖及簡單迴歸線</title><desc>'+fmt(d.rows.length,0)+' 筆；直線：月租＝'+fmt(m1.beta[0],0)+'＋'+fmt(m1.beta[1],1)+'×坪。</desc>';
+      for(let v=0;v<=160;v+=20)s+=`<line class="gridline" x1="${x(v)}" x2="${x(v)}" y1="16" y2="232"/><text class="tick" x="${x(v)}" y="248" text-anchor="middle">${v}</text>`;
+      for(let v=0;v<=400000;v+=100000)s+=`<text class="tick" x="44" y="${y(v)+4}" text-anchor="end">${v/10000} 萬</text>`;
+      if(dots)s+='<g class="dots">'+d.rows.map(r=>`<circle cx="${x(r[0]).toFixed(1)}" cy="${y(r[8]).toFixed(1)}" r="1.6"/>`).join('')+'</g>';
+      s+=`<line class="fit-line" x1="${x(0)}" y1="${y(m1.beta[0])}" x2="${x(160)}" y2="${y(m1.beta[0]+160*m1.beta[1])}"/><text x="620" y="270" text-anchor="end">建物面積（坪）；縱軸：月租金（元）</text>`;
+      $('reg-scatter').innerHTML=s;$('hex-legend').hidden=dots;};
+    window.W10fit=fitOls;window.W10scatter=drawScatter;drawScatter();
     updateModel();
   }
 
@@ -141,12 +148,14 @@
     $('th-label').textContent=fmt(th,2);
     $('cm').innerHTML=`<div class="table-wrap" tabindex="0" role="region" aria-label="混淆矩陣"><table class="cm-table"><thead><tr><th scope="col">實際＼電腦判斷</th><th scope="col">電腦說「要關心」</th><th scope="col">電腦說「不用」</th><th scope="col">合計</th></tr></thead><tbody><tr><th scope="row">實際上需要（25 人）</th><td class="cm-good">找對了 ✓<strong>${c.tp}</strong></td><td class="cm-bad">漏掉了 ✗<strong>${c.fn}</strong></td><td>${c.tp+c.fn}</td></tr><tr><th scope="row">實際上不需要（187 人）</th><td class="cm-warn">誤會了 ✗<strong>${c.fp}</strong></td><td class="cm-good">正確排除 ✓<strong>${c.tn}</strong></td><td>${c.fp+c.tn}</td></tr><tr><th scope="row">合計</th><td>${c.tp+c.fp}</td><td>${c.fn+c.tn}</td><td>${n}</td></tr></tbody></table></div>`;
     $('th-stats').innerHTML=stat('召回率：需要的人找到幾成',ratio(c.tp,c.tp+c.fn),`25 人中找到 ${c.tp} 人、漏掉 ${c.fn} 人`)+stat('精確率：被標記的人幾成真的需要',ratio(c.tp,c.tp+c.fp),`標記 ${c.tp+c.fp} 人，其中誤會 ${c.fp} 人`)+stat('正確率（小心會騙人）',ratio(c.tp+c.tn,n),`全部說「不用」也有 ${pct(187/212)}`);
-    const x=v=>40+v*580;let s=`<title>每位受訪者的交叉驗證預測機率</title><desc>上排為實際低生活滿意 25 人，下排為其他 187 人；虛線為門檻 ${th}。</desc>`;
-    for(let i=0;i<=10;i++)s+=`<line class="gridline" x1="${x(i/10)}" x2="${x(i/10)}" y1="10" y2="132"/><text class="tick" x="${x(i/10)}" y="148" text-anchor="middle">${fmt(i/10,1)}</text>`;
-    s+='<text x="40" y="22">實際上需要（對生活不滿意）</text><text x="40" y="82">實際上不需要</text>';
-    d.rows.forEach((r,i)=>{const y=(r[2]?36:96)+((i*37)%17)-8;s+=`<circle class="${r[2]?'pos-dot':'neg-dot'}${r[3]>=th-1e-12?' flagged':''}" cx="${x(r[3]).toFixed(1)}" cy="${y}" r="4"/>`;});
-    s+=`<line class="th-line" x1="${x(th)}" x2="${x(th)}" y1="6" y2="134"/><text x="620" y="168" text-anchor="end">電腦估計的可能性（用沒看過這個人的模型算出）</text>`;
-    $('th-chart').innerHTML=s;
+    // beeswarm: each dot takes the nearest free vertical slot so no two dots overlap
+    const x=v=>40+v*580;let s=`<title>每位受訪者的交叉驗證預測機率</title><desc>上方為實際對生活不滿意的 25 人，下方為其他 187 人；虛線為門檻 ${th}。</desc>`;
+    for(let i=0;i<=10;i++)s+=`<line class="gridline" x1="${x(i/10)}" x2="${x(i/10)}" y1="24" y2="318"/><text class="tick" x="${x(i/10)}" y="334" text-anchor="middle">${fmt(i/10,1)}</text>`;
+    s+='<text x="40" y="16" style="font-weight:700">實際上需要（對生活不滿意，25 人）</text><text x="40" y="108" style="font-weight:700">實際上不需要（187 人）</text><line class="gridline" x1="40" x2="620" y1="96" y2="96"/>';
+    [[1,58],[0,212]].forEach(([cls,base])=>{const placed=[];d.rows.filter(r=>r[2]===cls).sort((a,b)=>a[3]-b[3]).forEach(r=>{const cx=x(r[3]);let dy=0;for(let k=0;k<80;k++){dy=(k%2?1:-1)*Math.ceil(k/2)*6.4;if(!placed.some(p=>Math.hypot(p[0]-cx,p[1]-(base+dy))<6.6))break;}placed.push([cx,base+dy]);
+      s+=`<circle class="${cls?'pos-dot':'neg-dot'}${r[3]>=th-1e-12?' flagged':''}" cx="${cx.toFixed(1)}" cy="${(base+dy).toFixed(1)}" r="3"><title>可能性 ${fmt(r[3],2)}｜${cls?'實際上需要':'實際上不需要'}</title></circle>`;});});
+    s+=`<line class="th-line" x1="${x(th)}" x2="${x(th)}" y1="22" y2="320"/><text x="620" y="352" text-anchor="end">電腦估計的可能性（用沒看過這個人的模型算出）</text>`;
+    $('th-chart').setAttribute('viewBox','0 0 660 360');$('th-chart').innerHTML=s;
     const regions=[...new Set(d.rows.map(r=>r[0]))].sort((a,b)=>a-b);
     $('region-table').innerHTML=table('各地區錯誤',['地區代碼','人數','需要的人','找對了','漏掉了','誤會了','找到幾成','誤會幾成'],regions.map(g=>{const rs=d.rows.filter(r=>r[0]===g),c=conf(rs,th);return ['代碼 '+g,rs.length,c.tp+c.fn,c.tp,c.fn,c.fp,ratio(c.tp,c.tp+c.fn),ratio(c.fp,c.fp+c.tn)];}));
     window.week11={th,...c,regions:Object.fromEntries(regions.map(g=>[g,conf(d.rows.filter(r=>r[0]===g),th)]))};
@@ -162,7 +171,7 @@
   function rules(node,path,out){if(!node.feature){out.push({path,node});return out;}rules(node.left,[...path,cond(node.feature,node.threshold,true)],out);rules(node.right,[...path,cond(node.feature,node.threshold,false)],out);return out;}
   function updateTree(){
     const d=window.WEEK11_DATA,depth=$('tree-depth').value,th=$('tree-th').value,t=d.trees[depth],tr=t.train[th],cv=t.cv[th];
-    $('tree-view').innerHTML=`<ul class="tree">${treeHtml(t.root,[],Number(th))}</ul>`;
+    if(!$('tree-view-svg'))$('tree-view').innerHTML=`<ul class="tree">${treeHtml(t.root,[],Number(th))}</ul>`;
     const rr=rules(t.root,[],[]).filter(x=>x.node.pos/x.node.n>=Number(th)-1e-12);
     $('tree-rules').innerHTML=rr.length?'<ul>'+rr.map(x=>`<li>如果 ${x.path.map(esc).join('，而且 ')} → 標記「要關心」（這群 ${x.node.n} 人中有 ${x.node.pos} 人對生活不滿意）</li>`).join('')+'</ul>':'<p>在這個標準下，沒有任何一群被標記：等於「全部說不用」。</p>';
     $('tree-table').innerHTML=table('練習資料與沒看過的資料比較',['怎麼考','找對了','漏掉了','誤會了','找到幾成','標記中幾成正確','整體分數（AUC）'],[['用練習過的資料考',tr.tp,tr.fn,tr.fp,ratio(tr.tp,tr.tp+tr.fn),ratio(tr.tp,tr.tp+tr.fp),fmt(t.trainAuc,3)],['用沒看過的資料考（輪流考試）',cv.tp,cv.fn,cv.fp,ratio(cv.tp,cv.tp+cv.fn),ratio(cv.tp,cv.tp+cv.fp),fmt(t.cvAuc,3)]]);
@@ -221,7 +230,7 @@
     $('wf-stats').innerHTML=stat('提案件數',fmt(docs,0),year==='all'?'2020–2024 全部':`${year} 年`)+stat('第一名',esc(top[0][0]),`出現 ${fmt(top[0][1],0)} 次｜在 ${fmt(top[0][2],0)} 件提案（${pct(top[0][2]/docs)}）`)+stat('文字雲詞數',`${top.length}`,`欄位：${fieldName}`);
     const c=cloud(top,by);$('wf-cloud').innerHTML=c.svg;
     const b=top.slice(0,15),bmax=b[0][by],x=v=>110+v/bmax*470;let s=`<title>前 15 名高頻詞</title><desc>${b.map(r=>r[0]+' '+r[by]).join('；')}</desc>`;
-    b.forEach((r,i)=>{const y=8+i*24;s+=`<text x="100" y="${y+15}" text-anchor="end">${esc(r[0])}</text><rect class="bar" x="110" y="${y+3}" width="${x(r[by])-110}" height="16" rx="3"/><text class="tick" x="${x(r[by])+6}" y="${y+15}">${fmt(r[by],0)}</text>`;});
+    b.forEach((r,i)=>{const y=8+i*24;s+=`<text x="100" y="${y+15}" text-anchor="end">${esc(r[0])}</text><line x1="110" x2="${(x(r[by])).toFixed(1)}" y1="${y+11}" y2="${y+11}" style="stroke:var(--s1);stroke-width:2"/><circle cx="${x(r[by]).toFixed(1)}" cy="${y+11}" r="7" style="fill:var(--s1);stroke:var(--surface);stroke-width:2"><title>${esc(r[0])}：${fmt(r[by],0)}</title></circle><text class="tick" x="${x(r[by])+12}" y="${y+15}">${fmt(r[by],0)}</text>`;});
     $('wf-bars').innerHTML=s;
     $('wf-table').innerHTML=table('高頻詞表',['名次','詞','出現次數','出現在幾件提案','占全部提案'],list.slice(0,30).map((r,i)=>[i+1,esc(r[0]),fmt(r[1],0),fmt(r[2],0),pct(r[2]/docs)]));
     $('wf-description').textContent=`${$('wf-dict').value==='user'?'用了自訂詞典':'只用預設詞典'}；只數兩個字以上的中文詞，網址、數字、英文和標點都已去掉。${$('wf-stop').checked?'已刪除一般停用詞。':'沒有刪停用詞：前幾名多半是「可以」「我們」這種看不出主題的詞。'}${$('wf-domain').checked?'也刪除了領域停用詞（政府、台灣、建議等幾乎每件都有的詞）。':''} 文字雲放了 ${c.placed} 個詞；字越大代表${by===2?'出現在越多件提案':'出現越多次'}，位置和顏色沒有意義。`;

@@ -19,6 +19,8 @@
 </script>
 <script src="assets/week913.js" defer>
 </script>
+<script src="assets/week913-viz.js" defer>
+</script>
 <link rel="stylesheet" href="assets/slides.css">
 </head>
 <body class="lesson-page" data-week="09">
@@ -37,7 +39,7 @@
 </header>
 <main id="main">
 <details class="slide-download" id="slides">
-<summary class="slide-summary"><span class="slide-summary-title">本週簡報 <span class="slide-count">17 頁</span></span><span class="slide-expand">點擊展開</span><span class="slide-collapse">收合簡報</span></summary>
+<summary class="slide-summary"><span class="slide-summary-title">本週簡報 <span class="slide-count">18 頁</span></span><span class="slide-expand">點擊展開</span><span class="slide-collapse">收合簡報</span></summary>
 <div class="slide-content"><div class="slide-heading"><p>直接翻頁閱讀，或按「全螢幕」播放。</p><a class="slide-file" href="assets/slides/week09.pptx" download="資料探勘_Week09.pptx">另存 PPT ↓</a></div>
 <iframe class="slide-frame" src="assets/slides/viewer.html?week=09&amp;v=20261015" title="第 9 週簡報播放器" allow="fullscreen" allowfullscreen loading="lazy"></iframe>
 <p class="slide-meta">操作：上一頁／下一頁、選單跳頁；點入簡報後可用鍵盤 ← →。手機可左右滑動；完整提示語可按「備註」查看。</p></div>
@@ -257,6 +259,13 @@
 </p>
 <p class="fine">藍色長條是比例，橘色橫線是「可能的範圍」（95% 信賴區間）。「收入夠用」不算回答「不知道」的 3 人；學業狀態「不適用」的 34 人另外列一組。發現卡只是草稿，請改成自己的話，並自己再算一次。</p>
 <button type="button" id="reset-finding">重設</button>
+</div>
+<div class="lab lab-panel">
+<h3>一次看六個指標：啞鈴圖</h3>
+<p>用上面選的「分組方式」和「計算方式」，把六個指標並排比較。兩個點離得越遠，兩組差越多；適合放在期中網站當「總覽圖」。</p>
+<div id="dumbbell-legend" class="viz-legend"></div>
+<div class="chart-scroll" tabindex="0" role="region" aria-label="可左右捲動的六個指標的兩組比較啞鈴圖"><svg id="dumbbell" class="viz" viewBox="0 0 660 276" role="img" aria-label="六個指標的兩組比較啞鈴圖"></svg></div>
+<p id="dumbbell-note" class="fine"></p>
 </div>
 <div class="card" data-quiz>
 <p class="quiz-question">快速檢查｜哪一句最適合放在期中網站上？</p>
