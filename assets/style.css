@@ -248,6 +248,10 @@ a.wp-cell .wp-n { color: var(--brand); }
 .wp-cell.is-soon { opacity: .62; cursor: default; }
 .wp-cell.is-exam { border-style: dashed; }
 .wp-cell.current { outline: 2px solid var(--accent); outline-offset: 1px; }
+.wp-cell.wp-multi .wp-n { color: var(--brand); }
+.wp-cell .wp-links { display: flex; flex-direction: column; gap: 4px; margin-top: 2px; }
+.wp-cell .wp-links a { font-size: 11.5px; font-weight: 600; color: var(--good); text-decoration: none; }
+.wp-cell .wp-links a:hover { text-decoration: underline; }
 
 /* ---- 週教材上一週 / 下一週 ---- */
 .week-nav {
