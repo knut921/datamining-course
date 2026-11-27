@@ -1,0 +1,64 @@
+/* Weeks 14–16: sentiment, qual–quant integration, dashboard. Builds on week913.css tokens.
+   Tone colours are a diverging pair (validated with dataviz validate_palette: poles pass light & dark;
+   the grey midpoint is below 3:1, so every segment carries a visible % label and a table view exists). */
+:root{--tone-neg:#e34948;--tone-mid:#c9c7c0;--tone-pos:#2a78d6}
+@media (prefers-color-scheme:dark){:root{--tone-neg:#e66767;--tone-mid:#4a4f5c;--tone-pos:#3987e5}}
+.viz .t-neg{fill:var(--tone-neg)}.viz .t-mid{fill:var(--tone-mid)}.viz .t-pos{fill:var(--tone-pos)}
+.viz .seg{stroke:var(--surface);stroke-width:2}
+.viz text.on-dark{fill:#fff;font-weight:700;font-size:11.5px}.viz text.on-mid{fill:var(--ink);font-weight:700;font-size:11.5px}
+.viz-legend i.t-neg{background:var(--tone-neg)}.viz-legend i.t-mid{background:var(--tone-mid)}.viz-legend i.t-pos{background:var(--tone-pos)}
+.viz-legend i.bar1{background:var(--s1)}.viz-legend i.bar2{background:var(--s2)}
+.viz .b1{fill:var(--s1)}.viz .b2{fill:var(--s2)}.viz .bsoft{fill:var(--muted-mark)}.viz .bsel{fill:var(--s2)}
+.viz .ln{fill:none;stroke:var(--s1);stroke-width:2}.viz .ln2{fill:none;stroke:var(--s2);stroke-width:2}
+.viz .band{fill:var(--brand-soft)}.viz .clickable{cursor:pointer}
+.viz .hit-area{fill:transparent}
+/* token chips: + positive, − negative (sign shown as text, not colour alone) */
+.toks{display:flex;flex-wrap:wrap;gap:4px;margin:8px 0}
+.tok{display:inline-block;border:1px solid var(--line);border-radius:6px;padding:1px 7px;font-size:13.5px;background:var(--surface-2)}
+.tok.p{border-color:var(--tone-pos);background:color-mix(in srgb,var(--tone-pos) 14%,var(--surface));font-weight:700}
+.tok.n{border-color:var(--tone-neg);background:color-mix(in srgb,var(--tone-neg) 14%,var(--surface));font-weight:700}
+.tok.p::after{content:" +";color:var(--tone-pos)}.tok.n::after{content:" −";color:var(--tone-neg)}
+.chip.pos{background:color-mix(in srgb,var(--tone-pos) 16%,var(--surface));color:color-mix(in srgb,var(--tone-pos) 75%,var(--ink))}
+.chip.neg{background:color-mix(in srgb,var(--tone-neg) 16%,var(--surface));color:color-mix(in srgb,var(--tone-neg) 75%,var(--ink))}
+.chip.mid{background:var(--surface-2);color:var(--ink-soft);border:1px solid var(--line)}
+/* detective cards */
+.det-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr));gap:12px;margin-top:12px}
+.det-card{border:1px solid var(--line);border-radius:12px;padding:14px;background:var(--surface);display:flex;flex-direction:column;gap:6px;min-width:0}
+.det-card .src{font-size:12.5px;color:var(--ink-soft);margin:0}.det-card .txt{font-weight:700;margin:0;font-size:15px}
+.det-card .tools{display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:13px}.det-card .tools div{background:var(--surface-2);border-radius:8px;padding:6px 8px}
+.det-card .tools strong{display:block;font-size:15px}
+.det-choices{display:flex;gap:6px;flex-wrap:wrap}.det-choices button{min-height:40px;flex:1 1 70px}
+.det-choices button[aria-pressed="true"]{background:var(--brand);color:#fff;border-color:var(--brand)}
+.det-reveal{font-size:13.5px;border-left:3px solid var(--accent);padding:6px 10px;background:var(--accent-soft);border-radius:6px}
+.det-reveal[hidden]{display:none}
+/* quotes */
+.quote-list{display:grid;gap:10px;margin:10px 0}
+.quote-card{border-left:4px solid var(--brand);background:var(--surface);border-radius:8px;padding:12px 14px;border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.quote-card.extreme{border-left-color:var(--accent)}
+.quote-card h4{margin:0 0 4px;font-size:15px}.quote-card p{margin:4px 0;font-size:14px}.quote-card .meta{font-size:12.5px;color:var(--ink-soft)}
+.quote-card blockquote{margin:6px 0;padding:0 0 0 10px;border-left:2px solid var(--line);color:var(--ink);font-size:14px}
+/* dashboard */
+.dash{border:1px solid var(--line);border-radius:14px;padding:14px;background:var(--surface-2);display:grid;gap:12px}
+.dash .controls{margin:0}
+.dash-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(200px,100%),1fr));gap:10px}
+.dash-kpis .stat{background:var(--surface)}
+.dash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(540px,100%),1fr));gap:12px}
+.dash-panel{border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--surface);min-width:0}
+.dash-panel h4{margin:0 0 2px;font-size:15px}.dash-panel .fine{margin:2px 0 6px}
+.dash-panel.wide{grid-column:1/-1}
+.dash-story{border-left:4px solid var(--accent);background:var(--accent-soft);border-radius:8px;padding:10px 14px;font-size:14.5px;margin:0}
+.word-chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+.word-chips .chip small{font-weight:400;opacity:.8;margin-left:3px}
+/* makeover */
+.mk-toggles{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(250px,100%),1fr));gap:4px 14px;margin:8px 0}
+.mk-toggles .check-inline{display:flex;align-items:center;gap:8px;min-height:40px;font-size:14px}
+.mk-toggles input{width:18px;height:18px;accent-color:var(--brand)}
+.viz .mk-shadow{fill:#000;fill-opacity:.18}
+.r0{fill:#e6194b}.r1{fill:#3cb44b}.r2{fill:#ffe119}.r3{fill:#4363d8}.r4{fill:#f58231}.r5{fill:#911eb4}.r6{fill:#46f0f0}.r7{fill:#f032e6}.r8{fill:#bcf60c}
+.bad-badge{display:inline-block;font-size:12px;font-weight:700;border-radius:999px;padding:2px 10px;background:color-mix(in srgb,var(--accent) 18%,var(--surface));color:var(--accent)}
+#s-chart,#q-bins,#mk-chart,#d-trend,#d-topics{min-width:520px}
+@media print{#s-chart,#q-bins,#mk-chart,#d-trend,#d-topics{min-width:0}.tok,.chip,.viz *{print-color-adjust:exact}}
+.btn-lite,.lab-panel .btn-lite{min-height:40px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2);color:var(--brand);padding:6px 12px;font-weight:600}
+.btn-lite:disabled{opacity:.45;cursor:default}
+.vtable tr.muted-row td{color:var(--ink-soft)}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
